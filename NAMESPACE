@@ -1,0 +1,2 @@
+useDynLib("etasFLP")
+exportPattern("^[[:alpha:]]+")
