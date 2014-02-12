@@ -13,11 +13,11 @@ namepar=namespar[x$iprofile]
 perc=qchisq(prob,df=1)
 
 sn=spline(xx,zz,n=200,method="natural")
-plot(sn,type="l",xlab=namepar,main=paste("Profile -2(log(LR) for parameter ",namepar),
-	  ylab="-2(log(LR)",sub=paste("horizontal lines at prob=",paste(prob,collapse=" ")))
+plot(sn,type="l",xlab=namepar,main=paste("Profile -2[log(LR)] for parameter ",namepar),
+	  ylab="-2[log(LR)]")
 abline(h=perc,col="red")
-grid(col="grey")
-
+grid(col="darkgrey")
+text(x=xx[(1+length(xx))/2],y=perc,label=prob)
 
 ### Inverse spline interpolation for asymptotic confidence intervals
 n	=length(xx)
@@ -36,7 +36,9 @@ l2=round(sf(perc),3)
 
 conf=cbind(prob,l1,l2)
 colnames(conf)=c("Coverage","Lower","Upper")
-print("Asymptotic confidence intervals")
+rownames(conf)=1:length(prob)
+
+cat("Asymptotic  confidence  intervals:","\n")
 print(conf)
 
 ris=list(spline.profile=sn,conf=conf,prob=prob)

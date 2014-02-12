@@ -1,12 +1,18 @@
 plot.etasclass <-
-function(x,ngrid=200,flag.3D=TRUE,flag.log=FALSE,...){
+function(x,pdf=FALSE,file ="etasplot.pdf", ngrid=200,flag.3D=TRUE,flag.log=FALSE,...){
 
+cat("Computation of the ETAS integrated intensity on a grid","\n")
+cat("for large catalogs computation can take some minutes. Please wait ...","\n")
 #####################################################
 # plot time intensity # with points
 typegraph=1
 
+if (pdf){
+pdf(file=file,onefile=TRUE)}
+else
+{
 dev.new()
-
+}
 #####################################################
 
 
@@ -22,15 +28,15 @@ ycat.km	=x$cat$lat
 w	=x$rho.weights
 hdef	=x$hdef
 n	=length(xcat.km)
-params	=x$params	
-	mu	= params[1]
-        k0  	= params[2]
-        c   	= params[3]
-        p   	= params[4]
-        a   	= params[5]
-        gamma   = params[6]
-        d   	= params[7]
-        q   	= params[8]
+params	=x$params
+        mu= params[1]
+        k0= params[2]
+        c= params[3]
+        p= params[4]
+        a= params[5]
+        gamma= params[6]
+        d= params[7]
+        q= params[8]
 #
 rangex		=range(xcat.km)
 rangey		=range(ycat.km)
@@ -97,7 +103,8 @@ contour(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid)),col="red",add=TRUE)
 
 box()
 
-dev.new()
+if(!pdf) dev.new()
+
 image.plot(x.grid,y.grid,(matrix(back.grid,ngrid,ngrid))
 ,col=gray.colors(128, start = 0., end = 1., gamma =2 ),
 xlab="x-longitude",ylab="y-latitude",
@@ -115,7 +122,8 @@ box()
 ### start total intensity plotting
 
 
-dev.new()
+if(!pdf) dev.new()
+
 image.plot(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),
 col=gray.colors(128, start = 0., end = 1., gamma =2 ),
 xlab="x-longitude",ylab="y-latitude",main="Total Intensity"
@@ -131,10 +139,11 @@ box()
 ts=(x$cat$time-min(x$cat$time))/diff(range(x$cat$time))
 
 
-dev.new()
+if(!pdf) dev.new()
+
 image.plot(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),
 col=gray.colors(128, start = 0., end = 1., gamma =2 ),
-xlab="x-longitude",ylab="y-latitude",main="Total Intensity"
+xlab="x-longitude",ylab="y-latitude",main="Total Intensity with observed points \n Circles area proportional to magnitude; red: recent, blu:older"
 )
       
 grid(col="grey")
@@ -145,6 +154,9 @@ contour(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),col="yellow",add=TRUE)
 
 box()
 
+dev.off()
+
+
 etas.l=x$l
 
 if(flag.log) etas.l=log(etas.l)
@@ -154,7 +166,7 @@ if(flag.3D){
 
 typegraph=2
 plot3d(x$cat.longlat$long,x$cat.longlat$lat,etas.l,type="n",zlab=paste("estimated intensity   ","lambda(x,y)"),
-xlab="x-longitude",ylab="y-latitude",main="Estimated intensity")
+xlab="x-longitude",ylab="y-latitude",main="Estimated intensities in observed points")
 lines3d(cbind(mapxy$x,mapxy$y,min(etas.l)),col="red")
 plot3d(x$cat.longlat$long,x$cat.longlat$lat,etas.l,add=TRUE, type="h")
 

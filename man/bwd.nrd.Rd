@@ -18,7 +18,7 @@ If a multivariate kernel is used, (i.e. \code{d} > 1),
 \code{bwd.nrd} must be called for each variable. It computes dispersion only with the weighted standard deviation, with no robust alternative. Called by \code{kde2dnew.fortran}.}
 \value{The value of the bandwidth for a sample \code{x} and weights \code{w}.
 }
-\note{It is used in connection with the the declustering method of \code{etasFLP}. Points with an higher probability of being part of the background seismicity will weight more in the estimation the background seismicity.}
+\note{It is used in connection with the the declustering method of \code{etasFLP}. Points with an higher probability of being part of the background seismicity will weight more in the estimation of the background seismicity.}
 \references{
 Silverman, B.W. (1986). \emph{Density Estimation for Statistics and Data Analysis}. Chapman and Hall: London.}
 \author{

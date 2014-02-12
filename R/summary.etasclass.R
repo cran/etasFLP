@@ -1,6 +1,9 @@
 summary.etasclass<-function(object,...){
 x=object
-print(x$description)
+cat("Call:","\n","\n")
+print(x$this.call)
+cat("\n","\n")
+cat(x$description,"\n")
 cat("Execution started:                 ",format(x$time.start),"\n")
 cat("Elapsed time of execution (hours)  ",as.numeric(x$time.elapsed,units="hours"),"\n")
 cat("Number of observations            ",length(x$cat$time),"\n")
@@ -12,12 +15,14 @@ if (declustering){
 cat("Number of declustering iterations  ",x$iter,"\n")
 cat("Kind of declustering               ",ifelse(x$thinning,"thinning","weighting"),"\n")
 
-print("sequence of AIC values for each iteration")
-print(x$AIC.iter)
+cat("sequence of AIC values for each iteration","\n")
+cat(x$AIC.iter,"\n","\n")
 }
+cat("-------------------------------------------------------","\n","\n")
 
-print("ETAS Parameters")
+cat("ETAS Parameters:","\n")
 ris=cbind(x$params,x$sqm)
 colnames(ris)=c("      Estimates","      std.err.")
 print(round(ris,6))
+cat("-------------------------------------------------------","\n")
 }

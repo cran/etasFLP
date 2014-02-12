@@ -19,7 +19,7 @@ w = replicate(length(xkern), 1))
   \item{ykern}{y-values of kernel points of length \code{n}.}
   \item{gx}{x-values of the points where densities must be estimated.}
   \item{gy}{y-values of the points where densities must be estimated.}
-  \item{h}{bandwidths: a lenght 2 numerical vector.}
+  \item{h}{bandwidths: a length 2 numerical vector.}
   \item{factor.xy}{expansion factor for bandwidths (density will be smoother if  \code{factor.xy}>1).}
   \item{w}{vector of weights to give to observed points (length \code{n}).}
   \item{eps}{enlargment factor for the region.}
@@ -38,11 +38,6 @@ Wand, M.P and Jones, M.C. (1995). \emph{Kernel Smoothing}. London: Chapman & Hal
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 %\seealso{}
-\examples{
-\dontrun{
-  
-## 
-}}
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

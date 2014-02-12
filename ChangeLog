@@ -1,0 +1,28 @@
+2014-02-10  Marcello Chiodi  <marcello.chiodi@unipa.it>
+
+*R package etasFLP: changes from version 1.0.0 to version 1.0.1
+
+*print.etasclass.R: function added. S3 method for
+the generic function print for objects of class "etasclass".
+
+*print.etasclass.Rd: added documentation file for the new function "print.etasclass.R".
+
+*californiacatalog.RData: a new data set added to the package with a North California earthquake catalog. Documented in the help file "californiacatalog.Rd".
+
+*californiacatalog.Rd: added documentation file for the new data set "californiacatalog.RData".
+
+*DESCRIPTION file: Avoided dependency on package "car"; external packages "fields", "rgl", "maps", "mapdata" declared in "Imports" row instead of "Depends" row, due to a note present on the CRAN test page.
+
+*plot.profile.R: small changes to the titles of the plots. 
+
+*summary.etasclass.R: small changes to the output format.
+
+*etasclass.R: the input argument params.ind now is is a logical vector (default is the same: replicate(8,TRUE)); instead of a vector of 0 and 1; the meaning is the same.
+Corrected a bug in the comparison between the successive declustering iterations
+In the  output the  element "this.call" has been added and contains the call of the function.
+Corrected and improved some headers in the names of the output elements 
+
+*plot.etasclass: added two new input arguments: "PDF" and "file"; if "PDF=TRUE" then the output is sent to pdf file with name "file".
+Some plot label and titles have been corrected.
+
+*profile.etasclass.Rd: correction in the item nprofile.

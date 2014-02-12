@@ -18,17 +18,17 @@ a vector of magnitudes  coming from an earthquake catalog.
 }
 
 \details{
-Maximum likelihodd estimation for the Gutenberg Richter Law:
+Maximum likelihodd estimation for the Gutenberg-Richter Law:
 
 \deqn{\log_{10} N(>m) = a - b \ M  }{log10 N(>m) = a - b m  }
 
 where \eqn{N(>m)} is the number of events exceeding a magnitude \eqn{m} and \eqn{a,b} are two parameters: \eqn{a}  is related to the total seismicity rate of the region while \eqn{b}, to be estimated, should be usually near 1.
 
 Catalog is assumed to be complete (in a certain space-time region) at least for a magnitude \code{m0},
-that is every earthquake of magnitude at least \code{m0} in that space-time region, is certainly present in the catalog.}
+that is, every earthquake of magnitude at least \code{m0} in that space-time region, is certainly present in the catalog.}
 \value{
-  \item{b}{estimate of the parameter  \eqn{b} of the Gutenberg Richter Law.}
-  \item{se}{estimate of the standard error of   \code{b}.}
+  \item{b}{estimate of the parameter  \eqn{b} of the Gutenberg-Richter Law.}
+  \item{se}{estimate of the standard error of  the estimate \code{b}.}
 }
 \note{the plot produced by \code{magn.plot} can be used to have an idea, for a given catalog, of the magnitude threshold value.}
 \seealso{ \code{\link{magn.plot}}}

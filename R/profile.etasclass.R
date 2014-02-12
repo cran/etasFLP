@@ -16,7 +16,7 @@ if(iprofile>8 | iprofile <1 ) stop("'iprofile' must be an integer between 1 and 
 
 nprofile=trunc(nprofile)
 if(nprofile<1) stop("'nprofile' must be at least 1")
-
+fitted$params.ind=as.numeric(fitted$params.ind)
 if(fitted$params.ind[iprofile]==0) stop("cannot compute profile for a parameter not estimated")
 
 

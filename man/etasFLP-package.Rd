@@ -3,17 +3,17 @@
 \alias{etasFLP}
 \docType{package}
 \title{
-Estimation of an ETAS model for earthquake description. ML (maximum Likelihood) and FLP (Forward Likelihood Predictive) estimation of parametric and non-parametric components}
+Estimation of an ETAS model for earthquake description. ML (maximum Likelihood) and FLP (Forward Likelihood Predictive) estimation of parametric and non-parametric components.}
 \description{
-Estimation of the components of an ETAS (Epidemic type aftershock sequences) model for the description of the seismicity of a space-time region. Background seismicity is estimated non-parametrically, while triggered seismicity is estimated by MLE. The bandwidth for a kernel smoothing can be estimated through the Forward Likelihood Predictive approach (FLP);  probability of being an aftershock can be estimated for each event, too.
+Estimation of the components of an ETAS (Epidemic Type Aftershock Sequences) model for the description of the seismicity of a space-time region. Background seismicity is estimated non-parametrically, while triggered seismicity is estimated by MLE. The bandwidth for a kernel smoothing can be estimated through the Forward Likelihood Predictive approach (FLP);  probability of being an aftershock can be estimated for each event, too.
  Also \code{plot}, \code{print}, \code{summary}, \code{profile} methods are defined for the output of the main function \code{etasclass}.}
 
 \details{
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-11-21\cr
+Version: \tab 1.0.1\cr
+Date: \tab 2014-1-29\cr
 License: \tab GPL (>=2) \cr
 Depends: \tab R (>= 2.14.0), fields, rgl, maps, mapdata, car \cr
 Suggests: \tab MASS \cr
@@ -26,7 +26,7 @@ Marcello Chiodi and Giada Adelfio
 Maintainer: Marcello Chiodi<marcello.chiodi@unipa.it>
 }
 
-\note{The package is intended for the estimation of the ETAS model for seismicity description,
+\note{The package is intended for the estimation of the ETAS model for seismicity description (introduced by Ogata (1988), see reference),
 but theoretically it can be used for other fields of application.}
 
 \references{
@@ -37,7 +37,7 @@ Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric 
 Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757.
 
 Console, R.,  Jackson,   D. D. and  Kagan, Y. Y.
-Using the ETAS mo\-del for Catalog Declustering and Seismic
+Using the ETAS model for Catalog Declustering and Seismic
 Background Assessment. \emph{Pure Applied Geophysics}
 \bold{167}, 819--830 (2010).
 

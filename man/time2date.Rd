@@ -6,7 +6,7 @@
 \title{
 Date time conversion tools}
 \description{
-Date time conversion tools, useful in connection with package etasFLP for earthquake description. Base data is Jan. 1st 1900}
+Date time conversion tools, useful in connection with package etasFLP for earthquake description. Base date is Jan. 1st 1900.}
 \usage{
 time2date(t)
 

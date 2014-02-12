@@ -12,7 +12,7 @@ function(cat.orig,
 				d		=1.,
 				q		=1.5,
 ### indicators
-				params.ind=array(1,8),
+				params.ind=replicate(8,TRUE),
 				declustering	=TRUE,
 				thinning	=FALSE,
 				flp		=TRUE,
@@ -30,7 +30,8 @@ function(cat.orig,
 				epsmax		= 0.0001,
 				iterlim		=100,
 				ntheta		=100							)   {
-
+	this.call=match.call()
+	params.ind=as.numeric(params.ind)
 	flag		=eqcat(cat.orig)
 	if (!flag$ok){
  			 print("WRONG EARTHQUAKE CATALOG DEFINITION")
@@ -343,16 +344,17 @@ if (iter>1){
 	eps.par		=max(abs(params.iter[iter]-params.iter[iter-1]))
 	AIC.flag	=(AIC.iter[iter]<=min(AIC.iter)) 
 	}
+rownames(params.iter)=1:nrow(params.iter)
 
-	etas.ris=list(	
+	etas.ris=list(	this.call		=this.call,
 			description		=	description,
 			time.start		=	time.start,
 			time.elapsed		=	time.elapsed,
 			time.end		=	timenow,
-			risult=risult,
+			risult			=	risult,
 			magn.threshold	=magn.threshold,
 			magn.threshold.back=magn.threshold.back,
-			params.ind	=params.ind,
+			params.ind	=as.logical(params.ind),
 			params.fix	=params.fix,
 			params		=params.MLtot,
 			sqm		=sqm.tot,

@@ -16,10 +16,10 @@
   \item{iprofile}{An integer in the range 1-8. Profile likelihood will be computed with respect to the parameter of index \code{iprofile}. The order of parametrs is: \code{mu}, \code{k0}, \code{c}, \code{p}, \code{a}, \code{gamma}, \code{d}, \code{q}.
 %%     ~~Describe \code{profile} here~~
 }
-  \item{nprofile}{Number of values of \code{params[profile]} for which profile likelihood must be computed.  Default value= 7.
+  \item{nprofile}{Number of values of \code{params[iprofile]} for which profile likelihood must be computed.  Default value= 7.
 %%     ~~Describe \code{nprofile} here~~
 }
-  \item{kprofile}{Maximum absolute standardized value for \code{params[profile]}. Profile likelihood will be computed in the standardized range [-\code{kprofile},\code{kprofile}].  Default value= 3.
+  \item{kprofile}{Maximum absolute standardized value for \code{params[iprofile]}. Profile likelihood will be computed in the standardized range [-\code{kprofile}, \code{kprofile}].  Default value= 3.
 %%     ~~Describe \code{kprofile} here~~
 }
   \item{profile.approx}{if \code{TRUE}, then a conditional-likelihood approach is used as a first value for  each maximization step in profile likelihood computation.  Default value= \code{FALSE}.
@@ -29,7 +29,7 @@
 }
 \details{Profile likelihood for the \code{iprofile}-th parameter of the ETAS model for earthquake seismicity, estimated with \code{etasclass}; the order of parameters is: (\code{mu},\code{k0},\code{c},\code{p},\code{a},\code{gamma},\code{d},\code{q}).
 
-A \code{plot} method is defined for \code{profile.etasclass} objects. A number of grid points \code{nprofile}  of 7 (the default) usually is enough to have a good interpolation of the profile likelihood. The profile is computed using the final estimation of the background seismicity used to obtain the object \code{etas} of class \code{etasclass} and regardless to the method used. The computing time (for each of the \code{nprofile} values) is generally less than a single execution of \code{etasclass} without clustering, because only ML estimation is performed. Parameters not estimated in \code{etas} (with \code{params.ind[i]=0}) will remain fixed do the value \code{params.fix[i]}.
+A \code{plot} method is defined for \code{profile.etasclass} objects. A number of grid points \code{nprofile}  of 7 (the default) usually is enough to have a good interpolation of the profile likelihood. The profile is computed using the final estimation of the background seismicity used to obtain the object \code{etas} of class \code{etasclass} and regardless to the method used. The computing time (for each of the \code{nprofile} values) is generally less than a single execution of \code{etasclass} without clustering, because only ML estimation is performed. Parameters not estimated in \code{etas} (with \code{params.ind[i]=FALSE}) will remain fixed do the value \code{params.fix[i]}.
 
 To obtain profiles for different parameters, run \code{profile.etasclass} with different values of \code{iprofile}.
 }
@@ -53,16 +53,25 @@ Marcello Chiodi, Giada Adelfio}
 data("italycatalog")
 # load a sample catalog of italian seismicity  
 
-etas3.1<-etasclass(italycatalog,description="etas flp",magn.threshold=3.1,thinning=FALSE,flp=TRUE,
-is.backconstant=FALSE,magn.threshold.back=3.5,sectoday=TRUE,
-onlytime=FALSE,declustering=TRUE,epsmax=0.00001,
-params.ind=c(1,1,1,1,1,1,1,1),k0=0.005,c=0.005,p=1.01,a=1.05,gamma=0.6,q=1.52,d=1.1,
-compsqm=TRUE,usenlm=TRUE,ndeclust=15)
+etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3.5, 
+    k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, d = 1.1, 
+    q = 1.52, params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
+        TRUE, TRUE), declustering = TRUE, thinning = FALSE, flp = TRUE, 
+    ndeclust = 15, onlytime = FALSE, is.backconstant = FALSE, 
+    description = "etas flp", sectodacatalog-search.htmly = TRUE, usenlm = TRUE, 
+    epsmax = 0.001)
+
 
 # profile likelihood for the 5-th parameter (a), with plot:
 
-prof=profile(etas3.1,nprofile=7,iprofile=5)
-plot(prof)
+prof.flp=profile(etas.flp,nprofile=7,iprofile=5)
+plot(prof.flp)
+> plot(prof.flp)
+Asymptotic  confidence  intervals: 
+  Coverage Lower Upper
+1     0.90 1.514 1.766
+2     0.95 1.501 1.778
+3     0.99 1.463 1.805
 
 }}
 \keyword{ETAS}

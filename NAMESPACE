@@ -1,2 +1,6 @@
 useDynLib("etasFLP")
 exportPattern("^[[:alpha:]]+")
+import(mapdata, maps)
+importFrom(fields, image.plot)
+importFrom(rgl,plot3d,lines3d)
+

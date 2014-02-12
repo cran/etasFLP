@@ -9,14 +9,17 @@ Background, triggered and total space intensities
 are also plotted for a grid of values.
 }
 \usage{
-\method{plot}{etasclass}(x, ngrid=200,flag.3D=TRUE,flag.log=FALSE,...)
+\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot.pdf", ngrid=200,
+			flag.3D=TRUE,flag.log=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{an \code{etaclass} object  to pass to \code{plot}.}
+  \item{x}{an \code{etaclass} object.}
+  \item{pdf}{If \code{TRUE}, then 2D plots are sent to a pdf file}
+  \item{file}{name of the pdf file}
    \item{ngrid}{number of points for each direction (\code{x}, \code{y}) of a \code{ngrid*ngrid} grid where estimated  intensities must be evaluated. Default value= 200.}
-  \item{flag.3D}{Option of the \code{plot} method. If \code{TRUE} a 3D plot is also produced.}
-  \item{flag.log}{Option of the \code{plot} method. If \code{TRUE} then a  \code{log} scale is used to plot intensities.}
+  \item{flag.3D}{If \code{TRUE} a 3D plot is also produced.}
+  \item{flag.log}{If \code{TRUE} then a  \code{log} scale is used to plot intensities.}
   \item{...}{other arguments.}
 
 }
@@ -28,7 +31,8 @@ By default the space-time region is the same used for the estimation of the ETAS
 Background, triggered and total space intensities
 are also computed and plotted for a grid of values.
 
-
+If \code{pdf=TRUE} intensities are printed on a pdf file, as spcified by \code{file}; otherwise 
+default screen device is used. 
 }
 
 \value{This 
