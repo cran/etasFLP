@@ -15,7 +15,7 @@ timecharunique2seq(timestring)
 %- maybe also 'usage' for other objects documented here.
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{t}{A time:  seconds elapsed from 1900-1-1.}
+  \item{t}{seconds elapsed from 1900-1-1.}
 %%     ~~Describe \code{t} here~~
 
   \item{timestring}{A time string.
@@ -24,12 +24,12 @@ timecharunique2seq(timestring)
 }
 
 
-\details{\code{time2date} converts sequential time into character string;
-\code{timecharunique2seq}  converts character times of catalogs into sequential time (secs elapsed from the base date): the input is a single string.}
+\details{\code{time2date} converts sequential time in seconds into character string;
+\code{timecharunique2seq}  converts character times of catalogs into sequential time (seconds elapsed from the base date): the input is a single string.}
 
 \value{\code{time2date} returns a character string; \code{timecharunique2seq} returns a list:
 \item{char}{the input string.}
-\item{sec}{secs elapsed from the base date.}
+\item{sec}{seconds elapsed from the base date.}
 \item{day}{days elapsed from the base date.}
 }
 %\references{}

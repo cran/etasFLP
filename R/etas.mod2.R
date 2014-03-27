@@ -57,6 +57,19 @@ ris=.Fortran("etasfull8" ,NAOK=TRUE,
 ##############################################################################
 # starting time integration#
 ##############################################################################
+###### 12-3-2014 ### verify intensity etas 
+#deltat=outer(times,times,"-")
+#indt = deltat>0
+#deltat=((abs(deltat)+c)^(-p))*indt
+
+
+#deltaxy=outer(x,x,"-")^2+outer(y,y,"-")^2
+#deltaxy=t(indt)*((t(deltaxy*indt)/exp(gamma*magnitudes)+d)^(-q))
+
+#lcheck=k0*colSums(exp((a-gamma)*magnitudes)*t(deltat)*deltaxy)+lambda*back.dens
+# check ok 12-3-2014
+###### 
+
 
 
 if(p==1){
@@ -81,6 +94,7 @@ m1	=as.vector(exp((a-gamma)*magnitudes))
 m2	=as.vector(exp(gamma*magnitudes))
 ### approximate polar integration to whole space
 	time.init		<-	Sys.time()
+   	ci	=lambda*back.dens + etas.comp
 
 ### approximate polar integration to whole space by division in ntheta triangles centered in xi,yi
 etas	=rowSums(m1*m2*((rho.s2*rho.s2/m2+d)^(1-q)-d^(1-q)))

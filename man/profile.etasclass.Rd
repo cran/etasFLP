@@ -37,7 +37,7 @@ To obtain profiles for different parameters, run \code{profile.etasclass} with d
 \value{Returns a list:
 \item{params.vec}{vector of values of the parameter \code{iprofile} used to evaluate the profile likelihood.}
 \item{logl.vec}{vector of likelihoods corresponding to the values of \code{params.vec}}
-\code{plot} method is defined to represent the profile likelihood (in the scale -2log(LR)), using a spline interpolation through the grid points, with superimposition of approximate confidence intervals.
+\code{plot} method is defined to represent  profile likelihood (in  scale -2log(LR)), using a spline interpolation through  grid points, with superimposition of approximate confidence intervals.
 }
 \note{A odd number of grid points \code{nprofile}  is adviced, so that the central point is the unconstrained ML estimate for the profiled parameter, and the interpolation of the profile likelihood will have a better quality.}
 

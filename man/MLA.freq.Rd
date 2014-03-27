@@ -20,7 +20,7 @@ MLA.freq(x)
 single frequencies, cumulated and back cumulated (absolute and relatives).
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{return a matrix with 7 columns: the modalities (distinct values of \code{x}), frequencies, relative frequencies, cumulated frequencies
+\value{return a matrix with 7 columns: the modaldistinct values of \code{x}, frequencies, relative frequencies, cumulated frequencies,
 cumulated relative frequencies,  back cumulated frequencies
 and back cumulated relative frequencies.
 }
@@ -35,9 +35,6 @@ MLA.freq(italycatalog$magn1)
 
 %}
 }
-
-%\references{}
-%\note{}
 \author{
 Marcello Chiodi}
 

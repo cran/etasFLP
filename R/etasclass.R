@@ -26,6 +26,7 @@ function(cat.orig,
 				back.smooth	=1.0,
 				sectoday	=TRUE,
 				usenlm		=TRUE,
+				method		="BFGS",
 				compsqm 	=TRUE,
 				epsmax		= 0.0001,
 				iterlim		=100,
@@ -80,7 +81,9 @@ if ((declustering==FALSE)||onlytime || is.backconstant) ndeclust=1
 # NO CORRECTION FOR SPHERICITY #######################################
 #
 ###############################
-cat.longlat=cat		
+cat.longlat=cat
+rho.s2	=matrix(0,ntheta,n)
+
 	if(onlytime){
 	is.backconstant=TRUE
 	}
@@ -98,7 +101,6 @@ cat$long=xcat.km
 cat$lat=ycat.km
 region=embedding.rect.cat.eps(cat)
 
-	rho.s2	=matrix(0,ntheta,n)
 		for(i in (1:n)){
 		trasf			=region.P(region,c(xcat.km[i],ycat.km[i]),k=ntheta)
 		rho.s2[,i]		=trasf$rho
@@ -230,7 +232,7 @@ if (usenlm){
 	}
 else {
 	   risult =optim(params,etas.mod2,
-		method	="BFGS",
+		method	=method,
 		hessian	=TRUE,
 		control=list(trace=2,maxit=iterlim,fnscale=n/diff(range(cat$time)),parscale=sqrt(exp(params))),
 		params.ind=params.ind,
@@ -258,7 +260,9 @@ l=etas.mod2(params=params.optim,
 
 		
 ####################("found optimum ML step") #################################################################
-	sqm=0
+det.check=det(risult$hessian)
+if (abs(det.check)<1e-20) compsqm=FALSE
+sqm=0
 
 if (compsqm)	sqm	=sqrt(diag(solve(risult$hessian)))*exp(params.optim)
 ###### the optimization is made with respect to the log of the parameters ()

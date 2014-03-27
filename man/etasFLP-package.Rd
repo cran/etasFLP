@@ -12,8 +12,8 @@ Estimation of the components of an ETAS (Epidemic Type Aftershock Sequences) mod
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 1.0.1\cr
-Date: \tab 2014-1-29\cr
+Version: \tab 1.0.2\cr
+Date: \tab 2014-3-27\cr
 License: \tab GPL (>=2) \cr
 Depends: \tab R (>= 2.14.0), fields, rgl, maps, mapdata, car \cr
 Suggests: \tab MASS \cr

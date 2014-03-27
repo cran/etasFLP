@@ -1,5 +1,6 @@
 bwd.nrd <-
-function (x,w,d=2) 
+function (x,w=replicate(length(x),1)
+,d=2) 
 {
     if (length(x) < 2L) 
         stop("need at least 2 data points")

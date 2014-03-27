@@ -6,10 +6,10 @@
 to be used for a kernel estimator with given points and weights.}
 
 
-\usage{bwd.nrd(x, w, d = 2)}
+\usage{bwd.nrd(x, w=replicate(length(x),1), d = 2)}
 \arguments{
   \item{x}{numeric vector: sample points to be used for a normal kernel estimator.}
-  \item{w}{numeric vector of the same length of \code{x}: weights to give to the elements of \code{x}.}
+  \item{w}{numeric vector of the same length of \code{x}: weights to give to the elements of \code{x}. Default is a vector of ones}
   \item{d}{number of dimensions of the kernel estimator.}
 }
 \details{Computes the optimal bandwidth with the Silverman rule, for a kernel
@@ -31,7 +31,7 @@ Marcello Chiodi}
 \examples{
 \dontrun{
 ## The function is currently defined as
-function (x,w,d=2) 
+function (x,w=replicate(length(x),1),d=2) 
 {
     if (length(x) < 2L) 
         stop("need at least 2 data points")

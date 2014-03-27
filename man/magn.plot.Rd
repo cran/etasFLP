@@ -2,16 +2,17 @@
 \alias{magn.plot}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Transformed plot of magnitudes distribution of an earthquakes catalog}
+Transformed plot of the magnitudes distribution of an earthquakes catalog}
 \description{
-Plots the logarithm of the cumulative frequency of eccedence for the magnitude in an earthquake catalog.
+Plots the logarithm of the cumulative frequency of eccedence vs. magnitude in an earthquake catalog.
 }
 \usage{
-magn.plot(catalog)
+magn.plot(catalog,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{catalog}{should be a \code{eqcat} object, or at least must contain a column with name \code{magn1}.}
+  \item{...}{other arguments to be passed to \code{plot()}}
 }
 \details{
 For each magnitude \eqn{m_j}{mj}, if \eqn{N_j}{Nj} is the number of values of \code{magn1} greater than \eqn{m_j}{mj},
@@ -21,9 +22,9 @@ According to the Gutenberg-Richter law, this plot should be linear. If there is 
 than a given \eqn{m_0}{m0}, then  \eqn{m_0}{m0} is probably the magnitude threshold of the catalog.
 }
 
-\value{a new plot is printed (see details).}
+\value{A new plot is printed (see details).}
 %\references{}
-\author{Marcello Chiodi}
+\author{Marcello Chiodi.}
 
 \examples{
 \dontrun{

@@ -34,7 +34,7 @@ If the catalog passes the check, then the catalog is returned with the new class
 \author{
 Marcello Chiodi}
 \note{
-In this first version if you have a catalog without the depth (\code{z}), please insert however a constant column. The depth is used only in some plot and not in the estimation routines of the package etasFLP; \code{etasclass} uses only
+In this first version if you have a catalog without the depth (\code{z}), please insert however a constant column. The depth can be used only in some plot and not in the estimation routines of the package etasFLP; \code{etasclass} uses only
 \code{time},  \code{lat},   \code{long},  \code{magn1}.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

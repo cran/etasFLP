@@ -22,7 +22,7 @@ w = replicate(length(xkern), 1))
   \item{h}{bandwidths: a length 2 numerical vector.}
   \item{factor.xy}{expansion factor for bandwidths (density will be smoother if  \code{factor.xy}>1).}
   \item{w}{vector of weights to give to observed points (length \code{n}).}
-  \item{eps}{enlargment factor for the region.}
+  \item{eps}{enlargment factor for the region of interest.}
 }
 \details{A standard bivariate normal kernel estimator.}
 \value{grid values and estimated densities.
@@ -32,7 +32,7 @@ Venables, W. N. and Ripley, B. D. (2002) \emph{Modern Applied Statistics with S}
 Fourth edition. Springer.
 Wand, M.P and Jones, M.C. (1995). \emph{Kernel Smoothing}. London: Chapman & Hall/CRC. 
 }
-\author{Marcello Chiodi}
+\author{Marcello Chiodi.}
 %\note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
