@@ -13,11 +13,11 @@ cat("------------------------------------------------------------------", "\n")
 cat("Magnitude range  ",round(range(x$magn1),2),"\n")
 if (extended){
 cat("------------------------------------------------------------------", "\n")
-print("Summary of time differences")
-print(summary(diff(x$t)))
+cat("Summary of time differences","\n")
+cat(summary(diff(x$t)),"\n")
 cat("------------------------------------------------------------------", "\n")
-print("Magnitude Distribution")
-print(summary(diff(x$magn1)))
+cat("Magnitude Distribution","\n")
+cat(summary(diff(x$magn1)),"\n")
 MLA.freq(x$magn1)
 }
 }

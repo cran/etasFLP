@@ -9,8 +9,7 @@ Background, triggered and total space intensities
 are also plotted for a grid of values.
 }
 \usage{
-\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot.pdf", ngrid=201,
-			flag.3D=TRUE,flag.log=FALSE,...)
+\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot", ngrid=201,flag.3D=TRUE,flag.log=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

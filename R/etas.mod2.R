@@ -48,7 +48,7 @@ ris=.Fortran("etasfull8" ,NAOK=TRUE,
 	timeelapsed	<-	difftime(timenow,time.init,units="secs")
 	etas.comp	=ris$l
 	       
-	       if(iprint) print(timeelapsed)
+	       if(iprint) cat(timeelapsed,"\n")
 		
 
    	ci	=lambda*back.dens + etas.comp
@@ -103,8 +103,8 @@ space	=(pi/((1-q)*ntheta))*etas
 integral=sum(k0*it*space)
 
 if(iprint){
-print("integral polar")
-print(integral)
+cat("integral polar","\n")
+cat(integral,"\n")
 }
 
 }
@@ -120,10 +120,10 @@ print(integral)
 	integraltot	=integral+lambda*range.t*back.integral
 	logL		= -logL.l+integraltot
 
-if(iprint){	print("whole Integral computation")
-		print(timeelapsed)
-			print(params)
-			print(exp(params))
+if(iprint){	cat("whole Integral computation","\n")
+		cat(timeelapsed,"\n")
+			cat(params,"\n")
+			cat(exp(params),"\n")
 			}
 
 attr(logL,"etas.vec")=etas.comp

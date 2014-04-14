@@ -35,10 +35,10 @@ function(cat.orig,
 	params.ind=as.numeric(params.ind)
 	flag		=eqcat(cat.orig)
 	if (!flag$ok){
- 			 print("WRONG EARTHQUAKE CATALOG DEFINITION")
+ 			 cat("WRONG EARTHQUAKE CATALOG DEFINITION","\n")
 			  return(FALSE)
 		      }
-	if(sum(abs(params.ind-0.5)==0.5)!=8){print("WRONG PARAMS.IND DEFINITION: ONLY 0/1 ALLOWED SEE HELP")
+	if(sum(abs(params.ind-0.5)==0.5)!=8){cat("WRONG params.ind DEFINITION: ONLY FALSE/TRUE ALLOWED SEE HELP","\n")
 			  return(FALSE)}
 
 	iter  		=0
@@ -210,7 +210,7 @@ if(iter>0){
 
 			params		=log((params.fix-params.lim)[params.ind==1])
 cat("Start ML step; Declustering and weighting iteration number: ")
-print(iter)
+cat(iter,"\n")
 if (usenlm){
 	risult =nlm(etas.mod2,params,
 		hessian	=TRUE,
@@ -274,8 +274,8 @@ if (compsqm)	sqm	=sqrt(diag(solve(risult$hessian)))*exp(params.optim)
 	names(sqm.tot)=namespar
 		params.MLtot	=params
 #####################################################################################
-print("found optimum; end  ML step")
-print(iter)
+cat("found optimum; end  ML step  ")
+cat(iter,"\n")
 
 	mu	= params[1]
         k0  	= params[2]
@@ -340,9 +340,10 @@ rho.weights=params.MLtot[1]*back.dens/attr(l,"lambda.vec")
 	rho.weights.iter	=rbind(rho.weights.iter,rho.weights)
 	hdef.iter	=rbind(hdef.iter,hdef)
 	fl.iter		=c(fl.iter,fl)
-print(paste("######   ITERATION n.", iter, "  ###### AIC = ",AIC.iter[iter]))
-print("Current estimates of parameters: ")
-print(round(params.MLtot,5))
+cat(paste("######   ITERATION n.", iter, "  ###### AIC = ",AIC.iter[iter]),"\n")
+cat("Current estimates of parameters: ","\n")
+cat(round(params.MLtot,5))
+cat("\n")
 if (iter>1){
 	eps		=max(abs(back.dens-etas.ris$back.dens))
 	eps.par		=max(abs(params.iter[iter]-params.iter[iter-1]))

@@ -40,23 +40,21 @@ if(profile.approx){
 
 		params.indprof[iprofile]	=0
 		sq			=fitted$sqm[iprofile]*kprofile
-		print(sq)
 		
-		print(fitted$params[iprofile])
 		param.vec		=seq(fitted$params[iprofile]-sq,fitted$params[iprofile]+sq,length.out=nprofile)
 		logl.vec		=array(0,nprofile)
 		params.MLtot		=fitted$params
 		
 		for (j in 1:nprofile)	{
 
-	print("start profile-L computation. j=  ")
-  print(j)
+	cat("start profile-L computation. j=  ")
+  cat(j,"\n")
 
 		params.fix[iprofile]	=param.vec[j]
 		params		=log(params.MLtot[params.indprof==1])
 	
 		if(profile.approx) params=params-delta.psi*(params.fix[iprofile]-params.MLtot[iprofile])
-print(params)
+cat(params,"\n")
 if (fitted$usenlm){
 	risult.profile =nlm(etas.mod2,params,
 #		hessian	=TRUE,
@@ -95,8 +93,8 @@ else {
 	}
 
 logl.vec[j]=ifelse(fitted$usenlm,risult.profile$minimum,risult.profile$value)
-print(" profile likelihood found")
-print(c(j,param.vec[j],logl.vec[j]))
+cat(" profile likelihood found","\n")
+cat(c(j,param.vec[j],logl.vec[j]),"\n")
 	}
 			
 			ris=list(

@@ -1,3 +1,12 @@
+2014-04-14  Marcello Chiodi  <marcello.chiodi@unipa.it>
+
+*R package etasFLP: changes from version 1.0.2 to version 1.0.3
+
+*NAMESPACE: improved the import export instructions; S3 methods explicitly registered. Only few functions of the package are explicitely exported.
+
+*etasclass: improved the printing of some execution message, avoiding "print()".
+
+
 2014-03-27  Marcello Chiodi  <marcello.chiodi@unipa.it>
 
 *R package etasFLP: changes from version 1.0.1 to version 1.0.2

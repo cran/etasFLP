@@ -1,12 +1,13 @@
 plot.etasclass <-
-function(x,pdf=FALSE,file ="etasplot.pdf", ngrid=201,flag.3D=TRUE,flag.log=FALSE,...){
+function(x,pdf=FALSE,file ="etasplot", ngrid=201,flag.3D=TRUE,flag.log=FALSE,...){
 
-cat("Computation of the ETAS integrated intensity on a grid","\n")
+cat("Computation of the ETAS space intensity integrated intensity on a grid","\n")
 cat("for large catalogs computation can take some minutes. Please wait ...","\n")
 #####################################################
 # plot time intensity # with points
 typegraph=1
 
+file=paste(file,"pdf",sep="")
 if (pdf){
 pdf(file=file,onefile=TRUE)}
 else
