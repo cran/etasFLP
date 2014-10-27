@@ -3,9 +3,6 @@ function(params=c(1,1,1,1,1,1,1,1),
 				params.fix	=array(1,8),
 				params.ind	=array(1,8),
 				params.lim	=c(0,0,0,0,0,0,0,0),
-				onlytime	=FALSE,
-				back.dens,
-				back.integral,
 				cat,
 				rho.s2,
 				ntheta=100,
@@ -32,10 +29,10 @@ function(params=c(1,1,1,1,1,1,1,1),
 	m1=n/2
 intflp=0*times.tot
 for (i in m1:m2){
-tmax1		=times.tot[m2+1]
-tmax0		=times.tot[m2]
-times		=times.tot[1:m2]
-ind1		=1:m1
+tmax1		=times.tot[i+1]
+tmax0		=times.tot[i]
+ind1		=1:i
+times		=times.tot[ind1]
 magnitudes	=magnitudes.tot[ind1]
 rho.m1		=rho.s2[ind1,]
 

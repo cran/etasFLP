@@ -17,7 +17,6 @@ cat("Summary of time differences","\n")
 cat(summary(diff(x$t)),"\n")
 cat("------------------------------------------------------------------", "\n")
 cat("Magnitude Distribution","\n")
-cat(summary(diff(x$magn1)),"\n")
 MLA.freq(x$magn1)
 }
 }

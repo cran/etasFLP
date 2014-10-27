@@ -1,8 +1,8 @@
 summary.etasclass<-function(object,...){
 x=object
 cat("Call:","\n","\n")
-print(x$this.call)
-cat("\n","\n")
+cat(x$this.call)
+cat("\n","\n","\n")
 cat(x$description,"\n")
 cat("Execution started:                 ",format(x$time.start),"\n")
 cat("Elapsed time of execution (hours)  ",as.numeric(x$time.elapsed,units="hours"),"\n")
@@ -23,6 +23,6 @@ cat("-------------------------------------------------------","\n","\n")
 cat("ETAS Parameters:","\n")
 ris=cbind(x$params,x$sqm)
 colnames(ris)=c("      Estimates","      std.err.")
-print(round(ris,6))
+cat(round(ris,6),"\n")
 cat("-------------------------------------------------------","\n")
 }

@@ -39,7 +39,7 @@ colnames(conf)=c("Coverage","Lower","Upper")
 rownames(conf)=1:length(prob)
 
 cat("Asymptotic  confidence  intervals:","\n")
-print(conf)
+cat(conf,"\n")
 
 ris=list(spline.profile=sn,conf=conf,prob=prob)
 }

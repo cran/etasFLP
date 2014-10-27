@@ -13,12 +13,16 @@ Returns an \code{etasclass} object, for which \code{plot}, \code{summary}, \code
 \usage{etasclass(cat.orig, 
     magn.threshold=2.5, magn.threshold.back=magn.threshold+2,
     mu=1,k0=1,c=0.5,p=1.01,	a=1.2,gamma=.5,d=1.,q=1.5, params.ind=replicate(8,TRUE),
-    declustering=TRUE,thinning=FALSE,
-    flp=TRUE,ndeclust=5, onlytime=FALSE,is.backconstant=FALSE,
+%    kern.var=FALSE, alpha=0.5,
+    hdef=c(1,1),
+declustering=TRUE,thinning=FALSE,
+    flp=TRUE, m1=NULL, ndeclust=5, onlytime=FALSE,is.backconstant=FALSE,
+    w=replicate(nrow(cat.orig),1),
 ##### end of  main input arguments. 
 ##### Control and secondary arguments:
     description="", cat.back=NULL, back.smooth=1.0,
-    sectoday=TRUE,usenlm=TRUE, method	="BFGS", compsqm=TRUE,
+    sectoday=TRUE,longlat.to.km=TRUE,
+    usenlm=TRUE, method	="BFGS", compsqm=TRUE,
     epsmax=0.0001, iterlim=100, ntheta=100)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -69,25 +73,33 @@ mainshock; see details. Default value = 1.5.
   Default value = \code{replicate(8,TRUE)}, that is, \code{etasclass} estimates all parameters.
 }
 
-\emph{Flags for the kind of declustering}:
+\emph{Flags for the kind of declustering and smoothing}:
+%  \item{kern.var}{if \code{TRUE} the background seismicity is estimated through a variable metric anisotropic kernel. yet not used in version 1.1.0. Default value = \code{FALSE}.}
+  \item{hdef}{Starting values for the \code{x,y} bandwidths used in the kernel estimator of background seismicity. Default value = \code{1,1}.
+}
+%  \item{alpha}{if \code{kern.var=TRUE} indicates the mixing proportion in the background seismicity between  variable metric and fixed metric kernel.yet not used in version 1.1.0. Default value = \code{0.5}.}
+
   \item{declustering}{if \code{TRUE} the catalog is iteratively declustered to optimally estimate the background intensity (through thinning, if \code{thinning=TRUE}, or through weighting if \code{thinning=FALSE}). Default value = \code{TRUE}.
-%%     ~~Describe \code{declustering} here~~
 }
   \item{thinning}{if \code{thinning=TRUE} a background catalog is obtained sampling from the original catalog with probabilities estimated during the iterations. Default value =\code{FALSE}.
-%%     ~~Describe \code{thinning} here~~
 }
   \item{flp}{if \code{flp=TRUE} then background seismicity is estimated through Forward Likelihood Predictive (see details). Otherwise the Silverman rule is used. Default value =\code{TRUE}.
+%%     ~~Describe \code{flp} here~~
+} 
+  \item{m1}{Used only if \code{flp=TRUE}. Indicates the range of points used for the FLP steps. See details. If missing it is set  to \code{nrow(cat)/2}.
 %%     ~~Describe \code{flp} here~~
 } 
 \item{ndeclust}{maximum number of iterations for the general declustering procedure. Default=5.
 %%     ~~Describe \code{ndeclust} here~~
 }
-  \item{onlytime}{if \code{TRUE}  then a time process is fitted to data , regardless to space location (in this case \code{is.backconstant} is set to \code{TRUE} and \code{declustering}, \code{flp} are set to \code{FALSE}). Default value = \code{FALSE}.
+
+\item{onlytime}{if \code{TRUE}  then a time process is fitted to data , regardless to space location (in this case \code{is.backconstant} is set to \code{TRUE} and \code{declustering}, \code{flp} are set to \code{FALSE}). Default value = \code{FALSE}.
 %%     ~~Describe \code{onlytime} here~~
 }
   \item{is.backconstant}{if \code{TRUE}  then background seismicity is assumed to be homogeneous in space  (and \code{declustering, flp} are set to \code{FALSE}).  Default value = \code{FALSE}.
 %%     ~~Describe \code{is.backconstant} here~~
 }
+  \item{w}{initial weights}
 \emph{Other control parameters}:
   \item{description}{a description string used for the output. Default value = "".
 %%     ~~Describe \code{description} here~~
@@ -100,6 +112,8 @@ mainshock; see details. Default value = 1.5.
 Controls the level of smoothing for the background seismicity (meaningful only if \code{flp=FALSE}). Default value = 1.
 }
   \item{sectoday}{ if \code{TRUE}, then \code{time} variable of \code{cat.orig} is converted from seconds to days.  Default value = \code{TRUE}.
+}
+  \item{longlat.to.km}{ if \code{TRUE}, then \code{long} and \code{lat} variables of \code{cat.orig} are treated as geographical coordinates and converted to kilometers.  Default value = \code{TRUE}.
 }
   \item{usenlm}{if \code{TRUE}, then \code{nlm} function (gauss-newton method) is used in the maximum likelihood steps; if \code{FALSE}, then \code{optim} function is used (with \code{method} \code{=method} ).  Default value = \code{TRUE}.
 }
@@ -115,7 +129,7 @@ Controls the level of smoothing for the background seismicity (meaningful only i
    \item{ntheta}{number of subdivisions of the round angle, used in the approximation of the integral involved in the likelihood computation of the ETAS model. Default value = 100.
    }
 
- 
+
 
 }
 \details{

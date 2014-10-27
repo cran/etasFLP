@@ -1,5 +1,5 @@
 etasclass <-
-function(cat.orig,
+function(cat.orig,	
 				magn.threshold	=2.5,
 				magn.threshold.back=magn.threshold+2,				
 ##### starting values for parameters
@@ -13,25 +13,38 @@ function(cat.orig,
 				q		=1.5,
 ### indicators
 				params.ind=replicate(8,TRUE),
+### flags for the kind of declustering and smoothing:
+
+#				kern.var	=FALSE,
+#				alpha		=0.5,
+				hdef=c(1,1),
 				declustering	=TRUE,
 				thinning	=FALSE,
 				flp		=TRUE,
+				m1		=NULL,
 				ndeclust        =5,
 				onlytime	=FALSE,
 				is.backconstant	=FALSE,
+				w		=replicate(nrow(cat.orig),1),
+
 ##### end of  main input arguments. 
 ##### Control and secondary arguments:
 				description	="",
 				cat.back   	=NULL,
 				back.smooth	=1.0,
 				sectoday	=TRUE,
+				longlat.to.km   =TRUE,
 				usenlm		=TRUE,
 				method		="BFGS",
 				compsqm 	=TRUE,
 				epsmax		= 0.0001,
 				iterlim		=100,
-				ntheta		=100							)   {
-	this.call=match.call()
+				ntheta		=100)   {
+				
+				missingw	=missing(w)
+				kern.var	=FALSE
+				alpha		=0.5
+this.call=match.call()
 	params.ind=as.numeric(params.ind)
 	flag		=eqcat(cat.orig)
 	if (!flag$ok){
@@ -40,18 +53,28 @@ function(cat.orig,
 		      }
 	if(sum(abs(params.ind-0.5)==0.5)!=8){cat("WRONG params.ind DEFINITION: ONLY FALSE/TRUE ALLOWED SEE HELP","\n")
 			  return(FALSE)}
-
+			  kernvar	=FALSE
+			  alpha		=.9
+			  iprint	=FALSE
+#########################################
+## 
+## INIZIALIZATION OF SOME VARIABLES
+## 
+#########################################
+# 
 	iter  		=0
-  AIC.iter	=numeric(0)
+        AIC.iter	=numeric(0)
 	params.iter	=numeric(0)
 	sqm.iter 	=numeric(0)
 	rho.weights.iter	=numeric(0)
-	hdef		=c(0,0)
+	if (kern.var) hdef=c(hdef,alpha)  
 	hdef.iter	=numeric(0)
+	wmat		=numeric(0)
 	fl		=0
-	fl.iter	=numeric(0)
+	fl.iter		=numeric(0)
 
 	AIC.flag	=FALSE	
+	AIC.decrease	=TRUE	
 	time.start	<-	Sys.time()
 	trace		=TRUE # controls the level of intermediate printing can be deleted in future versions
 	region		=embedding.rect.cat.eps(cat.orig)
@@ -60,13 +83,22 @@ function(cat.orig,
 
  	if(sectoday) 	cat$time	=	cat$time/86400
 #### STARTING VALUES
+	if(missing(m1)||is.null(m1))   m1=as.integer(nrow(cat)/2)
  	if(missing(cat.back))   cat.back=subset(cat,cat$magn1>=magn.threshold.back)
 	if (missing(mu)||is.null(mu)) mu= 0.5*nrow(cat)/diff(range(cat$time))
 	if (missing(k0))	k0	=mu
+	print(missing(w))
+	print(is.null(w))
+	
 	if(!usenlm) compsqm=FALSE
         ord	<-	order(cat$time)
         cat 	<-	cat[ord,]
 	n	=	nrow(cat)
+	n.back	=	nrow(cat.back)
+
+ #       if(length(w)!=n.back)  {cat("WRONG WEIGHTS DEFINITION","\n")
+#			  return(FALSE)
+#			  }
         eps	=2*epsmax
 if (onlytime || is.backconstant) {
 				  declustering	=FALSE
@@ -89,17 +121,33 @@ rho.s2	=matrix(0,ntheta,n)
 	}
 	else
 	{
+		
+		
+		
+		if (longlat.to.km){
+		
 		radius=6371.3
+		
 		y.km      =   radius*cat.back$lat*pi/180
 		x.km      =   radius*cat.back$long*pi/180
-		y.lat	=   cat.back$lat
-		x.long	=cat.back$long
 
 		ycat.km      =   radius*cat$lat*pi/180
 		xcat.km      =   radius*cat$long*pi/180
-cat$long=xcat.km
-cat$lat=ycat.km
-region=embedding.rect.cat.eps(cat)
+
+		cat$long=xcat.km
+		cat$lat=ycat.km
+		
+		  }
+	        else
+	        {
+       		y.km      =   cat.back$lat
+		x.km      =   cat.back$long
+
+		ycat.km      =  cat$lat
+		xcat.km      =   cat$long
+}
+	
+		region=embedding.rect.cat.eps(cat)
 
 		for(i in (1:n)){
 		trasf			=region.P(region,c(xcat.km[i],ycat.km[i]),k=ntheta)
@@ -109,8 +157,10 @@ region=embedding.rect.cat.eps(cat)
 	} 
 	
 ###########################    begin clustering #################################################
-
-while ((iter<ndeclust)&((eps>epsmax)||(eps.par>epsmax)||(AIC.flag==FALSE))){
+#while ((iter<ndeclust)&((eps>epsmax)||(eps.par>epsmax)||(AIC.flag==FALSE))){
+while (AIC.decrease&(iter<ndeclust)&((eps>epsmax)||(eps.par>epsmax))){
+# attempt avoiding decrasing constrain:
+#while ((iter<ndeclust)&((eps>epsmax)||(eps.par>epsmax))){
 	
 	if(is.backconstant==FALSE){
 
@@ -126,38 +176,33 @@ if(iter>0){
 					params.ind=params.ind,
 					params.fix=params.fix,
 					cat=cat,magn.threshold=magn.threshold,
-					back.dens=back.dens,
-					back.integral=back.integral,
-					onlytime=onlytime,	
 
 					rho.s2=rho.s2,ntheta=ntheta,
 					trace=trace)
 
-# compute etas intensity and integral for each point
-# call routine for optimization
+# compute etas intensity and integral for each point and call routine for optimization
 # flp MUST be weighted 
-		ris.flp=flp1.etas.nlm(cat,
+    ris.flp=flp1.etas.nlm(cat,
+		        h.init=hdef,
 			etas.params=params.MLtot,
 			etas.l=etas.l,
 			etas.integral=etas.integral,
 			w=rho.weights,
-			m1=as.integer(nrow(cat)/2),
+			m1=m1,
 			m2=as.integer(nrow(cat)-1),
 			mh=1
+#			,kern.var=kern.var
+			
 			)
 		hdef	=ris.flp$hdef
 		fl	=ris.flp$fl
-		
-# h must be passed to the following 
-		}
+				}
     ### 	end of flp step 
 
 		if (thinning){
 		back.ind	=runif(n)<rho.weights
 		x.km	=xcat.km[back.ind]
 		y.km	=ycat.km[back.ind]
-		x.long	=cat.longlat$long[back.ind]
-		y.lat 	=cat.longlat$lat[back.ind]
 		w	=replicate(length(x.km),1)
 		}
 		else
@@ -165,27 +210,33 @@ if(iter>0){
 #		back.ind	=runif(n)<rho.weights
 		x.km	=xcat.km
 		y.km	=ycat.km
-		x.long	=cat.longlat$long
-		y.lat 	=cat.longlat$lat
 		w	=rho.weights
 		}
-		
-		
+				
     }
     else
-    {w	=replicate(length(x.km),1)
-
+    {if(missingw) w	=replicate(length(x.km),1)
     }
+# in future versions unify the two blocks    
 		if(flp&(iter>0)){
-		back.tot	=kde2dnew.fortran(x.km,y.km,xcat.km,ycat.km,factor.xy=1,h=hdef,w=w)
+#		alpha=hdef[3:4]
+#		back.tot		=kde2dnew.fortran(x.km,y.km,xcat.km,ycat.km,factor.xy=1,eps=1/n,h=hdef,w=w,kern.var=kern.var,alpha=alpha)
+
+		back.tot		=kde2dnew.fortran(x.km,y.km,xcat.km,ycat.km,factor.xy=1,eps=1/n,h=hdef,w=w)
 		back.dens	=back.tot$z
-		back.integral	=kde2d.integral(x.km,y.km,xcat.km,ycat.km,factor.xy=1,w=w,h=hdef,eps=1/n)
-		}
+		back.integral	=back.tot$integral
+		wmat		=back.tot$wmat}
 		else
 		{
-		back.tot	=kde2dnew.fortran(x.km,y.km,xcat.km,ycat.km,factor.xy=back.smooth,w=w)
+#		back.tot	=kde2dnew.fortran(x.km,y.km,xcat.km,ycat.km,factor.xy=back.smooth,eps=1/n,w=w,kern.var=kern.var,alpha=alpha)
+		if(!missingw){
+		x.km	=xcat.km
+		y.km	=ycat.km
+		}
+		back.tot	=kde2dnew.fortran(x.km,y.km,xcat.km,ycat.km,factor.xy=back.smooth,eps=1/n,w=w)
 		back.dens	=back.tot$z
-		back.integral	=kde2d.integral(x.km,y.km,xcat.km,ycat.km,factor.xy=back.smooth,w=w,eps=1/n)
+		back.integral	=back.tot$integral
+		wmat		=back.tot$wmat
 		hdef		=back.tot$h
 		}
 		
@@ -225,6 +276,7 @@ if (usenlm){
 		back.integral=back.integral,
 		onlytime=onlytime,
 		rho.s2=rho.s2,ntheta=ntheta,
+		iprint=iprint,
 		trace=trace)
 
 		params.optim=risult$estimate
@@ -257,8 +309,7 @@ l=etas.mod2(params=params.optim,
 
 		rho.s2=rho.s2,ntheta=ntheta,
 		trace=trace)
-
-		
+	
 ####################("found optimum ML step") #################################################################
 det.check=det(risult$hessian)
 if (abs(det.check)<1e-20) compsqm=FALSE
@@ -286,12 +337,8 @@ cat(iter,"\n")
         d   	= params[7]
         q   	= params[8]
 #####################################################################################
-#####################################################################################
-#
 # time.res= residuals obtained with integral tansform of time intensity function
 # to be used only for time processes
-#
-#####################################################################################
 #####################################################################################
 	time.res	=array(0,n)
 	if (onlytime){
@@ -317,9 +364,7 @@ cat(iter,"\n")
 	}
 
 #############################################################################################
-#
 #		final output####   check for clustering
-#
 #############################################################################################
 
 names(params.fix)=namespar
@@ -333,17 +378,24 @@ rho.weights=params.MLtot[1]*back.dens/attr(l,"lambda.vec")
 
 	timenow		<-	Sys.time()
 	time.elapsed	<-	difftime(timenow,time.start,units="secs")
+	AIC.temp	=2*l +2*nparams
+	AIC.decrease	=(AIC.temp<=min(AIC.iter)) 
+	
+#	AIC.flag	=AIC.flag1
+        if (AIC.decrease){
 	iter		=iter+1
-	AIC.iter[iter]	=2*l +2*nparams
+	AIC.iter[iter]	=AIC.temp
 	params.iter	=rbind(params.iter,params.MLtot)
 	sqm.iter	=rbind(sqm.iter,sqm.tot)
 	rho.weights.iter	=rbind(rho.weights.iter,rho.weights)
 	hdef.iter	=rbind(hdef.iter,hdef)
+	
 	fl.iter		=c(fl.iter,fl)
 cat(paste("######   ITERATION n.", iter, "  ###### AIC = ",AIC.iter[iter]),"\n")
 cat("Current estimates of parameters: ","\n")
 cat(round(params.MLtot,5))
 cat("\n")
+}
 if (iter>1){
 	eps		=max(abs(back.dens-etas.ris$back.dens))
 	eps.par		=max(abs(params.iter[iter]-params.iter[iter-1]))
@@ -380,6 +432,8 @@ rownames(params.iter)=1:nrow(params.iter)
 			flp 		=flp,
 			hdef		=hdef,
 			hdef.iter	=hdef.iter,
+#			kern.var	=kern.var,
+			wmat		=wmat,
 			fl.iter		=fl.iter,
 			back.smooth	=back.smooth,
 			rho.weights	=rho.weights, 
@@ -401,8 +455,8 @@ rownames(params.iter)=1:nrow(params.iter)
 #############################################################################################
 
 class(etas.ris)		="etasclass"
-class(etas.ris$cat)	="eqcat"
-class(etas.ris$cat.longlat)	="eqcat"
+#class(etas.ris$cat)	="eqcat"
+#class(etas.ris$cat.longlat)	="eqcat"
 
 			return(etas.ris)
 }

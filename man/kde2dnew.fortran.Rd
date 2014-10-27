@@ -7,11 +7,17 @@
 and relative integral.}
 
 \usage{
-kde2dnew.fortran(xkern, ykern, gx, gy, h, factor.xy = 1, w = replicate(length(xkern), 1))
+kde2dnew.fortran(xkern, ykern, gx, gy, h, factor.xy = 1,eps=0, w =
+ replicate(length(xkern), 1)
+%,kern.var=FALSE, alpha = h
+)
 
 kde2d.integral(xkern, ykern, gx = xkern, gy = ykern, eps = 0, factor.xy = 1, 
 h = c(bwd.nrd(xkern, w), bwd.nrd(ykern, w)),
-w = replicate(length(xkern), 1))
+w = replicate(length(xkern), 1),wmat=numeric(0)
+%,kern.var=FALSE
+)
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +28,9 @@ w = replicate(length(xkern), 1))
   \item{h}{bandwidths: a length 2 numerical vector.}
   \item{factor.xy}{expansion factor for bandwidths (density will be smoother if  \code{factor.xy}>1).}
   \item{w}{vector of weights to give to observed points (length \code{n}).}
+%  \item{kern.var}{if \code{TRUE} a variable metric is used}
+%  \item{alpha}{if \code{kern.var=TRUE} used for variable metric kernel. yet}
+  \item{wmat}{if \code{kern.var=TRUE} defines the variable metric}
   \item{eps}{enlargment factor for the region of interest.}
 }
 \details{A standard bivariate normal kernel estimator.}

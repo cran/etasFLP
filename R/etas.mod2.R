@@ -10,8 +10,9 @@ function(params=c(1,1,1,1,1,1,1,1),
 				rho.s2,
 				ntheta=100,
 				magn.threshold,
-				trace=TRUE) {
-	iprint=FALSE
+				trace=TRUE,
+				iprint=FALSE) 
+				{
 	params.e	=params.fix
 	params.e[params.ind==1]=exp(params)+params.lim[params.ind==1]
 #	print(c(length(params.e),length(params)))

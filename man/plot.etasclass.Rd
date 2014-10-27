@@ -9,14 +9,16 @@ Background, triggered and total space intensities
 are also plotted for a grid of values.
 }
 \usage{
-\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot", ngrid=201,flag.3D=TRUE,flag.log=FALSE,...)
+\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot",  ngrid=201,tfixed=0,flag.3D=FALSE,flag.log=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{an \code{etaclass} object.}
+%  \item{which}{an array with the desired graphs. Default is 1:4}
   \item{pdf}{If \code{TRUE}, then 2D plots are sent to a pdf file}
   \item{file}{name of the pdf file}
    \item{ngrid}{number of points for each direction (\code{x}, \code{y}) of a \code{ngrid*ngrid} grid where estimated  intensities must be evaluated. Default value= 201.}
+  \item{tfixed}{If a positive value is given, then the triggered intensity at time \code{tfixed} is estimated and visualized.}
   \item{flag.3D}{If \code{TRUE} a 3D plot is also produced.}
   \item{flag.log}{If \code{TRUE} then a  \code{log} scale is used to plot intensities.}
   \item{...}{other arguments.}
@@ -29,6 +31,9 @@ Different plots of the output of an object of class \code{etasclass}.
 By default the space-time region is the same used for the estimation of the ETAS model. 
 Background, triggered and total space intensities
 are also computed and plotted for a grid of values.
+
+If a positive value is given for \code{tfixed}, then the triggered intensity at time \code{tfixed} is estimated and visualized.
+A tipical use can be with \code{tfixed} a day after a big earthquake.
 
 If \code{pdf=TRUE} intensities are printed on a pdf file, as spcified by \code{file}; otherwise 
 default screen device is used. 
