@@ -1,3 +1,9 @@
+2014-10-30  Marcello Chiodi  <marcello.chiodi@unipa.it>
+
+*R package etasFLP: changes from version 1.1.0 to version 1.1.1
+
+*summary.etasclass.R: Corrected a bug in printing the output
+
 2014-10-27  Marcello Chiodi  <marcello.chiodi@unipa.it>
 
 *R package etasFLP: changes from version 1.0.3 to version 1.1.0
