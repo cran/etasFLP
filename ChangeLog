@@ -1,3 +1,17 @@
+2014-12-22  Marcello Chiodi  <marcello.chiodi@unipa.it>
+
+*R package etasFLP: changes from version 1.1.1 to version 1.2.0
+ 
+*etas.starting: new function  to estimate starting values (beta-version)
+
+*plot.etasclass: added several plot for diagnostic and residual analysis (ten plots in four windows)
+
+*plot.etasclass: Corrected a bug for the computation of integrated triggered intensities
+
+*plot.etasclass: Checked a bug when "backconstant=TRUE"
+
+*simpson.kD: the function now is exported for end users
+
 2014-10-30  Marcello Chiodi  <marcello.chiodi@unipa.it>
 
 *R package etasFLP: changes from version 1.1.0 to version 1.1.1

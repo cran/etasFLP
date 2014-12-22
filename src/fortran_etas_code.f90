@@ -224,6 +224,7 @@
 !	etasfull8 computes only the triggered intensity of the ETAS model
 !       with 8 parametrs.
 !       called by etas.mod2.R
+!       input magnitude vector must be  m(j)-m0
 !
       subroutine etasfull8(tflag,n,mu,k,c,p,a,g,d,q,x,y,t,m,l)
 	integer*4 n,tflag
@@ -253,12 +254,53 @@
  100    continue
        end
        
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!	etasfull8 computes only the triggering intensity of the ETAS model with 8 parametrs.of each  mainshock 
+!       sum the contribution of each event on the following ones
+!       called by plot.etasclass
+!       input magnitude vector must be  m(j)-m0
+!
+      subroutine etasfull8reversed(tflag,n,mu,k,c,p,a,g,d,q,x,y,t,m,ltot,l)
+	integer*4 n,tflag
+      double precision mu,k,c,p,a,g,d,q,x(n),y(n),t(n),m(n),ltot(n),l(n)
+      double precision dx,dy,ds,dt,xi,yi,ti,etas,inc
+      do 100 i=1,n-1
+	inc	=0
+	ti	=t(i)
+	xi	=x(i)
+	yi	=y(i)	
+      do 110 j=i+1,n
+      dt	=t(j)-ti
+	etas	=0
+	if (dt > 0)  then
+	dx	=xi-x(j)
+	dy	=yi-y(j)
+	ds	=dx*dx+dy*dy
+	if (tflag>0) then
+	etas	=((dt+c)**(-p))*exp(a*m(i))
+	else
+	etas	=((dt+c)**(-p))*exp((a-g)*m(i))*(ds/exp(g*m(i))+d )**(-q)
+	end if 
+	end if
+	inc	=inc+etas/ltot(j)
+ 110    continue
+	l(i)	=inc*k
+ 100    continue
+       end
+       
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!       
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !     etasfull8tintegrated computes only the triggered intensity of the ETAS model
 !     integrated on the time axis
 !     on a set of points different from those observed.
-! 
+!
+!     input magnitude vector must be  m(j)-m0
+!
+!
+
       subroutine etasfull8tintegrated(n,mu,k,c,p,a,g,d,q,x,y,t,m,l,ngridtot, xgrid, ygrid,tmax)
       integer*4 n,ngridtot
       double precision mu,k,c,p,a,g,d,q,x(n),y(n),xgrid(ngridtot),ygrid(ngridtot),t(n),m(n),l(ngridtot)
@@ -280,7 +322,7 @@
 	if (abs(p-1)<eps) then
 		integrt =log(c+dt)-log(c)
 		 else
-		integrt =(p-1)*(c**(1-p)-(c+dt)**(1-p))
+		integrt =((c+dt)**(1-p)- c**(1-p))/(1-p)
 	end if
 	etas	=integrt*exp((a-g)*m(j))*(ds/exp(g*m(j))+d )**(-q)
 	end if
@@ -296,7 +338,11 @@
 !
 !     etasfull8tfixed computes only the triggered intensity of the ETAS model
 !     for a given day tfixed on a set of space x-y points different from those observed.
-! 
+!
+!     input magnitude vector must be  m(j)-m0
+!
+!
+ 
       subroutine etasfull8tfixed(n,mu,k,c,p,a,g,d,q,x,y,t,m,l,ngridtot, xgrid, ygrid,tfixed)
       integer*4 n,ngridtot
       double precision mu,k,c,p,a,g,d,q,x(n),y(n),xgrid(ngridtot),ygrid(ngridtot),t(n),m(n),l(ngridtot)
@@ -505,10 +551,10 @@
 	stdx1	=((rangex(1,1)-xkern(i,1)))/wmat(i,2)
 	stdy2	=((rangex(2,2)-xkern(i,2)))/wmat(i,3)
 	stdy1	=((rangex(2,1)-xkern(i,2)))/wmat(i,3)
-	call MDBNOR(stdx2,stdy2,rho,ix4,IER)
-	call MDBNOR(stdx2,stdy1,rho,ix3,IER)
-	call MDBNOR(stdx1,stdy2,rho,ix2,IER)
-	call MDBNOR(stdx1,stdy1,rho,ix1,IER)
+!	call MDBNOR(stdx2,stdy2,rho,ix4,IER)
+!	call MDBNOR(stdx2,stdy1,rho,ix3,IER)
+!	call MDBNOR(stdx1,stdy2,rho,ix2,IER)
+!	call MDBNOR(stdx1,stdy1,rho,ix1,IER)
 	parz=ix4-ix3-ix2+ix1
       kintegral=kintegral+parz*w(i)
  160    continue
@@ -545,232 +591,4 @@
     1 P = 0.5 * DERFC(P)
       RETURN
       END
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-      SUBROUTINE MDBNORVEC(X,Y,N,RHO,P,IER)
-      integer*4 N,IER 
-      double precision X(N),Y(N),P(N),RHO(N),p1
-      IER=0
-      do i=1,N
-      call MDBNOR(X(i),Y(i),RHO(i),p1,IER)
-      P(i)=p1
-      end do
-      return
-      end
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      SUBROUTINE probnormvec(X,N,P)
-      integer*4 N
-      double precision X(N),P(N),p1   
-      do i=1,N
-      call probnorm(X(i),p1)
-      P(i)=p1
-      end do
-      return
-      end 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                                  SPECIFICATIONS FOR LOCAL VARIABLES
-
-!   IMSL ROUTINE NAME   - MDBNOR
 !
-!-----------------------------------------------------------------------
-!
-!   COMPUTER            - IBM/SINGLE
-!
-!   LATEST REVISION     - JANUARY 1, 1978
-!
-!   PURPOSE             - BIVARIATE NORMAL PROBABILITY DISTRIBUTION
-!                           FUNCTION
-!
-!   USAGE               - CALL MDBNOR (X,Y,RHO,P,IER)
-!
-!   ARGUMENTS    X      - INPUT UPPER LIMIT OF INTEGRATION FOR THE
-!                           FIRST VARIABLE
-!                Y      - INPUT UPPER LIMIT OF INTEGRATION FOR THE
-!                           SECOND VARIABLE
-!                RHO    - INPUT CORRELATION COEFFICIENT
-!                P      - OUTPUT PROBABILITY THAT THE FIRST VARIABLE
-!                           IS LESS THAN OR EQUAL TO X AND THAT THE
-!                           SECOND VARIABLE IS LESS THAN OR EQUAL TO Y
-!                IER    - ERROR PARAMETER. (OUTPUT)
-!                         TERMINAL ERROR
-!                         IER = 129 INDICATES THE ABSOLUTE VALUE OF RHO
-!                             IS GREATER THAN OR EQUAL TO ONE
-!
-!   PRECISION/HARDWARE  - SINGLE/ALL
-!
-!   REQD. IMSL ROUTINES - MDNOR,MDTNF,MERRC=ERFC,UERTST,UGETIO
-!
-!   NOTATION            - INFORMATION ON SPECIAL NOTATION AND
-!                           CONVENTIONS IS AVAILABLE IN THE MANUAL
-!                           INTRODUCTION OR THROUGH IMSL ROUTINE UHELP
-!
-!   COPYRIGHT           - 1978 BY IMSL, INC. ALL RIGHTS RESERVED.
-!
-!   WARRANTY            - IMSL WARRANTS ONLY THAT IMSL TESTING HAS BEEN
-!                           APPLIED TO THIS CODE. NO OTHER WARRANTY,
-!                           EXPRESSED OR IMPLIED, IS APPLICABLE.
-!
-!-----------------------------------------------------------------------
-!
-      SUBROUTINE MDBNOR(X,Y,RHO,P,IER)
-!                                  SPECIFICATIONS FOR ARGUMENTS
-      INTEGER*4            IER
-      REAL*8               X,Y,RHO,P
-!                                  SPECIFICATIONS FOR LOCAL VARIABLES
-      INTEGER*4            IAX,IAY,IND
-      REAL*8               C1,EPS,F1,XY,AX,AY,TY,TX,QX,QY
-      DATA               C1/1.0E0/
-!                                  FIRST EXECUTABLE STATEMENT
-      EPS = 0.0
-      IER = 0
-      IF (ABS(RHO) .LT. C1) GO TO 5
-!                                  TERMINAL - RHO OUT OF RANGE
-      IER = 129
-      GO TO 9000
-    5 F1 = 1.0/SQRT(1.0 - RHO**2)
-      XY = X*Y
-      IAX = 0
-      IAY = 0
-      IND = 0
-      IF (XY .EQ. 0.) GO TO 10
-      AX = F1*(Y/X - RHO)
-      AY = F1*(X/Y - RHO)
-      GO TO 25
-   10 IF (X .NE. 0.) GO TO 15
-      IF (Y .NE. 0.) GO TO 20
-!                                                                2 1/2
-!                                  FOR X=Y=0 AX=AY=(1-RHO)/(1-RHO )
-      AX = F1*(1.0 - RHO)
-      AY = AX
-      GO TO 25
-!                                  FOR Y=0,X LESS THAN 0     TY = -1/4
-!                                  FOR Y=0,X GREATER THAN 0  TY =  1/4
-   15 TY = 0.25
-      IF (X .LT. 0.0) TY = -TY
-      AX = -F1*RHO
-      IND = 1
-      GO TO 25
-!                                  FOR X=0,Y LESS THAN 0     TX = -1/4
-!                                  FOR X=0,Y GREATER THAN 0  TX =  1/4
-   20 TX = 0.25
-      IF (Y .LT. 0.0) TX = -TX
-      AY = -F1*RHO
-      GO TO 35
-   25 IF (AX .GE. 0.0) GO TO 30
-      IAX = 1
-      AX = -AX     
-
-   30 CALL MDTNF(X,AX,EPS,TX)
-      IF (IAX .NE. 0) TX = -TX
-      IF (IND .NE. 0) GO TO 45
-   35 IF (AY .GE. 0.0) GO TO 40
-      IAY = 1
-      AY = -AY
-   40 CALL MDTNF(Y,AY,EPS,TY)
-      IF (IAY .NE. 0) TY = -TY
-   45 IF (X .GT. 0.0) GO TO 50
-      CALL probnorm(X,QX)
-      GO TO 55
-   50 CALL probnorm(-X,QX)
-      QX = 1.- QX
-   55 IF (Y .GT. 0.0) GO TO 60
-      CALL probnorm(Y,QY)
-      GO TO 65
-   60 CALL probnorm(-Y,QY)
-      QY = 1.- QY
-!                                  NOW EVALUATE P
-   65 P = 0.5*(QX + QY) - TX - TY
-      IF (XY .LE. 0.0 .AND.(XY .NE. 0.0 .OR. X+Y .LT. 0.0)) P = P - 0.5
-      P = AMIN1(AMAX1(0.0,P),1.0)
- 9000 CONTINUE
-!      IF (IER .NE. 0) CALL UERTST(IER,'MDBNOR')
- 9005 RETURN
-      END
-
-!C   IMSL ROUTINE NAME   - MDTNF
-!C
-!C-----------------------------------------------------------------------
-!C
-!C   COMPUTER            - IBM/SINGLE
-!C
-!C   LATEST REVISION     - JANUARY 1, 1978
-!C
-!C   PURPOSE             - INTEGRAL RELATED TO CALCULATION OF NON-
-!C                           CENTRAL T AND BIVARIATE NORMAL PROBABILITY
-!C                           DISTRIBUTION FUNCTIONS
-!C
-!C   USAGE               - CALL MDTNF (Y,Z,EPS,T)
-!C
-!C   ARGUMENTS    Y      - INPUT PARAMETER.  SEE REMARKS.
-!C                Z      - INPUT.  INTEGRATION IS FROM 0 TO Z.
-!C                EPS    - INPUT.  ACCURACY SHOULD NOT BE LESS THAN EPS.
-!C                           IF EPS=0.0 IS ENTERED, EPS=.000001 IS USED.
-!C                T      - OUTPUT VALUE OF THE INTEGRAL.
-!C
-!C   PRECISION/HARDWARE  - SINGLE/ALL
-!C
-!C   REQD. IMSL ROUTINES - MDNOR,MERRC=ERFC
-!!C
-!C   REMARKS      MDTNF COMPUTES THE FUNCTION T(Y,Z) WHERE
-!C                T(Y,Z) = THE INTEGRAL, FROM 0 TO Z, OF
-!C                ((EXP((-Y**2/2)(1+X**2))/(2*PI(1+X**2)))DX
-!C-----------------------------------------------------------------------
-!C
-      SUBROUTINE MDTNF(Y,Z,EPS,T)
-!C                                  SPECIFICATIONS FOR ARGUMENTS
-      REAL*8               Y,Z,EPS,T
-!C                                  SPECIFICATIONS FOR LOCAL VARIABLES
-      REAL*8             C,EXPOV,EP1,B,A,TA,HSQB,BEXP,ASQ,A4,B4,A4B4
-      REAL*8                  AHSQB,AB4,F,SUM,G,G1,BER,TER,D1,D2,D,AEPS
-      DATA               C/.1591549/,EXPOV/174.673/
-!C                                  FIRST EXECUTABLE STATEMENT
-      EP1 = EPS
-      IF(EPS .EQ. 0.) EP1 = .000001
-      T = 0.0
-      B = ABS(Y)
-      A = ABS(Z)
-      IF(A .EQ. 0.) GO TO 35
-    5 TA = ATAN(A)
-      IF (A*B .LE. 4.0) GO TO 10
-!C                                  APPROXIMATION FOR SMALL Y*Z
-      CALL probnorm(B,T)
-      T = C*(TA+ATAN(1.0/A)) - .5*(T-.5)
-      GO TO 30
-   10 HSQB = .5*B*B
-      IF (HSQB .GT. EXPOV) GO TO 35
-      BEXP = EXP(-HSQB)
-      ASQ = A*A
-      A4 = ASQ*ASQ
-      B4 = HSQB * HSQB
-      A4B4 = A4 * B4
-      AHSQB = A * HSQB
-      AB4 = A*B4*.5
-      F = 1.0
-      SUM = 0.0
-      G = 3.0
-!C                                  BEGIN SERIES EXPANSION
-   15 G1 = G
-      BER = 0.0
-      TER = AB4
-   20 BER = BER+TER
-      IF(TER .LE. BER*EP1) GO TO 25
-!C                                  DEVELOP COEFFICIENT SERIES
-      TER = TER*HSQB/G1
-      G1 = G1+1.0
-      GO TO 20
-   25 D1 = (BER+AHSQB)/F
-      D2 = BER*ASQ/(F+2.0)
-      D = D1-D2
-      SUM = SUM+D
-      T = TA-SUM*BEXP
-      AEPS = EP1*T
-      AHSQB = AHSQB*A4B4/((G-1.0)*G)
-      AB4 = AB4*A4B4/((G +1.0)*G)
-      F = F+4.0
-      G = G+2.0
-!C                                  SHOULD SERIES EXPANSION BE TERMINATED
-      IF (D2*BEXP .GE. AEPS) GO TO 15
-      T = T * C
-   30 IF (Z .LT. 0.0) T = -T
-   35 RETURN
-      END SUBROUTINE
-

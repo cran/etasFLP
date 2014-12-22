@@ -272,10 +272,15 @@ Input times are expected in days, and so final intensities are expected number o
 \seealso{ \code{\link{eqcat}}, \code{\link{plot.etasclass}}, \code{\link{summary.etasclass}}, \code{\link{profile.etasclass}}}
 
 \references{
-Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. 22 (6), pp. 749-757.
+
+
+Adelfio, G. and Chiodi, M. (2014) Alternated estimation in semi-parametric space-time branching-type point processes with application to seismic catalogs. \emph{Stochastic Environmental Research and Risk Assessment},
+doi={10.1007/s00477-014-0873-8}
 
 Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric space-time point processes for earthquake description. 
 \emph{Proceedings of the 28th International Workshop on Statistical Modelling 8-13 July, 2013, Palermo} (Muggeo V.M.R., Capursi V., Boscaino G., Lovison G., editors). Vol. 1. pp.65-70. 
+
+Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. 22 (6), pp. 749-757.
 
 Zhuang, J., Ogata, Y.  and Vere-Jones, D.
 Stochastic declustering of space-time earthquake occurrences.

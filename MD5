@@ -1,6 +1,6 @@
-160bdf75de85976a29bf6b8f6e295f97 *ChangeLog
-99bd9b8aaa5f8d43931c95eb6ac2b85a *DESCRIPTION
-9a0f06fcfa67a11ce8bc0e050654f6f6 *NAMESPACE
+140d38d942e23825755f7f8085235e30 *ChangeLog
+59d978d40096201c4d527a727271db01 *DESCRIPTION
+95463010ad0f910e509663897159b097 *NAMESPACE
 f43bbc4fc62075d40db4811dd33f061b *R/MLA.freq.R
 793c9d4ef337dbbcb920d41da483c0ca *R/angle.positive.R
 106dc6dd286d80d65a52cac24601b537 *R/b.guten.R
@@ -11,6 +11,7 @@ cedd7272541a0e4b9b7d17f54b7f4bd6 *R/bwd.nrd.R
 ce9b4c16c682302d0ce98364787c8afd *R/embedding.rect.eps.R
 bf7b118459c7ffc7f9938229bfcafe96 *R/eqcat.R
 ae8d0d233da697dc4216ab37c94025d9 *R/etas.mod2.R
+8c19d8cc1837bfc2163b0aacdb6d1e20 *R/etas.starting.R
 f271cf6a99e195f13ae22266d71187df *R/etasFLP-internal.R
 e26b8f7821aab62e8545792d7e7e1fdf *R/etasclass.R
 dd979e5fe615fc2fdc3b195d9130e933 *R/etasflp.integral.R
@@ -21,7 +22,7 @@ b5097155d1f842cb5a70873b1630f302 *R/kde2d.integral.R
 c79438597f7eedb2955d8192c997007f *R/longlat.to.km.R
 4090577fa442e7e1ca764c1e47405097 *R/magn.plot.R
 8bc9a57455db012c1d281136c1872fa7 *R/plot.eqcat.R
-c6a25f0d521ad6bee18b077391a39fdd *R/plot.etasclass.R
+5bc149143722e30daed982e32026964e *R/plot.etasclass.R
 519565d279b8d5923c87e110b674d3e0 *R/plot.profile.etasclass.R
 0aab75678abd85fa47bed271cbf88a9f *R/print.etasclass.R
 621b1e5f3a30dd83e4dd6468a266fbf3 *R/profile.etasclass.R
@@ -46,13 +47,14 @@ d835edbe4ce6855426238b808751a9ce *man/bwd.nrd.Rd
 752aaf4fc5aa9b072d0fc194617ad05a *man/californiacatalog.Rd
 91103e09c33f69e41cdd9f20a0680019 *man/compare.etasclass.Rd
 8949ed13e017f69ccfdc8ec9a2b5cc23 *man/eqcat.Rd
+0ce9892ef52e464c14a9fffc09171dce *man/etas.starting.Rd
 aceb20ba8f7ed85e76a1e476455d7e64 *man/etasFLP-internal.Rd
-c300f4922d7738deeffcb41894ce87ab *man/etasFLP-package.Rd
-d4bbc616944c236a11d43b1f0d5763ea *man/etasclass.Rd
+59b3b5ee5d89dc43c002b53e77c6b71f *man/etasFLP-package.Rd
+934646137e2ea1e806abbe5b9ebf1857 *man/etasclass.Rd
 21e5348be3a3c318b125366ff5240698 *man/italycatalog.Rd
 5e917797c1075e9af9294426f4a9b826 *man/kde2dnew.fortran.Rd
 83c48e95c71a2f18341ae1ff29ff5a9b *man/magn.plot.Rd
-009bd125f5f4fefba390664e1375a5a0 *man/plot.etasclass.Rd
+73f63246d2830ffb614048d3f2b012e0 *man/plot.etasclass.Rd
 65d3d0bba4406ddddc64afbf899ca484 *man/plot.profile.etasclass.Rd
 4bff1c773390b122df7bd471ae5e2895 *man/print.etasclass.Rd
 30b1caa4dbfbfef3b32a2a1d66fa3eac *man/profile.etasclass.Rd
@@ -60,4 +62,4 @@ d4bbc616944c236a11d43b1f0d5763ea *man/etasclass.Rd
 5d6a7d39b2b2087e9653739c3dc5ef64 *man/summary.etasclass.Rd
 451ef07a4028ac2f20eb51e3eb73f093 *man/time2date.Rd
 93b9fa7ff789ec437929218240825b60 *man/xy.grid.Rd
-f86aea6793e56ec794ccf60634459429 *src/fortran_etas_code.f90
+dcc5fa02f1b2d5fd29baca8b1374cd6c *src/fortran_etas_code.f90
