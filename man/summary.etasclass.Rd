@@ -51,9 +51,8 @@ description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 10e-04)
 # for the background intensity function
 # (magn.threshold.back=3.5)
 
-summary(etas.flp)
 # summary merhod for the etasclass object
->summary(etas.flp)
+summary(etas.flp)
 
 Call: 
  

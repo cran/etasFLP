@@ -10,10 +10,12 @@ cat("Number of observations            ",length(x$cat$time),"\n")
 cat("Magnitude threshold               ",x$magn.threshold,"\n")
 
 ## output also declustering=TRUE|FALSE. the following is only if declustering=TRUE
-declustering=TRUE
-if (declustering){
+#declustering=TRUE
+cat("declustering                       ",x$declustering,"\n")
+if (x$declustering){
 cat("Number of declustering iterations  ",x$iter,"\n")
 cat("Kind of declustering               ",ifelse(x$thinning,"thinning","weighting"),"\n")
+cat("flp                                ",x$flp,"\n")
 
 cat("sequence of AIC values for each iteration","\n")
 cat(x$AIC.iter,"\n","\n")

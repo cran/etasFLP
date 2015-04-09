@@ -6,11 +6,11 @@
 \description{\code{plot} method for \code{profile.etasclass} objects (profile likelihood of ETAS model). Plots a smooth interpolation of the profile likelihood of a parameter of an ETAS model, as output from \code{profile.etasclass}.
 }
 \usage{
-\method{plot}{profile.etasclass}(x,prob=c(0.9,0.95,0.99),...)
+\method{plot}{profile.etasclass}(x,prob=c(0.90,0.95,0.99),...)
 }
 \arguments{
   \item{x}{An object of the class  \code{profile.etasclass}.}
-  \item{prob}{A vector of coverage probability for the asymptotic confidence interval computed using  -2log(LR). Default value \code{prob}=c(0.9,0.95,0.99).}
+  \item{prob}{A vector of coverage probability for the asymptotic confidence interval computed using  -2log(LR). Default value \code{prob}=c(0.90,0.95,0.99).}
 %%     ~~Describe \code{profile} here~~
 
   \item{...}{other arguments.}

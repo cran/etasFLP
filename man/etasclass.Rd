@@ -304,17 +304,17 @@ k0 = 0.005,c = 0.005,p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
 params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
 declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15,
 onlytime = FALSE, is.backconstant = FALSE,
-description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 10e-04)
+description = "etas flp",sectoday = TRUE, usenlm = TRUE,epsmax = 0.001)
+
 
 # execution of etasclass for events with minimum magnitude of 3.1. 
 # The events with magnitude at least 3.5 are used to build a first approximation
 # for the background intensity function
 # (magn.threshold.back=3.5)
 
-summary(etas.flp)
-# summary merhod for the etasclass object
->summary(etas.flp)
+# summary method for the etasclass object
 
+summary(etas.flp)
 Call: 
  
 etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3.5, 
@@ -322,35 +322,38 @@ etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3
     q = 1.52, params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
         TRUE, TRUE), declustering = TRUE, thinning = FALSE, flp = TRUE, 
     ndeclust = 15, onlytime = FALSE, is.backconstant = FALSE, 
-    description = "etas flp", sectodacatalog-search.htmly = TRUE, usenlm = TRUE, 
+    description = "etas flp", sectoday = TRUE, usenlm = TRUE, 
     epsmax = 0.001)
 
  
+ 
 etas flp 
-Execution started:                  2014-02-04 13:17:29 
-Elapsed time of execution (hours)   0.358737 
+Execution started:                  2015-04-14 17:08:50 
+Elapsed time of execution (hours)   0.1735942 
 Number of observations             1700 
 Magnitude threshold                3.1 
-Number of declustering iterations   7 
+declustering                        TRUE 
+Number of declustering iterations   4 
 Kind of declustering                weighting 
+flp                                 TRUE 
 sequence of AIC values for each iteration 
-40444.81 39058.33 39100.61 39101.3 39101.45 39027.12 39025.27 
+40444.81 39042.21 39025.69 39025.1 
  
 ------------------------------------------------------- 
  
 ETAS Parameters: 
             Estimates       std.err.
-mu           0.299141       0.010177
+mu           0.299153       0.010178
 k0           0.008847       0.002832
-c            0.012747       0.002752
-p            1.149504       0.020206
-a            1.640902       0.070027
-gamma        0.932499       0.094271
-d            2.010186       0.384154
-q            1.926670       0.089593
+c            0.012754       0.002753
+p            1.149591       0.020213
+a            1.640813       0.070028
+gamma        0.932248       0.094336
+d            2.010304       0.384207
+q            1.926604       0.089574
 ------------------------------------------------------- 
 
-# plot results with maps of intensities
+# plot results with maps of intensities and diagnostic tools 
 
 plot(etas.flp)
 

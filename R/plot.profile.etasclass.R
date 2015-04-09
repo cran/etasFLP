@@ -1,4 +1,4 @@
-plot.profile.etasclass=function(x,prob=c(0.9,0.95,0.99),...){
+plot.profile.etasclass=function(x,prob=c(0.90,0.95,0.99),...){
 ## plot profile likelihood of an etas model
 # 
 if(sum(is.element(class(x),"profile.etasclass"))==0) stop("object is not of the required class profile.etasclass")
@@ -39,7 +39,7 @@ colnames(conf)=c("Coverage","Lower","Upper")
 rownames(conf)=1:length(prob)
 
 cat("Asymptotic  confidence  intervals:","\n")
-cat(conf,"\n")
+print(conf)
 
 ris=list(spline.profile=sn,conf=conf,prob=prob)
 }

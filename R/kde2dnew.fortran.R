@@ -1,3 +1,6 @@
+# to be changed for kern.var
+
+
 kde2dnew.fortran <-
 function(xkern,ykern,gx,gy,h,factor.xy=1,eps=0,w=replicate(length(xkern),1)){
 kern.var=FALSE

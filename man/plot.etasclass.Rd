@@ -132,6 +132,11 @@ with coordinates \code{x.grid} and \code{y.grid}  used to obtain image plots of 
  \item{back.grid}{background space intensity estimated for observed points.}
   \item{trig.grid}{triggered space intensities estimated for observed points.}
   \item{tot.grid}{total space intensities estimated for observed points.}
+  \item{teo1}{matrix of \code{nclass*nclass} cells with theoretical total space intensities.}
+  \item{teo2}{matrix of \code{nclass*nclass} cells with theoretical background space intensities.}
+  \item{emp1}{matrix of \code{nclass*nclass} cells with empirical total space intensities.}
+  \item{emp2}{matrix of \code{nclass*nclass} cells with empirical background space intensities.}
+  \item{t.trasf}{vector  of transformed times.}
 
 }
 
@@ -153,7 +158,7 @@ data("italycatalog")
 
 class(italycatalog)<-"eqcat"
 
-etas3.1<-etasclass(italycatalog,description="etas flp",magn.threshold=3.1,thinning=FALSE,flp=TRUE,
+etas.flp<-etasclass(italycatalog,description="etas flp",magn.threshold=3.1,thinning=FALSE,flp=TRUE,
 is.backconstant=FALSE,magn.threshold.back=3.5,sectoday=TRUE,
 onlytime=FALSE,declustering=TRUE,epsmax=0.00001,
 params.ind=c(1,1,1,1,1,1,1,1),k0=0.005,c=0.005,p=1.01,a=1.05,gamma=0.6,q=1.52,d=1.1,
@@ -167,12 +172,7 @@ compsqm=TRUE,usenlm=TRUE,ndeclust=15)
 
 # plot method
 
-> plot(etas3.1)
-
-# profile likelihood for the 5-th parameter (a), with plot:
-
-prof=profile(etas3.1,nprofile=7,iprofile=5)
-plot(prof)
+plot(etas.flp)
 
 }
 }

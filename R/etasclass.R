@@ -51,6 +51,7 @@ this.call=match.call()
  			 cat("WRONG EARTHQUAKE CATALOG DEFINITION","\n")
 			  return(FALSE)
 		      }
+	cat.orig	=flag$cat
 	if(sum(abs(params.ind-0.5)==0.5)!=8){cat("WRONG params.ind DEFINITION: ONLY FALSE/TRUE ALLOWED SEE HELP","\n")
 			  return(FALSE)}
 			  kernvar	=FALSE

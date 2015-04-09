@@ -53,25 +53,24 @@ Marcello Chiodi, Giada Adelfio}
 data("italycatalog")
 # load a sample catalog of italian seismicity  
 
-etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3.5, 
-    k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, d = 1.1, 
-    q = 1.52, params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
-        TRUE, TRUE), declustering = TRUE, thinning = FALSE, flp = TRUE, 
-    ndeclust = 15, onlytime = FALSE, is.backconstant = FALSE, 
-    description = "etas flp", sectodacatalog-search.htmly = TRUE, usenlm = TRUE, 
-    epsmax = 0.001)
+etas.flp=etasclass(italycatalog,  magn.threshold = 3.1,  magn.threshold.back = 3.5,
+k0 = 0.005,c = 0.005,p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
+params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
+declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15,
+onlytime = FALSE, is.backconstant = FALSE,
+description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 10e-03)
 
 
 # profile likelihood for the 5-th parameter (a), with plot:
 
 prof.flp=profile(etas.flp,nprofile=7,iprofile=5)
 plot(prof.flp)
-> plot(prof.flp)
 Asymptotic  confidence  intervals: 
   Coverage Lower Upper
 1     0.90 1.514 1.766
 2     0.95 1.501 1.778
 3     0.99 1.463 1.805
+
 
 }}
 \keyword{ETAS}

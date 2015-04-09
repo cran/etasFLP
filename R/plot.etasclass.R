@@ -543,7 +543,7 @@ cat("Computation of the time intensity transform","\n")
 lambda=mu
 
 ntemp	=n
-iprint	=TRUE
+iprint	=FALSE
 ttot	=x$cat$time
 
 rho.tot	=x$rho.s2

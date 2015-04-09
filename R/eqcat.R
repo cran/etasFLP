@@ -12,7 +12,7 @@ if (n>0) {
 	  } 
 else
 	  {
-	  class(x)<-c("eqcat",class(x))
+	  class(x)<-c("eqcat","data.frame")
 	  return(list(cat=x,ok=TRUE));
 	  }
 }

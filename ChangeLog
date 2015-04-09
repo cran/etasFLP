@@ -1,3 +1,11 @@
+2015-04-09  Marcello Chiodi  <marcello.chiodi@unipa.it>
+
+*R package etasFLP: changes from version 1.2.0 to version 1.2.1
+ 
+*etas.starting: corrected a bug when using geographical coordinates (the routine is still a beta-version)
+
+*etasclass: now as input catalog an object of class eqcat or data.frame can be given. Inserted a better choice of the starting values of the bandwidth passed to the function flp1.etas.nlm in the flp step
+
 2014-12-22  Marcello Chiodi  <marcello.chiodi@unipa.it>
 
 *R package etasFLP: changes from version 1.1.1 to version 1.2.0
