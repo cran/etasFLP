@@ -5,7 +5,6 @@ function(theta,x,t,w,
 			m2=as.integer(nrow(x)-1),
 			etas.params,
 			etas.l,
-			etas.integral,
 			mh=1,
 #			kern.var=FALSE,
 			iprint=FALSE,
@@ -52,8 +51,8 @@ h.start[1:nh]=as.double(exp(theta[1:nh]))
 				)
 		if (ris.fl$allocationerr)cat("memory allocation failed in flp step","\n")		
 		lambda	=etas.params[1]
-		val	=-sum(log(lambda*ris.fl$dens[m1:m2])+log(etas.l[(m1+1):(m2+1)])
-		-etas.integral[m1:m2]-lambda*ris.fl$integr[m1:m2])
+		val	=-sum(log(lambda*ris.fl$dens[m1:m2]+etas.l[(m1+1):(m2+1)])
+		-lambda*ris.fl$integr[m1:m2])
 if (iprint) {
 cat("Function Value ",val,"\n")
 cat("  lambda: ",lambda,"\n")
@@ -61,8 +60,6 @@ cat("summary(ris.fl$dens[m1:m2])","\n")
 cat(summary(ris.fl$dens[m1:m2]),"\n")
 cat("summary(etas.l[(m1+1):(m2+1)])","\n")
 cat(summary(etas.l[(m1+1):(m2+1)]),"\n")
-cat("summary(etas.integral[m1:m2])","\n")
-cat(summary(etas.integral[m1:m2]),"\n")
 cat("summary(ris.fl$integr[m1:m2])","\n")
 cat(summary(ris.fl$integr[m1:m2]),"\n")
 

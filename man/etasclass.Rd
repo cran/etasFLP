@@ -299,25 +299,24 @@ Marcello Chiodi, Giada Adelfio}
 data("italycatalog")
 # load a sample catalog of the italian seismicity
 
-etas.flp=etasclass(italycatalog,  magn.threshold = 3.1,  magn.threshold.back = 3.5,
-k0 = 0.005,c = 0.005,p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
+
+etas.flp=etasclass(italycatalog,  
+magn.threshold = 3.0,  magn.threshold.back = 3.5,
+k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
 params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
 declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15,
 onlytime = FALSE, is.backconstant = FALSE,
-description = "etas flp",sectoday = TRUE, usenlm = TRUE,epsmax = 0.001)
-
-
-# execution of etasclass for events with minimum magnitude of 3.1. 
+description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 0.001)
+# execution of etasclass for events with minimum magnitude of 3.0. 
 # The events with magnitude at least 3.5 are used to build a first approximation
 # for the background intensity function
 # (magn.threshold.back=3.5)
 
-# summary method for the etasclass object
-
-summary(etas.flp)
+# print method for the etasclass object
+etas.flp
 Call: 
  
-etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3.5, 
+etasclass(cat.orig = italycatalog, magn.threshold = 3, magn.threshold.back = 3.5, 
     k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, d = 1.1, 
     q = 1.52, params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
         TRUE, TRUE), declustering = TRUE, thinning = FALSE, flp = TRUE, 
@@ -328,30 +327,11 @@ etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3
  
  
 etas flp 
-Execution started:                  2015-04-14 17:08:50 
-Elapsed time of execution (hours)   0.1735942 
-Number of observations             1700 
-Magnitude threshold                3.1 
-declustering                        TRUE 
-Number of declustering iterations   4 
-Kind of declustering                weighting 
-flp                                 TRUE 
-sequence of AIC values for each iteration 
-40444.81 39042.21 39025.69 39025.1 
- 
-------------------------------------------------------- 
- 
+Number of observations             2158 
 ETAS Parameters: 
-            Estimates       std.err.
-mu           0.299153       0.010178
-k0           0.008847       0.002832
-c            0.012754       0.002753
-p            1.149591       0.020213
-a            1.640813       0.070028
-gamma        0.932248       0.094336
-d            2.010304       0.384207
-q            1.926604       0.089574
-------------------------------------------------------- 
+      mu       k0        c        p        a    gamma        d        q 
+0.355850 0.008373 0.009404 1.121630 1.509371 0.857945 1.915139 1.836391 
+   
 
 # plot results with maps of intensities and diagnostic tools 
 

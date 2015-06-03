@@ -282,12 +282,8 @@ lines3d(cbind(mapxy$x,mapxy$y,min(etas.l)),col="red")
 plot3d(x$cat.longlat$long,x$cat.longlat$lat,etas.l,add=TRUE, type="h")
 
 }
-
-
-
+#####################################################################################
 ### added november 7th, 2014
-
-
 # computation of  intensities in observed points integrated with respect to time 
 #
 ngridtot	=n
@@ -315,9 +311,6 @@ emp1=teo1
 emp2=teo2
 emp3=teo3
 emp4=teo4
-
-
-
 
 coeff.integr		=simpson.kD(nsimps,2)
 
@@ -366,10 +359,7 @@ if(emp1[i,j]>0) emp4[i,j]=sum(1/tot.obs[indrid])
 }	
 }
 
-
-##
-
-##
+#####################################################################################
 ## plotting space residuals 
 
 xx=range(x.grid)
@@ -533,8 +523,6 @@ std=(emp1-emp2-(teo1-teo2))/sqrt(teo1-teo2)
 plot(sqrt(teo1-teo2),std,xlab="sqrt theor. freq",ylab="std.zd residuals",main="Triggered space intens.")
 abline(a=-1.96,b=0,col=2)
 abline(a=+1.96,b=0,col=2)
-
-
 
 ############################## time residuals  #######################################
 ######## 9-12-2014 #############

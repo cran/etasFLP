@@ -70,7 +70,7 @@
 
 \alias{flpkspace}
 \alias{etas.mod2}
-\alias{etasflp.integral}
+% \alias{etasflp.integral} dropped beginning from version 1.3.0
 \alias{flp1.etas.nlm}
 \alias{longlat.to.km}
 \alias{timechar.to.seq}

@@ -39,54 +39,58 @@ Marcello Chiodi, Giada Adelfio}
 data("italycatalog")
 # load a sample catalog of the italian seismicity
 
-etas.flp=etasclass(italycatalog,  magn.threshold = 3.1,  magn.threshold.back = 3.5,
-k0 = 0.005,c = 0.005,p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
+
+etas.flp=etasclass(italycatalog,  
+magn.threshold = 3.0,  magn.threshold.back = 3.5,
+k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
 params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
 declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15,
 onlytime = FALSE, is.backconstant = FALSE,
-description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 10e-04)
-
-# execution of etasclass for events with minimum magnitude of 3.1. 
+description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 0.001)
+# execution of etasclass for events with minimum magnitude of 3.0. 
 # The events with magnitude at least 3.5 are used to build a first approximation
 # for the background intensity function
 # (magn.threshold.back=3.5)
 
-# summary merhod for the etasclass object
-summary(etas.flp)
+# summary method for the etasclass object
 
+summary(etas.flp)
 Call: 
  
-etasclass(cat.orig = italycatalog, magn.threshold = 3.1, magn.threshold.back = 3.5, 
+etasclass(cat.orig = italycatalog, magn.threshold = 3, magn.threshold.back = 3.5, 
     k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, d = 1.1, 
     q = 1.52, params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
         TRUE, TRUE), declustering = TRUE, thinning = FALSE, flp = TRUE, 
     ndeclust = 15, onlytime = FALSE, is.backconstant = FALSE, 
-    description = "etas flp", sectodacatalog-search.htmly = TRUE, usenlm = TRUE, 
+    description = "etas flp", sectoday = TRUE, usenlm = TRUE, 
     epsmax = 0.001)
 
  
+ 
 etas flp 
-Execution started:                  2014-02-04 13:17:29 
-Elapsed time of execution (hours)   0.358737 
-Number of observations             1700 
-Magnitude threshold                3.1 
-Number of declustering iterations   7 
+Execution started:                  2015-06-02 13:01:04 
+Elapsed time of execution (hours)   0.2473813 
+Number of observations             2158 
+Magnitude threshold                3 
+declustering                        TRUE 
+Number of declustering iterations   4 
 Kind of declustering                weighting 
+flp                                 TRUE 
 sequence of AIC values for each iteration 
-40444.81 39058.33 39100.61 39101.3 39101.45 39027.12 39025.27 
+49620.08 48458.86 48418.2 48415.17 
  
 ------------------------------------------------------- 
  
 ETAS Parameters: 
             Estimates       std.err.
-mu           0.299141       0.010177
-k0           0.008847       0.002832
-c            0.012747       0.002752
-p            1.149504       0.020206
-a            1.640902       0.070027
-gamma        0.932499       0.094271
-d            2.010186       0.384154
-q            1.926670       0.089593
+mu           0.355850       0.011294
+k0           0.008373       0.002053
+c            0.009404       0.001795
+p            1.121630       0.016271
+a            1.509371       0.064077
+gamma        0.857945       0.084688
+d            1.915139       0.306384
+q            1.836391       0.067067
 ------------------------------------------------------- 
 
 }

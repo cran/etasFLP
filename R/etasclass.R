@@ -173,21 +173,12 @@ if(iter>0){
 
 		if (flp){
 		etas.l		=attr(l,"etas.vec")
-		etas.integral	=etasflp.integral(params=params.optim,
-					params.ind=params.ind,
-					params.fix=params.fix,
-					cat=cat,magn.threshold=magn.threshold,
-
-					rho.s2=rho.s2,ntheta=ntheta,
-					trace=trace)
-
 # compute etas intensity and integral for each point and call routine for optimization
 # flp MUST be weighted 
     ris.flp=flp1.etas.nlm(cat,
 		        h.init=hdef,
 			etas.params=params.MLtot,
 			etas.l=etas.l,
-			etas.integral=etas.integral,
 			w=rho.weights,
 			m1=m1,
 			m2=as.integer(nrow(cat)-1),
