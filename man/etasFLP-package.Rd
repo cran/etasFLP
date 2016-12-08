@@ -14,8 +14,8 @@ Estimation of the components of an ETAS model for earthquake description.
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 1.3.0\cr
-Date: \tab 2015-06-03\cr
+Version: \tab 1.3.1\cr
+Date: \tab 2016-12-07\cr
 License: \tab GPL (>=2) \cr
 Depends: \tab R (>= 2.14.0), mapdata,rgl \cr
 Suggests: \tab MASS \cr

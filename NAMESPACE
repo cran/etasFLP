@@ -10,3 +10,9 @@ export(b.guten,bwd.nrd, eqcat, etasclass, kde2dnew.fortran, kde2d.integral,magn.
 import(mapdata, maps)
 importFrom(fields, image.plot)
 importFrom(rgl,plot3d,lines3d)
+  importFrom("grDevices", "dev.new", "dev.off", "gray.colors", "rgb")
+  importFrom("graphics", "abline", "box", "close.screen", "contour",
+             "grid", "lines", "par", "plot", "points", "text", "title")
+  importFrom("stats", "cor", "nlm", "optim", "pnorm", "qchisq",
+             "quantile", "runif", "spline", "splinefun", "weighted.mean")
+
