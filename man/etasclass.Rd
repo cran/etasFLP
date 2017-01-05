@@ -4,7 +4,7 @@
 \title{Mixed estimation of an ETAS model}
 \description{\code{etasclass} is the main function of the package \code{etasFLP}.
 
-Performs the estimation of the components of the ETAS (Epidemic type aftershock sequences) model for the description of the seismicity in a space-time region. Background seismicity is estimated non-parametrically, while triggered seismicity is estimated by MLE. In particular also the bandwidth for a kernel smoothing can be estimated through the Forward Likelihood Predictive approach (FLP). For each event the probability of being a background event or a triggered one is estimated. 
+Performs the estimation of the components of the ETAS (Epidemic Type Aftershock Sequence) model for the description of the seismicity in a space-time region. Background seismicity is estimated non-parametrically, while triggered seismicity is estimated by MLE. In particular also the bandwidth for a kernel smoothing can be estimated through the Forward Likelihood Predictive (FLP) approach . For each event the probability of being a background event or a triggered one is estimated. 
 
 An ETAS with up to 8 parameters can be estimated, with several options and different methods.
 
@@ -133,7 +133,7 @@ Controls the level of smoothing for the background seismicity (meaningful only i
 
 }
 \details{
-Estimates the components of an ETAS (Epidemic type aftershock sequences)
+Estimates the components of an ETAS (Epidemic type aftershock sequence)
 model for the description of the seismicity of a space-time region. 
 Background seismicity is estimated nonparametrically, while triggered seismicity is estimated by MLE.
 
@@ -273,19 +273,25 @@ Input times are expected in days, and so final intensities are expected number o
 
 \references{
 
+Adelfio G, Chiodi M (2015). Alternated Estimation in Semi-Parametric Space-Time
+Branching-Type Point Processes with Application to Seismic Catalogs. \emph{Stochastic Environmental Research and Risk Assessment}, \bold{29}(2), 443-450. doi:10.1007/s00477-014-0873-8.
 
-Adelfio, G. and Chiodi, M. (2014) Alternated estimation in semi-parametric space-time branching-type point processes with application to seismic catalogs. \emph{Stochastic Environmental Research and Risk Assessment},
-doi={10.1007/s00477-014-0873-8}
+Adelfio G, Chiodi M (2015). FLP Estimation of Semi-Parametric Models for Space-Time
+Point Processes and Diagnostic Tools. \emph{Spatial Statistics}, \bold{14}(B), 119-132. doi:10.1016/j.spasta.2015.06.004.
 
 Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric space-time point processes for earthquake description. 
-\emph{Proceedings of the 28th International Workshop on Statistical Modelling 8-13 July, 2013, Palermo} (Muggeo V.M.R., Capursi V., Boscaino G., Lovison G., editors). Vol. 1. pp.65-70. 
+\emph{Proceedings of the 28th International Workshop on Statistical Modelling 8-13 July, 2013, Palermo} (Muggeo V.M.R., Capursi V., Boscaino G., Lovison G., editors). Vol. \bold{1} pp.65-70. 
 
-Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. 22 (6), pp. 749-757.
+Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757. DOI:10.1002/env.1121.
+
+Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-28.
+ DOI: 10.18637/jss.v076.i03.
+
 
 Zhuang, J., Ogata, Y.  and Vere-Jones, D.
 Stochastic declustering of space-time earthquake occurrences.
 \emph{Journal of the American Statistical Association},
-\bold{97},  369--379 (2002).
+\bold{97},  369--379 (2002). DOI:10.1198/016214502760046925.
 }
 
 \author{

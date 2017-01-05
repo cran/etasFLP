@@ -107,7 +107,7 @@ ris=.Fortran("etasfull8tintegrated" ,NAOK=TRUE,
 tot.grid=back.grid+trig.grid
 
 # maps of triggered intensity for a single day
-
+totfixed.grid=tot.grid*0.
 if(tfixed>0){
 ind=x$cat$time<tfixed
 ris=.Fortran("etasfull8tfixed" ,NAOK=TRUE,
@@ -619,6 +619,8 @@ space.grid=space.grid,
 back.grid=back.grid,
 trig.grid=trig.grid,
 tot.grid=tot.grid,
+tfixed=tfixed,
+totfixed.grid=totfixed.grid,
 back.obs=back.obs,
 trig.obs=trig.obs,
 tot.obs=tot.obs,

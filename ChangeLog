@@ -1,3 +1,7 @@
+2017-01-04  Marcello Chiodi  <marcello.chiodi@unipa.it>
+*R package etasFLP: changes from version 1.3.1 to version 1.4.0
+*general changes: added a CITATION file with the reference to the JSS (Journal of Statistical Software) article (the DOI in the CITATION is for a new JSS publication that will be registered after publication on CRAN) 
+*plot.etasclass: added tfixed and totfixed in the output. 
 2016-12-07  Marcello Chiodi  <marcello.chiodi@unipa.it>
 *R package etasFLP: changes from version 1.3.0 to version 1.3.1
 *general changes: used different Fortran compiler options to avoid some warnings in the CRAN Package Check Results page

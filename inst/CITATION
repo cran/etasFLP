@@ -1,0 +1,23 @@
+bibentry(bibtype = "Article",
+  title        = "Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description",
+  author       = c(person(given = "Marcello",
+                          family = "Chiodi",
+                          email = "marcello.chiodi@unipa.it"),
+                   person(given = "Giada",
+                          family = "Adelfio",
+                          email = "giada.adelfio@unipa.it")),
+  journal      = "Journal of Statistical Software",
+  year         = "2017",
+  volume       = "76",
+  number       = "3",
+  pages        = "1--28",
+  doi          = "10.18637/jss.v076.i03",
+
+  header       = "To cite etasFLP in publications use:",
+  textVersion  =
+  paste("Marcello Chiodi, Giada Adelfio (2017).",
+        "Mixed Non-Parametric and Parametric Estimation Techniques in R Package etasFLP for Earthquakes' Description.",
+        "Journal of Statistical Software, 76(3), 1-28.",
+        "doi:10.18637/jss.v076.i03")
+)
+

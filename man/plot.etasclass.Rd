@@ -129,6 +129,8 @@ with coordinates \code{x.grid} and \code{y.grid}  used to obtain image plots of 
  \item{back.grid}{background intensity estimated on a \code{ngrid} x \code{ngrid} grid.}
   \item{trig.grid}{triggered intensities estimated on a grid of \code{ngrid} x \code{ngrid} points.}
   \item{tot.grid}{total intensities estimated on a grid of \code{ngrid} x \code{ngrid} points.}
+  \item{tfixed}{the fixed time for which intensity is estimated and visualized.}
+  \item{totfixed.grid}{total intensities estimated on a grid of \code{ngrid} x \code{ngrid} points at time \code{tfixed}.}
  \item{back.grid}{background space intensity estimated for observed points.}
   \item{trig.grid}{triggered space intensities estimated for observed points.}
   \item{tot.grid}{total space intensities estimated for observed points.}
@@ -144,6 +146,23 @@ with coordinates \code{x.grid} and \code{y.grid}  used to obtain image plots of 
 }
 
 \seealso{\code{\link{etasclass}},  \code{\link{eqcat}}, \code{\link{profile.etasclass}}}
+
+\references{
+
+Adelfio G, Chiodi M (2009).Second-Order Diagnostics for Space-Time Point Processes with
+Application to Seismic Events. \emph{Environmetrics}, \bold{20}(8), 895-911. doi:10.1002/env.961.
+
+Adelfio G, Chiodi M (2015). FLP Estimation of Semi-Parametric Models for Space-Time
+Point Processes and Diagnostic Tools. \emph{Spatial Statistics}, \bold{14}(B), 119-132. doi:10.1016/j.spasta.2015.06.004.
+
+Adelfio G, Schoenberg FP (2009). Point Process Diagnostics Based on Weighted Second-
+Order Statistics and Their Asymptotic Properties. \emph{The Annals of the Institute of Statistical
+Mathematics}, \bold{61}(4), 929-948. doi:10.1007/s10463-008-0177-1.
+
+Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-28.
+ DOI: 10.18637/jss.v076.i03.
+
+}
 
 \author{
 Marcello Chiodi, Giada Adelfio}
