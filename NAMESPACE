@@ -1,4 +1,5 @@
-useDynLib("etasFLP")
+useDynLib(etasFLP, .registration = TRUE, .fixes = C_)
+  
 S3method(summary,etasclass)
 S3method(plot,etasclass)
 S3method(print,etasclass)
@@ -6,13 +7,16 @@ S3method(profile,etasclass)
 S3method(plot,profile.etasclass)
 S3method(summary,eqcat)
 S3method(plot,eqcat)
-export(b.guten,bwd.nrd, eqcat, etasclass, kde2dnew.fortran, kde2d.integral,magn.plot, MLA.freq, simpson.coeff,simpson.kD, time2date,timecharunique2seq,xy.grid,compare.etasclass,etas.starting)
-import(mapdata, maps)
-importFrom(fields, image.plot)
-importFrom(rgl,plot3d,lines3d)
+export(b.guten,bwd.nrd, eqcat, etasclass, kde2dnew.fortran, 
+       kde2d.integral,magn.plot, MLA.freq, simpson.coeff,simpson.kD, 
+       time2date,timecharunique2seq,xy.grid,compare.etasclass,etas.starting)
+import("mapdata","maps" )
+#import("maps","map" )
+importFrom("fields", "image.plot")
   importFrom("grDevices", "dev.new", "dev.off", "gray.colors", "rgb")
   importFrom("graphics", "abline", "box", "close.screen", "contour",
              "grid", "lines", "par", "plot", "points", "text", "title")
   importFrom("stats", "cor", "nlm", "optim", "pnorm", "qchisq",
-             "quantile", "runif", "spline", "splinefun", "weighted.mean")
+             "quantile", "runif", "spline", "splinefun", "weighted.mean","as.formula",
+             "update", "model.matrix", "model.frame", "model.offset" )
 

@@ -8,6 +8,6 @@ cat(x$description,"\n")
 cat("Number of observations            ",length(x$cat$time),"\n")
 
 cat("ETAS Parameters:","\n")
-ris=x$params
+ris=x$params.MLtot
 print(round(ris,6))
 }

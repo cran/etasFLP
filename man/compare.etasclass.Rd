@@ -14,10 +14,10 @@ compare.etasclass(etas1,etas2)
   \item{etas2}{an \code{etasclass} object.}
 }
 \details{
-Compare the results of two \code{etasclass} executions through the comparison of some elements of two \code{etasclass} objects. Fundamental elements (catalog, threshold magnitude) should be equal, but no check is made
+Compare the results of two \code{etasclass} executions through the comparison of some elements of two \code{etasclass} objects estimated on the same catalog
 }
 \value{
-\item{params}{Standardized comparison of the estimated parameters.}
+\item{diffstd.params}{Standardized comparison of the estimated parameters, included covariates.}
 \item{AIC}{Difference of AIC values.}
 \item{weigths}{Comparison of the weights \code{rho.weights} of the two input objects.}
 \item{rho.weigths}{Standardized comparison of the weights \code{rho.weights} of the two input objects.}

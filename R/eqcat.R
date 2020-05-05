@@ -6,7 +6,7 @@ function(x){
 if (n>0) {
 	  print("WRONG EARTHQUAKE CATALOG DEFINITION")
 	  print(c(n," wrong variable names"))
-	  print("an object of class eqcat (earthquake catalog) must contains the five names")
+	  print("an object of class eqcat (earthquake catalog) must contains at least the five names")
 	  print (a)
 	  return(list(cat=x,ok=FALSE));
 	  } 

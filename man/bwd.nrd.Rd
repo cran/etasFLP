@@ -29,17 +29,7 @@ Marcello Chiodi}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \examples{
-\dontrun{
-## The function is currently defined as
-function (x,w=replicate(length(x),1),d=2) 
-{
-    if (length(x) < 2L) 
-        stop("need at least 2 data points")
-     m<-weighted.mean(x,w) 
-     return(sqrt(weighted.mean((x-m)^2,w)) * 
-	      (length(x)*(d+2)/4)^(-1/(d+4)))
-}
-}
+#####
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

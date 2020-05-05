@@ -2,17 +2,17 @@
 \alias{etas.starting}
 
 \title{Guess starting values of ETAS parameters (beta-version). Only from package version 1.2.0}
-\description{\code{etas.starting} is a simple function to give starting values of the 8 ETAS parameters for the function \code{etasclass}.
+\description{\code{etas.starting} is a simple function to give starting values of the 7 ETAS parameters for the function \code{etasclass}.
 
 It gives only rough approximation, based on some assumptions, intended to give only the order of magnitude of each parameter (but should be better than nothing).
-Returns a list with 8 starting values. With this beta-version user must give manually the output of this function in the input of \code{etasclass} 
+Returns a list with 8 starting values. In the present version user must give manually the output of this function in the input of \code{etasclass} 
 }
 \usage{etas.starting(cat.orig,
 m0=2.5,
 p.start=1,
-a.start=1.5,
 gamma.start=0.5,
 q.start=2,
+betacov.start=.7,
 longlat.to.km=TRUE,
 sectoday=TRUE
 )
@@ -28,16 +28,15 @@ Threshold magnitude (only events with a magnitude at least \code{magn.threshold}
 \item{p.start}{Parameter 4  of the ETAS model; the exponent of the Omori law for temporal decay rate of aftershocks; see details. Default value = 1.0.
 %%     ~~Describe \code{p} here~~
 }
-  \item{a.start}{Parameter 5 (\eqn{\alpha}) of the ETAS model;
-efficiency of an event of given magnitude in generating aftershocks;  see details. Default value = 1.5.
-%%     ~~Describe \code{a} here~~
-}
-  \item{gamma.start}{Parameter 6 (\eqn{\gamma}) of the ETAS model; together with  \code{a} is related to the efficiency of an event of given magnitude 
+  \item{gamma.start}{Parameter 5 (\eqn{\gamma}) of the ETAS model; together with  \code{a} is related to the efficiency of an event of given magnitude 
   in generating aftershocks; see details. Default value = 0.5.
 %%     ~~Describe \code{gamma} here~~
 }
-  \item{q.start}{Parameter 8 of the ETAS model; parameter related to the spatial influence of the
+  \item{q.start}{Parameter 7 of the ETAS model; parameter related to the spatial influence of the
 mainshock; see details. Default value = 2.
+%%     ~~Describe \code{q} here~~
+}
+  \item{betacov.start}{coefficient of the covariate (as default the magnitude). Default value = 0.7.
 %%     ~~Describe \code{q} here~~
 }
   \item{sectoday}{ if \code{TRUE}, then \code{time} variable of \code{cat.orig} is converted from seconds to days.  Default value = \code{TRUE}.
@@ -49,7 +48,7 @@ mainshock; see details. Default value = 2.
 
 }
 \details{It is a beta-version of a very crude method to give 
- starting values for the eight parameters of an ETAS  (Epidemic type aftershock sequences) model
+ starting values for the seven parameters of an ETAS  (Epidemic type aftershock sequences) model
  for the description of the seismicity of a space-time region. 
 These starting values can be used as input for the function \code{etasclass} 
 \code{sectoday} and \code{ longlat.to.km} flags must the same that will be used in \code{etasclass}.
@@ -57,12 +56,12 @@ These starting values can be used as input for the function \code{etasclass}
 In this first attempt to give starting values for the ETAS model, many approximations are used 
 
 It gives only rough approximation, based on some assumptions, intended to give only the order of magnitude of each parameter (but it should be better than nothing). It
-returns a list with 8 starting values. With this beta-version user must give manually the output of this function in the input of \code{etasclass}. 
+returns a list with 7 starting values. With this beta-version user must give manually the output of this function in the input of \code{etasclass}. 
 
-The values of \code{p.start}, \code{a.start}, \code{gamma.start} and  \code{q.start} must be however given by the user (we did not find anything reasonable). Default choices for \code{p} and \code{q} (\code{p.start=1}, \code{q.start=2}) are strongly reccomended.
+The values of \code{p.start},  \code{gamma.start} and  \code{q.start} must be however given by the user (we did not find anything reasonable). Default choices for \code{p} and \code{q} (\code{p.start=1}, \code{q.start=2}) are strongly reccomended.
 
 \code{c} and \code{d} are estimated from the emprical distributions of time differences and space distances, respectively.
-\code{mu} and \code{k0} are then estimated from the starting valus the other six parameters, solving the two ML equations, that is derivatives of the whole likelihood with respect to  \code{mu} and \code{k0} equated to zero. 
+\code{mu} and \code{k0} are then estimated given the other starting values, solving the two ML equations, that is derivatives of the whole likelihood with respect to  \code{mu} and \code{k0} equated to zero. 
 In the computation of the likelihood an approximation for the integral of the intensity function is used (quoted also in 
 Schoenberg (2013)).
 }
@@ -73,7 +72,6 @@ returns a list:
 \item{k0.start}{guess value for \code{k0}}
 \item{c.start}{guess value for \code{c}}
 \item{p.start}{guess value for \code{p} (the same as input value)}
-\item{a.start}{guess value for \code{a} (the same as input value)}
 \item{gamma.start}{guess value for \code{gamma} (the same as input value)}
 \item{d.start}{guess value for \code{d}}
 \item{q.start}{guess value for \code{q} (the same as input value)}
@@ -89,7 +87,7 @@ Quicker executions are obtained using smaller values of \code{iterlim} and \code
 
 Also a first execution with \code{is.backconstant = TRUE}, to fit a first approximation model with constant background, can be useful.
 
-Some other useful information can be obtained estimating a pure time process, that can give a good guess at least for some  parameters, like  \eqn{\mu, \kappa_0, \alpha,c,p}{mu, k0, a, c, p}.
+Some other useful information can be obtained estimating a pure time process, that can give a good guess at least for some  parameters, like  \eqn{\mu, \kappa_0, c,p}{mu, k0, a, c, p}.
 
 Input times are expected in days, and so final intensities are expected number of events per day. If input values are in seconds, then set \code{sectoday=TRUE}
 }

@@ -3,7 +3,7 @@ plot.profile.etasclass=function(x,prob=c(0.90,0.95,0.99),...){
 # 
 if(sum(is.element(class(x),"profile.etasclass"))==0) stop("object is not of the required class profile.etasclass")
 
-namespar=c("mu","k0","c","p","a","gamma","d","q")
+namespar=c("mu","k0","c","p","gamma","d","q")
 
 xx=x$param.vec
 yy=x$logl.vec

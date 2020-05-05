@@ -2,9 +2,9 @@
 etas.starting = function(cat.orig,
 m0=2.5,
 p.start=1,
-a.start=1.5,
 gamma.start=0.5,
 q.start=2,
+betacov.start=.7,
 longlat.to.km=TRUE,
 sectoday=TRUE
 )
@@ -37,7 +37,7 @@ mu.start=n*0.5/diff(range(t))
 # approximate evaluation of integrals
 tmax=max(t)
 it=log((c.start+tmax-t)/c.start)
-em=exp((a.start-gamma.start)*(a$magn1-m0))
+em=exp((betacov.start)*(a$magn1-m0))
 is=d.start^(1-q.start)*exp(gamma.start*(a$magn1-m0))*pi/(q.start-1)
 k0.start=n*0.5/sum(em*it*is)
 return(list(
@@ -45,10 +45,10 @@ mu.start=mu.start,
 k0.start=k0.start,
 c.start=c.start,
 p.start=p.start,
-a.start=a.start,
 gamma.start=gamma.start,
 d.start=d.start,
 q.start=q.start,
+betacov.start=betacov.start,
 longlat.to.km=longlat.to.km,
 sectoday=sectoday
 ))

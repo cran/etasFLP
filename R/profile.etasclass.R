@@ -6,13 +6,15 @@
 #
 #####################################################################################
 #####################################################################################
-profile.etasclass<-function(fitted,iprofile		=4,
+profile.etasclass<-function(fitted,iprofile		=1,
 				 nprofile	=7,
 				 kprofile	=3,
 				 profile.approx	=FALSE,...){
+maxprofile=7 # in this version profile only for etas parameters, not for covariates parameters 27-7-2017				 
+				 
 if(class(fitted)!="etasclass") stop("object is not of the required class etasclass")
 iprofile=trunc(iprofile)
-if(iprofile>8 | iprofile <1 ) stop("'iprofile' must be an integer between 1 and 8")
+if(iprofile>maxprofile | iprofile <1 ) stop("'iprofile' must be an integer between 1 and maxprofile")
 
 nprofile=trunc(nprofile)
 if(nprofile<1) stop("'nprofile' must be at least 1")
@@ -28,6 +30,7 @@ if(fitted$params.ind[iprofile]==0) stop("cannot compute profile for a parameter 
 		n.params	=sum(params.indprof)
 		iterlim		=100
 		n		=length(fitted$cat$time)
+	trace		=TRUE # controls the level of 	intermediate printing can be deleted in future versions
 #####################################################################################
 if(profile.approx){
 #	approximation of second order for initial values for non-profile estimators			
@@ -55,53 +58,32 @@ if(profile.approx){
 	
 		if(profile.approx) params=params-delta.psi*(params.fix[iprofile]-params.MLtot[iprofile])
 cat(params,"\n")
-if (fitted$usenlm){
-	risult.profile =nlm(etas.mod2,params,
-#		hessian	=TRUE,
-#		stepmax=200,
-#		steptol	=1e-6,
-		typsize=abs(params),
-		#fscale=l.optim,
-		ndigit=5,print.level=0,
-		iterlim		=100,
-		params.ind=params.indprof,
- 		params.fix=params.fix,
-		cat=fitted$cat,
-		magn.threshold=fitted$magn.threshold,
-		back.dens=fitted$back.dens,
-		back.integral=fitted$back.integral,
-		onlytime=fitted$onlytime,
-		rho.s2=fitted$rho.s2,
-		ntheta=fitted$ntheta)
+                fitted.prof     =fitted
+                fitted.prof$params.fix=params.fix
+                fitted.prof$params=params
+                fitted.prof$params.ind=params.indprof
+                fitted.prof$nparams.etas=fitted$nparams.etas-1
+                fitted.prof$nparams=fitted$nparams-1
 
-	}
-else {
-	risult.profile =optim(params,etas.mod2,
-#		stepmax=200,
-#		steptol	=1e-6,
-		method		="BFGS",
-		hessian		=TRUE,
-		control		=list(maxit=iterlim,fnscale=n/diff(range(cat$time)),parscale=sqrt(exp(params))),
-		params.ind=params.indprof,
- 		params.fix=params.fix,
-		cat=fitted$cat,
-		magn.threshold=fitted$magn.threshold,
-		back.dens=fitted$back.dens,back.integral=fitted$back.integral,
-		onlytime=fitted$onlytime,
-		rho.s2=fitted$rho.s2,
-		ntheta=fitted$ntheta)
-	}
 
-logl.vec[j]=ifelse(fitted$usenlm,risult.profile$minimum,risult.profile$value)
+risult.profile= generaloptimizationNEW(fitted.prof,
+		hessian	=TRUE,
+                iterlim		=iterlim,
+		iprint=FALSE,
+		trace=trace)
+
+
+logl.vec[j]=risult.profile$l.optim
 cat(" profile likelihood found","\n")
 cat(c(j,param.vec[j],logl.vec[j]),"\n")
 	}
-			
+			general.optimum =c(fitted$params[iprofile],fitted$logl)
+			names(general.optimum)[2]="-logL"
 			ris=list(
 			iprofile	=iprofile,
 			logl.vec	=logl.vec,
 			param.vec	=param.vec,
-			general.optimum =c(fitted$params[iprofile],fitted$logl)
+			general.optimum =general.optimum
 			)
 
 			

@@ -5,22 +5,22 @@
 \title{Mixed FLP and ML Estimation of ETAS Space-Time Point Processes
 }
 \description{
-Estimation of the components of an ETAS (Epidemic Type Aftershock Sequence) model for earthquake description. 
- Non-parametric background seismicity can be estimated through FLP (Forward Likelihood Predictive), while parametric components are estimated through maximum likelihood. 
- The two estimation steps are alternated until convergence is obtained. 
- For each event the probability of being a background event is estimated and used as a weight for declustering steps. Many options to control the estimation process are present, together with some diagnostic tools. Some descriptive functions for earthquakes catalogs are  present; also \code{plot}, \code{print}, \code{summary}, \code{profile} methods are defined for main output (objects of class \code{etasclass})}
+\emph{New  version 2.0.0}. Covariates have been introduced to explain the effects of external factors on the induced seismicity. Since the parametrization is changed, the etasclass object created with the previous versions are not compatible with the one obtained with the current version. Estimation of the components of an ETAS (Epidemic Type Aftershock Sequence) model for earthquake description. Non-parametric background seismicity can be estimated through FLP (Forward Likelihood Predictive), while parametric components are estimated through maximum likelihood. The two estimation steps are alternated until convergence is obtained. For each event the probability of being a background event is estimated and used as a weight for declustering steps. Many options to control the estimation process are present, together with some diagnostic tools.
+Parallel computation  could speed up computations with suitable processors, but we decide to exclude the experimental parallelized version to increase portabilty.  
+Some descriptive functions for earthquakes catalogs are  included; also \code{plot}, \code{print}, \code{summary}, \code{profile} methods are defined for main output (objects of class \code{etasclass})}
 
 \details{
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 1.4.0\cr
-Date: \tab 2017-01-04\cr
+Version: \tab 2.0.0\cr  
+Date: \tab 2020-04-30\cr
 License: \tab GPL (>=2) \cr
-Depends: \tab R (>= 2.14.0), mapdata,rgl \cr
+Imports: fields,maps
+Depends: \tab R (>= 3.5.0), mapdata \cr
 Suggests: \tab MASS \cr
 }
-\code{etasclass} is the main function of the package \code{etasFLP}.
+\code{etasclass} is the main function of the package \code{etasFLP}: strongly renewed in version 2.0.
 }
 \author{
 Marcello Chiodi and Giada Adelfio
@@ -30,6 +30,9 @@ Maintainer: Marcello Chiodi<marcello.chiodi@unipa.it>
 
 \note{The package is intended for the estimation of the ETAS model for seismicity description (introduced by Ogata (1988), see reference),
 but theoretically it can be used for other fields of application.
+
+Future versions could contain anisotropic smoothing,
+ellipsoidal spatial function in triggered intensity, together with parallel computation  and other tricks to speed up computations and to obtain first approximation estimates.
 }
 
 \references{
@@ -55,7 +58,7 @@ Mathematics}, \bold{61}(4), 929-948. doi:10.1007/s10463-008-0177-1.
 Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757. DOI:10.1002/env.1121.
 
 
-Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-28.
+Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-29.
  DOI: 10.18637/jss.v076.i03 
 
 Console, R.,  Jackson,   D. D. and  Kagan, Y. Y.

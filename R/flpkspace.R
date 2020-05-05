@@ -6,11 +6,9 @@ function(theta,x,t,w,
 			etas.params,
 			etas.l,
 			mh=1,
-#			kern.var=FALSE,
 			iprint=FALSE,
 			indweight=TRUE)     {
 		
-			kern.var=FALSE
 # function called (for optimization) by flp.etas.nlm
 # essentially is an interface to the FORTRAN  subroutine deltafl1kspace
 # in this version only for k=2  (x,y)
@@ -23,7 +21,7 @@ cat("-")
 		dens	=array(0,n)
 		 s	=matrix(c(1,0,0,1),2,2)
  rangex=t(apply(x,2,range))
-indanis	=as.integer(kern.var)
+indanis	=0
 nh	=k*(1+indanis) 
 h.start=numeric(0)
 h.start[1:nh]=as.double(exp(theta[1:nh]))
@@ -43,7 +41,6 @@ h.start[1:nh]=as.double(exp(theta[1:nh]))
 		dens	=as.double(dens),
 		integr	=as.double(dens),
 		delta	=as.double(dens),
-		indanis	=as.integer(indanis),
 		expweight=as.double(-0.2),
 		indweight=as.integer(indweight),
 		allocationerr=as.integer(0),

@@ -9,8 +9,7 @@ Background, triggered and total space intensities
 are also plotted for a grid of values.
 }
 \usage{
-\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot", 
-ngrid=201,nclass=10,tfixed=0,flag.3D=FALSE,flag.log=FALSE,...)
+\method{plot}{etasclass}(x,pdf=FALSE,file ="etasplot",  ngrid=201,nclass=10,tfixed=0,flag.log=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,10 +21,8 @@ ngrid=201,nclass=10,tfixed=0,flag.3D=FALSE,flag.log=FALSE,...)
    \item{nclass}{number of class for each direction (\code{x}, \code{y}) of a grid of \code{nclass*nclass} cells where estimated  intensities must be evaluated.
    Must divide \code{ngrid-1}. Default value= 10.}
   \item{tfixed}{If a positive value is given, then the triggered intensity at time \code{tfixed} is estimated and visualized.}
-  \item{flag.3D}{If \code{TRUE} a 3D plot is also produced.}
   \item{flag.log}{If \code{TRUE} then a  \code{log} scale is used to plot intensities.}
   \item{...}{other arguments.}
-
 }
 \details{
 
@@ -38,11 +35,13 @@ are also computed and plotted for a grid of values.
 If a positive value is given for \code{tfixed}, then the triggered intensity at time \code{tfixed} is estimated and visualized.
 A tipical use can be with \code{tfixed} a day after a big earthquake.
 
+
+For space dimension, four plot are drawn with triggered, observed, total intensity, and total intensity with points.
+
 Starting with the package version 1.2.0 different kind of residual analysis are computed and visualized, separately for the space and time dimensions. (8 plot on three windows for the space and 2 plots on one window for the time)
 
-For space dimension, 
 
-
+Then two plots are printed for space residuals for total and background intensities
 
 
 Space residuals are computed dividing the observed rectangular space area in
@@ -177,21 +176,10 @@ data("italycatalog")
 
 class(italycatalog)<-"eqcat"
 
-etas.flp<-etasclass(italycatalog,description="etas flp",magn.threshold=3.1,thinning=FALSE,flp=TRUE,
-is.backconstant=FALSE,magn.threshold.back=3.5,sectoday=TRUE,
-onlytime=FALSE,declustering=TRUE,epsmax=0.00001,
-params.ind=c(1,1,1,1,1,1,1,1),k0=0.005,c=0.005,p=1.01,a=1.05,gamma=0.6,q=1.52,d=1.1,
-compsqm=TRUE,usenlm=TRUE,ndeclust=15)
-
-# execution of etasclass for events with minimum magnitude of 3.1. 
-# The events with magnitude at least 3.5 are used to build a first approximation
-# for the background intensity function
-# (magn.threshold.back=3.5)
-
 
 # plot method
 
-plot(etas.flp)
+plot(\code{an etasclass object})
 
 }
 }

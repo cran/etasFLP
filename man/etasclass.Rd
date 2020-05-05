@@ -1,30 +1,73 @@
 \name{etasclass}
 \alias{etasclass}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Mixed estimation of an ETAS model}
+\title{Mixed estimation of an ETAS model (renewed in version 2.0)}
 \description{\code{etasclass} is the main function of the package \code{etasFLP}.
 
-Performs the estimation of the components of the ETAS (Epidemic Type Aftershock Sequence) model for the description of the seismicity in a space-time region. Background seismicity is estimated non-parametrically, while triggered seismicity is estimated by MLE. In particular also the bandwidth for a kernel smoothing can be estimated through the Forward Likelihood Predictive (FLP) approach . For each event the probability of being a background event or a triggered one is estimated. 
+\code{etassclass} \emph{objects of previous versions
+are not compatible with the  current version}
 
-An ETAS with up to 8 parameters can be estimated, with several options and different methods.
+Performs the estimation of the components of the ETAS (Epidemic Type Aftershock Sequence) model for the description of the seismicity in a space-time region. Background seismicity is estimated non-parametrically, while triggered seismicity is estimated by MLE. In particular also the bandwidth for a kernel smoothing can be estimated through the Forward Likelihood Predictive (FLP) approach. For each event the probability of being a background event or a triggered one is estimated. 
+
+\strong{New in version 2.0.0:}
+\emph{Covariates have been introduced to explain the effects of external factors on the induced seismicity. Since the parametrization is changed, the etasclass object created with the previous versions are not compatible with the one obtained with the current version.}
+
+An ETAS with up to 7+ncov parameters can be estimated, with several options and different methods.
 
 Returns an \code{etasclass} object, for which \code{plot}, \code{summary}, \code{print} and \code{profile} methods are defined. 
 }
-\usage{etasclass(cat.orig, 
-    magn.threshold=2.5, magn.threshold.back=magn.threshold+2,
-    mu=1,k0=1,c=0.5,p=1.01,	a=1.2,gamma=.5,d=1.,q=1.5, params.ind=replicate(8,TRUE),
-%    kern.var=FALSE, alpha=0.5,
-    hdef=c(1,1),
-declustering=TRUE,thinning=FALSE,
-    flp=TRUE, m1=NULL, ndeclust=5, onlytime=FALSE,is.backconstant=FALSE,
-    w=replicate(nrow(cat.orig),1),
+
+%    parallel betacov formula1 offset hvarx hvary
+
+
+\usage{  etasclass(cat.orig,
+         magn.threshold	=2.5,
+				 magn.threshold.back=magn.threshold+2,	
+         tmax		=max(cat.orig$time),
+
+##### starting values for parameters
+				mu		=1,
+				k0		=1,
+				c		=0.5,
+				p		=1.01,
+##				a		=1.2,
+				gamma		=.5,
+				d		=1.,
+				q		=1.5,
+        betacov         =0.7,
+### indicators
+				params.ind=replicate(7,TRUE),
+### formula for covariates:
+                                formula1            ="time~magn1.work-1",
+                                offset              =0,
+### anisotropic smoothing is not  implemented
+###  ellipsoidal spatial function in triggered intensity not yet implemented
+				hdef=c(1,1),
+				w		=replicate(nrow(cat.orig),1),
+                                hvarx            =NULL,
+                                hvary            =NULL,
+### flags for the kind of declustering and smoothing:
+                                declustering	=TRUE,
+				thinning	=FALSE,
+				flp		=TRUE,
+				m1		=NULL,
+				ndeclust        =5,
+				onlytime	=FALSE,
+				is.backconstant	=FALSE,
 ##### end of  main input arguments. 
 ##### Control and secondary arguments:
-    description="", cat.back=NULL, back.smooth=1.0,
-    sectoday=TRUE,longlat.to.km=TRUE,
-    usenlm=TRUE, method	="BFGS", compsqm=TRUE,
-    epsmax=0.0001, iterlim=100, ntheta=100)
-}
+				description	="",
+				cat.back   	=NULL,
+				back.smooth	=1.0,
+				sectoday	=TRUE,
+				longlat.to.km   =TRUE,
+				usenlm		=TRUE,
+				method		="BFGS",
+				compsqm 	=TRUE,
+				epsmax		= 0.0001,
+				iterlim		=50,      
+				ntheta		=36) 
+				}
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cat.orig}{
@@ -37,8 +80,11 @@ Threshold magnitude (only events with a magnitude at least \code{magn.threshold}
 Threshold magnitude used to build the  catalog \code{cat.back} for
 the first estimation of the background seismicity. Default value = \code{magn.threshold+2}.
 }
+  \item{tmax}{
+Maximum value of time. Only observation before \code{tmax} will be used for estimation. Default value = \code{max(cat.orig$time)}.
+}
 
-\emph{Values for the 8 parameters of the ETAS   model} (starting values or fixed values according to  \code{params.ind}):
+\emph{Values for the 7 parameters of the ETAS   model} (starting values or fixed values according to  \code{params.ind}):
   \item{mu}{Parameter 1 (\eqn{\mu}) of the ETAS model: background general intensity; see details. Default value = 1.
 %%     ~~Describe \code{lambda} here~~
 }
@@ -52,62 +98,60 @@ of the aftershock activity; see details. Default value = 1.
   \item{p}{Parameter 4  of the ETAS model; the exponent of the Omori law for temporal decay rate of aftershocks; see details. Default value = 1.01.
 %%     ~~Describe \code{p} here~~
 }
-  \item{a}{Parameter 5 (\eqn{\alpha}) of the ETAS model;
-efficiency of an event of given magnitude in generating aftershocks;  see details. Default value = 1.2.
-%%     ~~Describe \code{a} here~~
-}
-  \item{gamma}{Parameter 6 (\eqn{\gamma}) of the ETAS model; together with  \code{a} is related to the efficiency of an event of given magnitude 
+  \item{gamma}{Parameter 5 (\eqn{\gamma}) of the ETAS model; together with  \code{a} is related to the efficiency of an event of given magnitude 
   in generating aftershocks; see details. Default value = 0.5.
 %%     ~~Describe \code{gamma} here~~
 }
-  \item{d}{Parameter 7 of the ETAS model; parameter related to the spatial influence of the
+  \item{d}{Parameter 6 of the ETAS model; parameter related to the spatial influence of the
 mainshock; see details. Default value = 1.
 %%     ~~Describe \code{d} here~~
 }
-  \item{q}{Parameter 8 of the ETAS model; parameter related to the spatial influence of the
+  \item{q}{Parameter 7 of the ETAS model; parameter related to the spatial influence of the
 mainshock; see details. Default value = 1.5.
 %%     ~~Describe \code{q} here~~
 }
-\emph{End of model pararameter input}
-  \item{params.ind}{vector of 8 logical values: \code{params.ind[i] = TRUE} means that the i-th parameter must be estimated.  \code{params.ind[i] = FALSE}  means that the i-th parameter is fixed to its input value  (the order of parametrs is: \code{mu}, \code{k0}, \code{c}, \code{p}, \code{a}, \code{gamma}, \code{d}, \code{q}).
-  Default value = \code{replicate(8,TRUE)}, that is, \code{etasclass} estimates all parameters.
+ \item{betacov}{Parameter of the covariates ETAS model; 
+ see details. Default value = 0.7.
+%%     ~~Describe \code{q} here~~
 }
+
+\emph{End of model pararameter input}
+  \item{params.ind}{vector of 7 logical values: \code{params.ind[i] = TRUE} means that the i-th parameter must be estimated.  \code{params.ind[i] = FALSE}  means that the i-th parameter is fixed to its input value  (the order of parametrs is: \code{mu}, \code{k0}, \code{c}, \code{p}, \code{gamma}, \code{d}, \code{q}).
+  Default value = \code{replicate(7,TRUE)}, that is, \code{etasclass} estimates all parameters.
+}
+\item{formula1}{a character variable: Formula which defines the covariates acting on the induced seismicity. In classical etas model   the covariate is the magnitude. The left side (dummy) element must be the time, which is a variable certainly present in the data set. The right part of the formula determines \code{ncov} the number of covariates. Default value=\code{"time~magn1.work-1"}; input \emph{must} be a character value: it is converted in a formula inside the program}
+\item{offset}{An offset, for which no parameter will be estimated. Default value=0}
 
 \emph{Flags for the kind of declustering and smoothing}:
 %  \item{kern.var}{if \code{TRUE} the background seismicity is estimated through a variable metric anisotropic kernel. yet not used in version 1.1.0. Default value = \code{FALSE}.}
   \item{hdef}{Starting values for the \code{x,y} bandwidths used in the kernel estimator of background seismicity. Default value = \code{1,1}.
 }
-%  \item{alpha}{if \code{kern.var=TRUE} indicates the mixing proportion in the background seismicity between  variable metric and fixed metric kernel.yet not used in version 1.1.0. Default value = \code{0.5}.}
-
+  \item{w}{Starting values for the weigths used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}). 
+  
+Default value = \code{replicate(nrow(cat.orig),1).}
+}
+  \item{hvarx}{Longitude bandwidths adjustement used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}). Default value = NULL}
+  \item{hvary}{Longitude bandwidths adjustement used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}). Default value = NULL}
   \item{declustering}{if \code{TRUE} the catalog is iteratively declustered to optimally estimate the background intensity (through thinning, if \code{thinning=TRUE}, or through weighting if \code{thinning=FALSE}). Default value = \code{TRUE}.
 }
   \item{thinning}{if \code{thinning=TRUE} a background catalog is obtained sampling from the original catalog with probabilities estimated during the iterations. Default value =\code{FALSE}.
 }
   \item{flp}{if \code{flp=TRUE} then background seismicity is estimated through Forward Likelihood Predictive (see details). Otherwise the Silverman rule is used. Default value =\code{TRUE}.
-%%     ~~Describe \code{flp} here~~
 } 
   \item{m1}{Used only if \code{flp=TRUE}. Indicates the range of points used for the FLP steps. See details. If missing it is set  to \code{nrow(cat)/2}.
-%%     ~~Describe \code{flp} here~~
 } 
 \item{ndeclust}{maximum number of iterations for the general declustering procedure. Default=5.
-%%     ~~Describe \code{ndeclust} here~~
 }
-
 \item{onlytime}{if \code{TRUE}  then a time process is fitted to data , regardless to space location (in this case \code{is.backconstant} is set to \code{TRUE} and \code{declustering}, \code{flp} are set to \code{FALSE}). Default value = \code{FALSE}.
-%%     ~~Describe \code{onlytime} here~~
 }
   \item{is.backconstant}{if \code{TRUE}  then background seismicity is assumed to be homogeneous in space  (and \code{declustering, flp} are set to \code{FALSE}).  Default value = \code{FALSE}.
-%%     ~~Describe \code{is.backconstant} here~~
 }
-  \item{w}{initial weights}
 \emph{Other control parameters}:
   \item{description}{a description string used for the output. Default value = "".
-%%     ~~Describe \code{description} here~~
 }
   \item{cat.back}{ external catalog used for the estimation of the background seismicity. 
  Default value = \code{NULL}.
 }
-%If \code{declustering=TRUE} it is used only as a first approximation.
 \item{back.smooth}{
 Controls the level of smoothing for the background seismicity (meaningful only if \code{flp=FALSE}). Default value = 1.
 }
@@ -137,23 +181,27 @@ Estimates the components of an ETAS (Epidemic type aftershock sequence)
 model for the description of the seismicity of a space-time region. 
 Background seismicity is estimated nonparametrically, while triggered seismicity is estimated by MLE.
 
+From version 2.0 of package \code{etasFLP} covariates are allowed to improve the fitting of the triggered part, through the input \code{formula1}, which as a default values of \code{"time ~ magn1.work - 1"}, which corresponds to the previous version of package \code{etasFLP}, that is, magnitude as the only covariate which influence the average number of aftershocks.
+
 The bandwidth of the kernel density estimator is estimated through the 
 Forward Likelihood Predictive approach (FLP),
 (theoretical reference on Adelfio and Chiodi, 2013) if \code{flp} is set to \code{TRUE}. 
-Otherwise the bandwidth is estimated trough  Silverman's rule.
+Otherwise the bandwidth is estimated trough the Silverman's rule.
 FLP steps for the estimation of nonparametric background component  is alternated with the Maximum Likelihood step for the estimation
 of parametric components (only if \code{declustering=TRUE}).
 For each event the probability of being a background event or a triggered one is estimated,
 according to a declustering procedure in a way similar to the proposal of Zhuang,  Ogata,  and Vere-Jones (2002).
 
+
 The ETAS model for conditional space time intensity \eqn{\lambda(x,y,t)}{lambda(x,y,t)} is given by:
 
-\deqn{\lambda(x,y,t)=\mu f(x,y)+\sum_{t_j<t}\frac{\kappa_0\ e^{(\alpha-\gamma) \ (m_j-m_0)}}{(t-t_j +c)^p}
+\deqn{\lambda(x,y,t)=\mu f(x,y)+\kappa_0 \sum_{t_j<t}\frac{ e^{\eta_j}}{(t-t_j +c)^p}
 \left\{ \frac{(x-x_j)^2+(y-y_j)^2}{e^{\gamma \ (m_j-m_0)}}+d \right\}^{-q}}{%
 lambda(x,y,t)=mu*f(x,y)+
-sum_(t_j<t)(k0\ e^(a-gamma) \ (m_j-m_0))/(t-t_j +c)^p
+k0\ sum_(t_j<t)(\ e^ eta_j/(t-t_j +c)^p
 [ ((x-x_j)^2+(y-y_j)^2)/(e^(gamma \ (m_j-m_0))+d) ]^(-q)}
 
+where \eqn{\eta_j=\sum_{j=1,ncov}betacov_j cov_{ij}}
 
 \eqn{f(x,y)}{f(x,y)} is estimated through a weighted kernel gaussian estimator; if \code{flp} is set to \code{TRUE}
 then the bandwidth is estimated through a FLP step.
@@ -170,7 +218,7 @@ The weights \eqn{\rho_i}{rho_i} are updated after a whole iteration.
  \code{c} and \code{p} are the characteristic parameters of the seismic
 activity of the given region; \code{c} is a shift parameter while \code{p}, which characterizes the pattern of seismicity, is the exponent parameter of the modified Omori law for temporal decay rate of aftershocks; 
 
-\code{a} (\eqn{\alpha}{alpha}) and \code{gamma} (\eqn{\gamma}{gamma}) measure the efficiency of an event of given magnitude in generating aftershock sequences;
+\eqn{\eta_j=\sum_{j=1,ncov}betacov_j cov_{ij}} measures the efficiency of an event of a given magnitude in generating aftershock sequences;
 
 \code{d} and \code{q} are two parameters related to the spatial influence of the mainshocks.
 
@@ -178,13 +226,13 @@ Many kinds of ETAS models can be estimated, managing some control input argument
 The eight ETAS parameters can be fixed  to some input value, or can be estimated, according to \code{params.ind}:
 if \code{params.ind}[i]=FALSE the i-th parameter is kept fixed to its input value, otherwise, if \code{params.ind[i]} \code{ = TRUE},  the i-th parameter is estimated and the input value is used as a starting value. 
 
-By default \code{params.ind=c(TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE)}, and so a full 8 parameters ETAS model will be estimated.
+By default \code{params.ind=c(TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE)}, and so a full 7+\code{ncov} parameters ETAS model will be estimated.
 
-The eight parameters are internally ordered in this way: \code{params} = (\code{mu}, \code{k0}, \code{c}, \code{p}, \code{a}, \code{gamma}, \code{d}, \code{q}); for example
+The seven parameters are internally ordered in this way: \code{params} = (\code{mu}, \code{k0}, \code{c}, \code{p},  \code{gamma}, \code{d}, \code{q}); for example
 a model with a fixed value \code{p=1} (and  \code{params.ind}[4] = FALSE) can be estimated  and compared with the model where \code{p} is estimated (\code{params.ind}[4]=TRUE);
 
-for example  a 7 parameters model can be fitted with \code{gamma=0} and \code{params.ind[6]}=\code{FALSE}, 
-so that  input must be in this case: \code{params.ind=c(TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE)}; 
+for example  a 6+\code{ncov} parameters model can be fitted with \code{gamma=0} and \code{params.ind[5]}=\code{FALSE}, 
+so that  input must be in this case: \code{params.ind=c(TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,TRUE)}; 
 
 if \code{onlytime=TRUE} a time process is fitted to data (with a maximum of 5 parameters), regardless to space location (however the input catalog \code{cat.orig} must contain  three columns named \code{long}, \code{lat, z});
 
@@ -236,7 +284,7 @@ The main items of the output are:
   \item{this.call}{reports the exact call of the function}
   \item{params.ind}{indicates which parameters have been estimated (see details)}
   \item{params}{ML estimates of the ETAS parameters.}
-  \item{sqm}{Estimates of standard errors of the ML estimates of the ETAS parameters (\code{sqm[i]}=0 if \code{params.ind[i]}=\code{FALSE} and for the situation where hessian is not computed or near to singularity). }
+  \item{sqm}{Estimates of standard errors of the ML estimates of the ETAS parameters (\code{sqm[i]}=0 if \code{params.ind[i]}=\code{FALSE} or where the hessian is not computed or near to singularity). }
   \item{AIC.iter}{AIC values at each iteration.}
   \item{hdef}{final bandwidth used for the kernel estimation of background spatial intensity (however estimated, with \code{flp=TRUE} or \code{flp=FALSE}).}
   \item{rho.weights}{Estimated probability for each event to be a background event (\eqn{\rho}).}
@@ -253,10 +301,10 @@ The main items of the output are:
 A \code{profile} method (\code{\link{profile.etasclass}}
 ) is also defined  to make approximate inference on a single parameter   
 }
-\note{In this first version the x-y space region, where the point process is defined, is  a rectangle embedding the catalog values.
+\note{In this version the x-y space region, where the point process is defined, is  a rectangle embedding the catalog values.
 
 The optimization algorithm  depends on the choice of initial values. Some default guess choice is performed 
-inside the function for parameters without input starting values. If convergence problem are experienced, a useful strategy can be to start  with an high magnitude threshold value \eqn{m_0}{m0} (that is, with a smaller catalog with bigger earthquakes), and then using this first output as starting  guess for a running with a lower magnitude threshold value \eqn{m_0}{m0}. 
+inside the function for parameters without input starting values; the function \code{etas.starting} gives rough first guess for initial values. If convergence problem are experienced, a useful strategy can be starting  with an higher magnitude threshold value \eqn{m_0}{m0} (that is, with a smaller catalog with bigger earthquakes), and then using this first output as starting  guess for a running with a lower magnitude threshold value \eqn{m_0}{m0}. 
 In this trial executions avoid declustering (\code{declustering=FALSE}) or at least use a small value of \code{ndeclust}; small values of \code{iterlim} and \code{ntheta} can speed first executions.
 
 Quicker executions are obtained using smaller values of \code{iterlim} and \code{ntheta} in the input.
@@ -269,7 +317,7 @@ Some other useful information can be obtained estimating a pure time process, th
 Input times are expected in days, and so final intensities are expected number of events per day. If input values are in seconds, then set \code{sectoday=TRUE}
 }
 
-\seealso{ \code{\link{eqcat}}, \code{\link{plot.etasclass}}, \code{\link{summary.etasclass}}, \code{\link{profile.etasclass}}}
+\seealso{ \code{\link{eqcat}}, \code{\link{plot.etasclass}},\code{\link{print.etasclass}}, \code{\link{summary.etasclass}}, \code{\link{profile.etasclass}}, \code{\link{etas.starting}}}
 
 \references{
 
@@ -284,7 +332,7 @@ Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric 
 
 Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757. DOI:10.1002/env.1121.
 
-Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-28.
+Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-29.
  DOI: 10.18637/jss.v076.i03.
 
 
@@ -304,44 +352,86 @@ Marcello Chiodi, Giada Adelfio}
 \dontrun{
 data("italycatalog")
 # load a sample catalog of the italian seismicity
+esecov1<-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
+mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
+q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
+TRUE), formula1 = "time ~  magn1.work- 1", declustering = TRUE, 
+thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE, 
+is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE, 
+compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)
 
-
-etas.flp=etasclass(italycatalog,  
-magn.threshold = 3.0,  magn.threshold.back = 3.5,
-k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, q = 1.52, d = 1.1,
-params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
-declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15,
-onlytime = FALSE, is.backconstant = FALSE,
-description = "etas flp",sectoday = TRUE, usenlm = TRUE, epsmax = 0.001)
 # execution of etasclass for events with minimum magnitude of 3.0. 
 # The events with magnitude at least 3.5 are used to build a first approximation
 # for the background intensity function
 # (magn.threshold.back=3.5)
-
+# The magnitude effect is given by the covariate magn1.work 
+# in the formula "time ~  magn1.work- 1"
+# magn1.work is the internal name for magn1-magn.threshold
 # print method for the etasclass object
-etas.flp
+
+print(esecov1)
+
+> print(esecov1)
 Call: 
  
-etasclass(cat.orig = italycatalog, magn.threshold = 3, magn.threshold.back = 3.5, 
-    k0 = 0.005, c = 0.005, p = 1.01, a = 1.05, gamma = 0.6, d = 1.1, 
-    q = 1.52, params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
-        TRUE, TRUE), declustering = TRUE, thinning = FALSE, flp = TRUE, 
-    ndeclust = 15, onlytime = FALSE, is.backconstant = FALSE, 
-    description = "etas flp", sectoday = TRUE, usenlm = TRUE, 
-    epsmax = 0.001)
+etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
+    mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
+    q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
+        TRUE), formula1 = "time ~  magn1.work- 1", declustering = TRUE, 
+    thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE, 
+    is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE, 
+    compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)
 
  
  
-etas flp 
-Number of observations             2158 
+ 
+Number of observations             2226 
 ETAS Parameters: 
-      mu       k0        c        p        a    gamma        d        q 
-0.355850 0.008373 0.009404 1.121630 1.509371 0.857945 1.915139 1.836391 
-   
+        mu         k0          c          p      gamma          d          q 
+  0.667509   0.022393   0.014769   1.110059   0.000000   1.905461   1.947223 
+magn1.work 
+  0.740109 
+# summary method for more informative output etasclass object
 
+summary(esecov1)
 # plot results with maps of intensities and diagnostic tools 
 
-plot(etas.flp)
+plot(esecov1)
+
+## an application with 5 covariates
+esecov5<-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
+mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
+q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE), 
+formula1 = "time ~ z + magn1.work +nstaloc_rev +min_distance_rev+distmin- 1", 
+declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15, 
+onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
+usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
+ntheta = 36)
+
+## print results, more out put with summary
+ print(esecov5)
+Call: 
+ 
+etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
+    mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
+    q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
+        TRUE), formula1 = "time ~ z + magn1.work +nstaloc_rev +min_distance_rev+distmin- 1", 
+    declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15, 
+    onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
+    usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
+    ntheta = 36)
+
+ 
+ 
+ 
+Number of observations             2226 
+ETAS Parameters: 
+              mu               k0                c                p 
+        0.705351         0.073070         0.019396         1.154186 
+           gamma                d                q                z 
+        0.000000         1.942929         2.004915        -0.041256 
+      magn1.work      nstaloc_rev min_distance_rev          distmin 
+        1.157698        -0.009010        -0.011020        -1.826717 
 
 }
 }
@@ -350,6 +440,7 @@ plot(etas.flp)
 \keyword{ETAS}
 \keyword{earthquake}
 \keyword{kernel}
+\keyword{covariates}
 \keyword{flp}
 
 % __ONLY ONE__ keyword per line

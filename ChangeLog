@@ -1,3 +1,40 @@
+2020-4-22 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasFLP: dropped out the parallel option to avoid problems on some compiler.
+*etasclass: removed the options fastML,ellipse.trig,rxy also in all functions
+2019-02-28 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: a  options introduced parallel.density e parallel.etas, passed to interfaces for FORTRAN routines
+*fortran_etas_code.f90: parallel versions of etasfull8NEW and of density2 have been introduced
+*Makevars: added support for openMP compiler for parallel computing
+2019-01-28 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: some improvement introduced
+2018-02-28 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*kde2dnew.fortran: two new arguments added hvarx, hvary, vectors of bandwidth
+(to be documented)
+*etasclass: two new arguments, formula1 and offset has been added to allow for introduction of covariates
+*etasclass:  the output object of the class etasclass, has been largely modified
+*etasclassNEW: not used
+*etasclass: a new function generaloptimizationNEW has been introduced, which choose the method of optimization
+2018-01-31 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: a new argument fastML has been added
+*etasclass: ellipse.trig and rxy for ellipsoidal spatial function in triggered intensity (not yet completed)
+2018-01-31 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: a new argument fastML has been added
+2017-05-26  Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: a new argument, formula1 has been added to allow for future introduction of covariates
+*etasclass: the output object of the class etasclass, has been extended
+*etasclass: x.km,y.km variables renamed xback.work,yback.work
+*etasclass: xcat.km,ycat.km variables renamed xcat.work, ycat.work 
+*etasclass: a call to a new subroutine generaloptimization added in june 2017 as an interface to nlm or optim according to the option usenlm.
+*etas.mod2: process parametrs pass though a unique argument etas.obj of class "etasclass".
+*etasclass: inserted a new argument ellipse.trig, that allows for ellipsoidal space triggered intensities. 
+*weighted.space: a new subroutine used when ellipse.trig=TRUE; essentially an interface to FORTRAN subroutine wspace.
+*cat.select: a new subroutine used to select the catalog on which etasclass will work.
+
+2017-04-01  Marcello Chiodi  <marcello.chiodi@unipa.it>
+*R package etasFLP: changes from version 1.4.0 to version 1.4.1
+*general changes: the CITATION file quotes a reference to a registered JSS (Journal of Statistical Software) article.
+*etasclass, etas.mod2: inserted a new argument tmax, that can be different from the observed maximum. 
+*plot.etasclass: Some plot label have been changed.
 2017-01-04  Marcello Chiodi  <marcello.chiodi@unipa.it>
 *R package etasFLP: changes from version 1.3.1 to version 1.4.0
 *general changes: added a CITATION file with the reference to the JSS (Journal of Statistical Software) article (the DOI in the CITATION is for a new JSS publication that will be registered after publication on CRAN) 

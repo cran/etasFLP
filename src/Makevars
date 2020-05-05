@@ -1,0 +1,4 @@
+CXX98FLAGS = -g -O2 -Wall -pedantic -fstack-protector-strong -D_FORTIFY_SOURCE=2
+CXX11FLAGS = -g -O2 -Wall -pedantic -fstack-protector-strong -D_FORTIFY_SOURCE=2
+CXX14FLAGS = -g -O2 -Wall -pedantic -fstack-protector-strong -D_FORTIFY_SOURCE=2
+#CFLAGS=-Wall -g -fPIC

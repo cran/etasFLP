@@ -1,5 +1,5 @@
 plot.etasclass <-
-function(x,pdf=FALSE,file ="etasplot",  ngrid=201,nclass=10,tfixed=0,flag.3D=FALSE,flag.log=FALSE,...){
+function(x,pdf=FALSE,file ="etasplot",  ngrid=201,nclass=10,tfixed=0,flag.log=FALSE,...){
 #  function(x,pdf=FALSE,file ="etasplot",  ngrid=201,flag.3D=FALSE,flag.log=FALSE,ellipse=FALSE,...){
 	if(class(x)!="etasclass")stop("argument must be an etasclass object")
 	nsimps=1+(ngrid-1)/nclass
@@ -36,27 +36,26 @@ pdf(file=file,onefile=TRUE)}
 ## back.grid computed on km coordinates
 
 # chamge the is.backconstant switch
-magnitude=x$cat$magn1-x$magn.threshold
-
-print(summary(magnitude))
+magnitude=x$cat$magn1.work
 
 #if(!x$is.backconstant){
 {
 
-xcat.km	=x$cat$long
-ycat.km	=x$cat$lat
+xcat.km	=x$cat$xcat.work
+ycat.km	=x$cat$ycat.work
 w	=x$rho.weights
 hdef	=x$hdef
 n	=length(xcat.km)
+tmax    =x$tmax
 params	=x$params
         mu= params[1]
         k0= params[2]
         c= params[3]
         p= params[4]
-        a= params[5]
-        gamma= params[6]
-        d= params[7]
-        q= params[8]
+#        a= params[5]
+        gamma= params[5]
+        d= params[6]
+        q= params[7]
 	#
 	    eps=1/n
 
@@ -67,7 +66,7 @@ params	=x$params
             rangex.km  =c(min(rangex)-eps.x,max(rangex)+eps.x)
             rangey.km  =c(min(rangey)-eps.y,max(rangey)+eps.y)
 
-ranget=diff(range(x$cat$time))
+ranget=diff(range(x$cat$time.work))
 
 alpha	=0
 if (kern.var) alpha=hdef[3]
@@ -76,7 +75,7 @@ space.grid	=xy.grid(rangex.km,rangey.km,ngrid)
 ngridtot	=length(space.grid[,1])
 #kde=kde2dnew.fortran(xcat.km,ycat.km,space.grid[,1],space.grid[,2],w=w,factor.xy=1,h=hdef,kern.var=kern.var,alpha=alpha)
 if(!x$is.backconstant){
-kde=kde2dnew.fortran(xcat.km,ycat.km,space.grid[,1],space.grid[,2],w=w,factor.xy=1,h=hdef)
+kde=kde2dnew.fortran(xcat.km,ycat.km,space.grid[,1],space.grid[,2],w=w,factor.xy=1,h=hdef,hvarx=x$hvarx,hvary=x$hvary)
 wmat1		=matrix(kde$wmat,n,4)
 back.grid	=ranget*mu*kde$z
 }
@@ -87,18 +86,21 @@ wmat1		=matrix(kde$wmat,n,4)
 back.grid	=ranget*mu*kde$z^0
 }
 
-
 #### computation MUST be in km IN THIS VERSION because parameters are evaluated in km
-ris=.Fortran("etasfull8tintegrated" ,NAOK=TRUE,
+ris=.Fortran("etasfull8tintegratednew" ,NAOK=TRUE,
 			n=as.integer(n),
 			mu=as.double(mu),k=as.double(k0),
 			c=as.double(c),p=as.double(p),
-			a=as.double(a),g=as.double(gamma),
+			g=as.double(gamma),
 			d=as.double(d),q=as.double(q),
-			x=as.double(xcat.km),y=as.double(ycat.km), t=as.double(x$cat$time),m=as.double(magnitude),l=back.grid,
+			x=as.double(xcat.km),y=as.double(ycat.km), t=as.double(x$cat$time.work),
+			m=as.double(magnitude),
+			predictor=as.double(x$predictor),
+			
+			l=back.grid,
 			ngridtot=as.integer(ngridtot), xgrid=as.double(space.grid[,1]),
 			ygrid=as.double(space.grid[,2]),
-			tmax=as.double(max(x$cat$time)))
+			tmax=as.double(tmax))
 			trig.grid	=ris$l
 				
 ### trig.grid intensity on a x-y grid   by time integration of ETAS intensity function
@@ -109,14 +111,17 @@ tot.grid=back.grid+trig.grid
 # maps of triggered intensity for a single day
 totfixed.grid=tot.grid*0.
 if(tfixed>0){
-ind=x$cat$time<tfixed
-ris=.Fortran("etasfull8tfixed" ,NAOK=TRUE,
+ind=x$cat$time.work<tfixed
+ris=.Fortran("etasfull8tfixednew" ,NAOK=TRUE,
 			n=as.integer(sum(ind)),
 			mu=as.double(mu),k=as.double(k0),
 			c=as.double(c),p=as.double(p),
-			a=as.double(a),g=as.double(gamma),
+			g=as.double(gamma),
 			d=as.double(d),q=as.double(q),
-			x=as.double(xcat.km[ind]),y=as.double(ycat.km[ind]), t=as.double(x$cat$time[ind]),m=as.double(magnitude[ind]),l=back.grid,
+			x=as.double(xcat.km[ind]),y=as.double(ycat.km[ind]), t=as.double(x$cat$time.work[ind]),m=as.double(magnitude[ind]),
+			predictor=as.double(x$predictor),
+                    
+			l=back.grid,
 			ngridtot=as.integer(ngridtot), xgrid=as.double(space.grid[,1]), 
 			ygrid=as.double(space.grid[,2]),tfixed=as.double(tfixed))
 		        totfixed.grid	=ris$l+back.grid/ranget
@@ -131,8 +136,8 @@ if(flag.log) {
 }
 ## change grid to degrees
 
-rangex		=range(x$cat.longlat$long)
-rangey		=range(x$cat.longlat$lat)
+rangex		=range(x$cat$long)
+rangey		=range(x$cat$lat)
 	    eps.x   =diff(rangex)*eps/2
             eps.y   =diff(rangey)*eps/2
             rangex  =c(min(rangex)-eps.x,max(rangex)+eps.x)
@@ -147,9 +152,9 @@ ngridtot	=length(space.grid[,1])
 if(tfixed>0){
 ### start triggered intensity plotting for a tfixed ########################################
 if(!pdf) dev.new()
-ind1=x$cat.longlat$time>=tfixed & x$cat.longlat$time<(tfixed+1)
+ind1=x$cat$time.work>=tfixed & x$cat$time.work<(tfixed+1)
 
-mapxy=map("worldHires",xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),plot=FALSE)
+mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
 
 image.plot(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid))
 ,col=gray.colors(128, start = 0., end = 1., gamma =2 )
@@ -160,11 +165,11 @@ image.plot(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid))
 grid(col="grey")
 
 map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
-xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),col="green"
+xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green"
 )
 contour(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid)),col="red",add=TRUE)
 
-points(x$cat.longlat$long[ind1],x$cat.longlat$lat[ind1],cex=sqrt(exp(x$cat.longlat$magn1[ind1]))/8,col=4,pch=19)
+points(x$cat$long[ind1],x$cat$lat[ind1],cex=sqrt(exp(x$cat$magn1.work[ind1]))/8,col=4,pch=19)
 
 
 ### end triggered intensity plotting for a tfixed ########################################
@@ -175,7 +180,7 @@ if(!pdf) dev.new()
 
 ### start triggered intensity plotting
 
-mapxy=map("worldHires",xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),plot=FALSE)
+mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
 
 image.plot(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid))
 ,col=gray.colors(128, start = 0., end = 1., gamma =2 )
@@ -186,7 +191,7 @@ image.plot(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid))
 grid(col="grey")
 
 map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
-xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),col="green"
+xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green"
 )
 contour(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid)),col="red",add=TRUE)
 
@@ -206,7 +211,7 @@ main="Background Intensity"
       
 grid(col="grey")
 map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
-xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),col="green")
+xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
 
 contour(x.grid,y.grid,(matrix(back.grid,ngrid,ngrid)),col="red",add=TRUE)
 
@@ -223,7 +228,7 @@ xlab="x-longitude",ylab="y-latitude",main="Total Intensity"
       
 grid(col="grey")
 map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
-xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),col="green")
+xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
 contour(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),col="red",add=TRUE)
 
 box()
@@ -240,8 +245,8 @@ xlab="x-longitude",ylab="y-latitude",main="Total Intensity with observed points 
       
 grid(col="grey")
 map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
-xlim=range(x$cat.longlat$long),ylim=range(x$cat.longlat$lat),col="green")
-points(x$cat.longlat$long,x$cat.longlat$lat,cex=sqrt(exp(x$cat.longlat$magn1))/8,col=rgb(ts,0,1-ts),pch=19)
+xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
+points(x$cat$long,x$cat$lat,cex=sqrt(exp(x$cat$magn1.work))/8,col=rgb(ts,0,1-ts),pch=19)
 contour(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),col="yellow",add=TRUE)
 
 box()
@@ -273,31 +278,33 @@ etas.l=x$l
 
 if(flag.log) etas.l=log(etas.l)
 
-if(flag.3D){
+#if(flag.3D){
 
-typegraph=2
-plot3d(x$cat.longlat$long,x$cat.longlat$lat,etas.l,type="n",zlab=paste("estimated intensity   ","lambda(x,y)"),
-xlab="x-longitude",ylab="y-latitude",main="Estimated intensities in observed points")
-lines3d(cbind(mapxy$x,mapxy$y,min(etas.l)),col="red")
-plot3d(x$cat.longlat$long,x$cat.longlat$lat,etas.l,add=TRUE, type="h")
+#typegraph=2
+#plot3d(x$cat$long,x$cat$lat,etas.l,type="n",zlab=paste("estimated intensity   ","lambda(x,y)"),
+#xlab="x-longitude",ylab="y-latitude",main="Estimated intensities in observed points")
+#lines3d(cbind(mapxy$x,mapxy$y,min(etas.l)),col="red")
+#plot3d(x$cat$long,x$cat$lat,etas.l,add=TRUE, type="h")
 
-}
+#}
 #####################################################################################
 ### added november 7th, 2014
 # computation of  intensities in observed points integrated with respect to time 
 #
 ngridtot	=n
-back.obs	=ranget*mu*kde2dnew.fortran(xcat.km,ycat.km,xcat.km,ycat.km,w=w,factor.xy=1,h=hdef)$z
+back.obs	=ranget*mu*kde2dnew.fortran(xcat.km,ycat.km,xcat.km,ycat.km,w=w,factor.xy=1,h=hdef,hvarx=x$hvarx,hvary=x$hvary)$z
 	
 #### computation MUST be in km IN THIS VERSION because parameters are evaluated in km
-ris=.Fortran("etasfull8tintegrated" ,NAOK=TRUE,
+ris=.Fortran("etasfull8tintegratednew" ,NAOK=TRUE,
 			n=as.integer(n),
 			mu=as.double(mu),k=as.double(k0),
 			c=as.double(c),p=as.double(p),
-			a=as.double(a),g=as.double(gamma),
+			g=as.double(gamma),
 			d=as.double(d),q=as.double(q),
-			x=as.double(xcat.km),y=as.double(ycat.km), t=as.double(x$cat$time),m=as.double(x$cat$magn1),l=back.obs,
-			ngridtot=as.integer(n), xgrid=as.double(xcat.km), ygrid=as.double(ycat.km),tmax=as.double(max(x$cat$time)))
+			x=as.double(xcat.km),y=as.double(ycat.km), t=as.double(x$cat$time.work),m=as.double(x$cat$magn1),
+			predictor=as.double(x$predictor),
+			l=back.obs,
+			ngridtot=as.integer(n), xgrid=as.double(xcat.km), ygrid=as.double(ycat.km),tmax=as.double(tmax))
 			trig.obs	=ris$l
 
 
@@ -386,7 +393,7 @@ std[std4]=smax
 if(!pdf) dev.new()
 
 image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,
-main="Standardized differences between \n  theoretical and observed frequency (whole model)")
+main="Standardized differences between \n observed and theoretical frequency (whole model)")
 
 #image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,xaxp=c(xx[1],xx[2],nclass),yaxp=c(yy[1],yy[2],nclass))
 grid(nclass)
@@ -404,7 +411,7 @@ std[std4]=smax
 if(!pdf) dev.new()
 
 image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,
-main="Standardized differences between  \n theoretical and observed frequency (background only)")
+main="Standardized differences between  \n observed and theoretical frequency (background only)")
 
 #image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,xaxp=c(xx[1],xx[2],nclass),yaxp=c(yy[1],yy[2],nclass))
 grid(nclass)
@@ -417,31 +424,6 @@ map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",col="black")
 if(!pdf) dev.new()
 par(mfcol=c(3,2))
 
-##################### induced seismicity  ############################
-
-#ris=.Fortran("etasfull8reversed" ,NAOK=TRUE,
-#			tflag=as.integer(x$onlytime),
-#			n=as.integer(n),
-#			mu=as.double(mu),k=as.double(k0),
-#			c=as.double(c),p=as.double(p),
-#			a=as.double(a),g=as.double(gamma),
-#			d=as.double(d),q=as.double(q),
-#			x=as.double(xcat.km),y=as.double(ycat.km), t=as.double(x$cat$time),m=as.double(magnitude),
-#			ltot=as.double(x$l),l=as.double(xcat.km*0))
-
-
-#	etasn	=ris$l
-#y1=log(etasn+0.00000001)
-
-
-# page7: graph1
-
-#plot(magnitude,y1,xlab="",ylab="log(num. triggered)", main="log(num. triggered) vs. magn1-m0")
-#if(var(magnitude>0)){
-#    abline(lm(y1 ~ magnitude), lwd = 2, col = 4)
-#    lines(lowess(y1 ~ magnitude), lwd = 2, col = 2)
-#}
-#
 ## plotting observed vs. observed theoretical
 np=200
 
@@ -532,7 +514,7 @@ lambda=mu
 
 ntemp	=n
 iprint	=FALSE
-ttot	=x$cat$time
+ttot	=x$cat$time.work
 
 rho.tot	=x$rho.s2
 t.trasf	=array(0,ntemp)
@@ -543,19 +525,21 @@ for (i in 2:ntemp){
 times	=ttot[1:i]
 range.t	=diff(range(times))
 rho.s2	=rho.tot[1:i,]
-tmax	=max(times)
+tmax.i	=max(times)
 magnitudes=magnitude[1:i]
-trig=(c+tmax-times)^(-p)
+predictor.i=x$predictor[1:i]
+
+trig=(c+tmax.i-times)^(-p)
 if(p==1){
-			 it=log(c+tmax-times)-log(c)
+			 it=log(c+tmax.i-times)-log(c)
 			}
 			else
 			{
-			 it=((c+tmax-times)^(1-p)-c^(1-p))/(1-p)
+			 it=((c+tmax.i-times)^(1-p)-c^(1-p))/(1-p)
 			}
 
 if(x$onlytime){
-		integral=k0*sum(exp(a*magnitudes)*it)
+		integral=k0*sum(exp(predictor.i)*it)
 	}
 else
 
@@ -564,7 +548,7 @@ else
 ##############################################################################
 {
 
-m1	=as.vector(exp((a-gamma)*magnitudes))
+m1	=as.vector(exp(predictor.i))
 m2	=as.vector(exp(gamma*magnitudes))
 ### approximate polar integration to whole space
 

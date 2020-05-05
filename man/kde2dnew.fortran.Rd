@@ -7,16 +7,14 @@
 and relative integral.}
 
 \usage{
-kde2dnew.fortran(xkern, ykern, gx, gy, h, factor.xy = 1,eps=0, w =
- replicate(length(xkern), 1)
-%,kern.var=FALSE, alpha = h
+kde2dnew.fortran(xkern,ykern,gx,gy,h,factor.xy=1,eps=0,w=replicate(length(xkern),1),
+hvarx=replicate(length(xkern),1),hvary=replicate(length(xkern),1)
 )
 
-kde2d.integral(xkern, ykern, gx = xkern, gy = ykern, eps = 0, factor.xy = 1, 
-h = c(bwd.nrd(xkern, w), bwd.nrd(ykern, w)),
-w = replicate(length(xkern), 1),wmat=numeric(0)
-%,kern.var=FALSE
-)
+kde2d.integral(xkern,ykern,gx=xkern,gy=ykern,eps=0,factor.xy=1,
+           h  = c(   bwd.nrd(xkern,w),bwd.nrd(ykern,w)),w=replicate(length(xkern),1),
+           hvarx=replicate(length(xkern),1),hvary=replicate(length(xkern),1)
+           )
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -26,13 +24,12 @@ w = replicate(length(xkern), 1),wmat=numeric(0)
   \item{gx}{x-values of the points where densities must be estimated.}
   \item{gy}{y-values of the points where densities must be estimated.}
   \item{h}{bandwidths: a length 2 numerical vector.}
-  \item{factor.xy}{expansion factor for bandwidths (density will be smoother if  \code{factor.xy}>1).}
-  \item{w}{vector of weights to give to observed points (length \code{n}).}
-%  \item{kern.var}{if \code{TRUE} a variable metric is used}
-%  \item{alpha}{if \code{kern.var=TRUE} used for variable metric kernel. yet}
-  \item{wmat}{if \code{kern.var=TRUE} defines the variable metric}
   \item{eps}{enlargment factor for the region of interest.}
-}
+  \item{factor.xy}{expansion factor for bandwidths (density will be smoother if  \code{factor.xy}>1).}
+  \item{w}{vector of weights to give to observed points (length \code{n}).}[]
+    \item{hvarx}{Longitude bandwidths adjustement used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}). Default value = \code{replicate(length(xkern),1)} }
+  \item{hvary}{Longitude bandwidths adjustement used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}).Default value = \code{replicate(length(xkern),1)}}
+ }
 \details{A standard bivariate normal kernel estimator.}
 \value{grid values and estimated densities.
 }

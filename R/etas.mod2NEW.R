@@ -1,50 +1,76 @@
-etas.mod2 <-
-function(params=c(1,1,1,1,1,1,1,1),
-				params.fix	=array(1,8),
-				params.ind	=array(1,8),
-				params.lim	=c(0,0,0,0,0,0,0,0),
-				onlytime	=FALSE,
-				back.dens,
-				back.integral,
-				cat,
-				rho.s2,
-				ntheta=100,
-				magn.threshold,
+etas.mod2NEW <-
+function(params=c(1,1,1,1,1,1,1),etas.obj,
+                                params.lim	=c(0,0,0,0,0,0,0),
 				trace=TRUE,
 				iprint=FALSE) 
 				{
+ 		params.ind   =etas.obj$params.ind
+ 		params.fix   =etas.obj$params.fix
+                tmax            =etas.obj$tmax
+                cat         =etas.obj$cat
+                magn.threshold=etas.obj$magn.threshold
+		back.dens     =etas.obj$back.dens
+		back.integral =etas.obj$back.integral
+		onlytime      =etas.obj$onlytime
+		rho.s2        =etas.obj$rho.s2
+		nparams.etas  =etas.obj$nparams.etas
+		nparams       =etas.obj$nparams
+                ntheta          =etas.obj$ntheta		
+			
+				
+				
+				
+                params.etas    =params[1:nparams.etas]
+                betacov        =params[(nparams.etas+1):nparams]
 	params.e	=params.fix
-	params.e[params.ind==1]=exp(params)+params.lim[params.ind==1]
-#	print(c(length(params.e),length(params)))
+	params.e[params.ind==1]=exp(params.etas)+params.lim[params.ind==1]
         lambda	= params.e[1]
         k0  	= params.e[2]
         c   	= params.e[3]
         p   	= params.e[4]
-        a   	= params.e[5]
-        gamma   = params.e[6]
-        d   	= params.e[7]
-        q   	= params.e[8]
-	x		=cat$long
-	y		=cat$lat
-	magnitudes	=cat$magn1-magn.threshold
-	times		=cat$time
-	tmax		=max(times)
+#        a   	= params.e[5]
+        gamma   = params.e[5]
+        d   	= params.e[6]
+        q   	= params.e[7]
+	x		=cat$xcat.work
+	y		=cat$ycat.work
+	magnitudes	=cat$magn1.work
+
+#if(onlytime){
+#predictor       =as.vector((etas.obj$cov.matrix)*(a))}
+#else
+#{predictor       =as.vector((etas.obj$cov.matrix)*(a-gamma))
+#}
+predictor       =as.matrix(etas.obj$cov.matrix)%*%as.vector(betacov)+as.vector(etas.obj$offset)
+
+
+
+times		=cat$time.work
 	range.t		=diff(range(times))
 	time.init<-	Sys.time()
     	n   	=length(times)
 	etas.comp	=as.double(array(0,n))
 
+	
+	
 ##################### begin of the computation Fortran etasfull8 +R  ############################
 
-ris=.Fortran("etasfull8" ,NAOK=TRUE,
+ris=.Fortran("etasfull8newserial" ,NAOK=TRUE,
 			tflag=as.integer(onlytime),
 			n=as.integer(n),
 			mu=as.double(lambda),k=as.double(k0),
 			c=as.double(c),p=as.double(p),
-			a=as.double(a),g=as.double(gamma),
+			g=as.double(gamma),
 			d=as.double(d),q=as.double(q),
-			x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),l=etas.comp)
+			x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),
+			predictor=as.double(predictor),
+			l=etas.comp)
 
+
+
+			
+			
+			
 	timenow		<-	Sys.time()
 	timeelapsed	<-	difftime(timenow,time.init,units="secs")
 	etas.comp	=ris$l
@@ -54,22 +80,10 @@ ris=.Fortran("etasfull8" ,NAOK=TRUE,
 
    	ci	=lambda*back.dens + etas.comp
 	logL.l	=sum(log(ci))
-
+	
 ##############################################################################
 # starting time integration#
 ##############################################################################
-###### 12-3-2014 ### verify intensity etas 
-#deltat=outer(times,times,"-")
-#indt = deltat>0
-#deltat=((abs(deltat)+c)^(-p))*indt
-
-
-#deltaxy=outer(x,x,"-")^2+outer(y,y,"-")^2
-#deltaxy=t(indt)*((t(deltaxy*indt)/exp(gamma*magnitudes)+d)^(-q))
-
-#lcheck=k0*colSums(exp((a-gamma)*magnitudes)*t(deltat)*deltaxy)+lambda*back.dens
-# check ok 12-3-2014
-###### 
 
 
 
@@ -82,7 +96,10 @@ if(p==1){
 			}
 
 if(onlytime){
-		integral=k0*sum(exp(a*magnitudes)*it)
+##		integral=k0*sum(exp(a*magnitudes)*it)
+	
+		integralNEW=k0*sum(exp(predictor)*it)
+	
 	}
 else
 
@@ -91,31 +108,46 @@ else
 ##############################################################################
 {
 
-m1	=as.vector(exp((a-gamma)*magnitudes))
+m1NEW	=as.vector(exp(predictor))
+##m1	=as.vector(exp((a-gamma)*magnitudes))
 m2	=as.vector(exp(gamma*magnitudes))
-### approximate polar integration to whole space
-	time.init		<-	Sys.time()
-   	ci	=lambda*back.dens + etas.comp
+
+time.init		<-	Sys.time()
+    ci	=lambda*back.dens + etas.comp
 
 ### approximate polar integration to whole space by division in ntheta triangles centered in xi,yi
-etas	=rowSums(m1*m2*((rho.s2*rho.s2/m2+d)^(1-q)-d^(1-q)))
 
-space	=(pi/((1-q)*ntheta))*etas
-integral=sum(k0*it*space)
+
+
+
+etasNEW	=rowSums(m1NEW*m2*((rho.s2*rho.s2*etas.obj$dettrasf/m2+d)^(1-q)-d^(1-q)))
+spaceNEW	=(pi/((1-q)*ntheta))*etasNEW
+integralNEW=sum(k0*it*spaceNEW)
 
 if(iprint){
 cat("integral polar","\n")
 cat(integral,"\n")
 }
 
+
 }
+
+#print(summary(ris$l))	
+#print(summary(risNEW$l))	
+#print(integral)
+#print(integralNEW)
+
+integral=integralNEW
+#stop()	
 
 ##############################################################################
 #
 # end space integration
 #
 ##############################################################################
-	timenow		<-	Sys.time()
+
+
+timenow		<-	Sys.time()
 	timeelapsed	<-	difftime(timenow,time.init,units="secs")
 
 	integraltot	=integral+lambda*range.t*back.integral

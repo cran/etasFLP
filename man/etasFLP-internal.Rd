@@ -69,11 +69,28 @@
 
 
 \alias{flpkspace}
-\alias{etas.mod2}
+\alias{etas.mod2NEW}
 % \alias{etasflp.integral} dropped beginning from version 1.3.0
-\alias{flp1.etas.nlm}
+\alias{flp1.etas.nlmNEW}
 \alias{longlat.to.km}
 \alias{timechar.to.seq}
+
+
+\alias{generaloptimizationNEW}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% generaloptimization added in june 2017 
+%% as an interface to nlm or optim according to the option usenlm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\alias{cat.select}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%% cat.select added in june 2017 
+%% select the catalog according to input choices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 \description{Internal functions used in the package etasFLP }
 \author{Marcello Chiodi}
