@@ -76,13 +76,13 @@ ngridtot	=length(space.grid[,1])
 #kde=kde2dnew.fortran(xcat.km,ycat.km,space.grid[,1],space.grid[,2],w=w,factor.xy=1,h=hdef,kern.var=kern.var,alpha=alpha)
 if(!x$is.backconstant){
 kde=kde2dnew.fortran(xcat.km,ycat.km,space.grid[,1],space.grid[,2],w=w,factor.xy=1,h=hdef,hvarx=x$hvarx,hvary=x$hvary)
-wmat1		=matrix(kde$wmat,n,4)
+#wmat1		=matrix(kde$wmat,n,4)
 back.grid	=ranget*mu*kde$z
 }
 else
 {
 kde=kde2dnew.fortran(xcat.km,ycat.km,space.grid[,1],space.grid[,2],w=w,factor.xy=1,h=c(1,1))
-wmat1		=matrix(kde$wmat,n,4)
+#wmat1		=matrix(kde$wmat,n,4)
 back.grid	=ranget*mu*kde$z^0
 }
 
@@ -255,7 +255,8 @@ box()
 
 #####################################################
 if((as.numeric(kern.var)*as.numeric(ellipse))==1){
-
+wmat1		=matrix(0,n,4)
+  
 if(!pdf) dev.new()
 
 

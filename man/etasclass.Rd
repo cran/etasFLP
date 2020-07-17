@@ -321,14 +321,17 @@ Input times are expected in days, and so final intensities are expected number o
 
 \references{
 
+Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric space-time point processes for earthquake description. 
+\emph{Proceedings of the 28th International Workshop on Statistical Modelling 8-13 July, 2013, Palermo} (Muggeo V.M.R., Capursi V., Boscaino G., Lovison G., editors). Vol. \bold{1} pp.65-70. 
+
 Adelfio G, Chiodi M (2015). Alternated Estimation in Semi-Parametric Space-Time
 Branching-Type Point Processes with Application to Seismic Catalogs. \emph{Stochastic Environmental Research and Risk Assessment}, \bold{29}(2), 443-450. doi:10.1007/s00477-014-0873-8.
 
 Adelfio G, Chiodi M (2015). FLP Estimation of Semi-Parametric Models for Space-Time
 Point Processes and Diagnostic Tools. \emph{Spatial Statistics}, \bold{14}(B), 119-132. doi:10.1016/j.spasta.2015.06.004.
 
-Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric space-time point processes for earthquake description. 
-\emph{Proceedings of the 28th International Workshop on Statistical Modelling 8-13 July, 2013, Palermo} (Muggeo V.M.R., Capursi V., Boscaino G., Lovison G., editors). Vol. \bold{1} pp.65-70. 
+
+Adelfio G., Chiodi, M. (2020). Including covariates in a space-time point process with application to seismicity. \emph{Statistical Methods and Applications},  doi:10.1007/s10260-020-00543-5.
 
 Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757. DOI:10.1002/env.1121.
 

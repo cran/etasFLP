@@ -13,7 +13,7 @@ Some descriptive functions for earthquakes catalogs are  included; also \code{pl
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 2.0.0\cr  
+Version: \tab 2.1.0\cr  
 Date: \tab 2020-04-30\cr
 License: \tab GPL (>=2) \cr
 Imports: fields,maps
@@ -38,27 +38,30 @@ ellipsoidal spatial function in triggered intensity, together with parallel comp
 \references{
 
 
-Adelfio G, Chiodi M (2009). Second-Order Diagnostics for Space-Time Point Processes with
+Adelfio G., Chiodi, M. (2009). Second-Order Diagnostics for Space-Time Point Processes with
 Application to Seismic Events. \emph{Environmetrics}, \bold{20}(8), 895-911. doi:10.1002/env.961.
 
-Adelfio, G. and Chiodi, M. (2013) Mixed estimation technique in semi-parametric space-time point processes for earthquake description. 
+Adelfio, G.,  Chiodi, M. (2013) Mixed estimation technique in semi-parametric space-time point processes for earthquake description. 
 \emph{Proceedings of the 28th International Workshop on Statistical Modelling 8-13 July, 2013, Palermo} (Muggeo VMR, Capursi V, Boscaino G, Lovison G, editors). Vol. \bold{1}. pp.65-70.
 
-Adelfio, G. and Chiodi, M. (2015) Alternated estimation in semi-parametric space-time branching-type point processes with application to seismic catalogs. 
+Adelfio, G., Chiodi, M. (2015) Alternated estimation in semi-parametric space-time branching-type point processes with application to seismic catalogs. 
 \emph{Stochastic Environmental Research and Risk Assessment}    \bold{29}(2), pp. 443-450. DOI: 10.1007/s00477-014-0873-8
 
 
-Adelfio G, Chiodi M (2015). FLP Estimation of Semi-Parametric Models for Space-Time
+Adelfio G., Chiodi, M. (2015). FLP Estimation of Semi-Parametric Models for Space-Time
 Point Processes and Diagnostic Tools. \emph{Spatial Statistics}, \bold{14}(B), 119-132. doi:10.1016/j.spasta.2015.06.004.
 
-Adelfio G, Schoenberg FP (2009). Point Process Diagnostics Based on Weighted Second-
+Adelfio G., Chiodi, M. (2020). Including covariates in a space-time point process with application to seismicity. \emph{Statistical Methods and Applications
+},  doi:10.1007/s10260-020-00543-5.
+
+Adelfio G., Schoenberg, FP (2009). Point Process Diagnostics Based on Weighted Second-
 Order Statistics and Their Asymptotic Properties. \emph{The Annals of the Institute of Statistical
 Mathematics}, \bold{61}(4), 929-948. doi:10.1007/s10463-008-0177-1.
 
-Chiodi, M. and Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757. DOI:10.1002/env.1121.
+Chiodi, M., Adelfio, G., (2011) Forward Likelihood-based predictive approach for space-time processes. \emph{Environmetrics}, vol. \bold{22} (6), pp. 749-757. DOI:10.1002/env.1121.
 
 
-Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-29.
+Chiodi, M., Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimation Techniques in {R} Package {etasFLP} for Earthquakes' Description. \emph{Journal of Statistical Software}, vol. \bold{76} (3), pp. 1-29.
  DOI: 10.18637/jss.v076.i03 
 
 Console, R.,  Jackson,   D. D. and  Kagan, Y. Y.
@@ -76,7 +79,7 @@ occurrences and residual analysis for point processes.
 
 
 
-Veen, A. and Schoenberg, F.P.  Estimation of space-time
+Veen, A. , Schoenberg, F.P.  Estimation of space-time
 branching process models in seismology using an EM-type algorithm.
 \emph{Journal of the American Statistical Association}, \bold{103}(482), 614--624 (2008).
 

@@ -1,3 +1,7 @@
+2020-7-15 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasFLP-package: a new reference of year 2020 added for the ETAS model with covariates
+*plot.etasclass: two bugs fixed
+*NAMESPACE: dependence on package fields added
 2020-4-22 Marcello Chiodi  <marcello.chiodi@unipa.it>
 *etasFLP: dropped out the parallel option to avoid problems on some compiler.
 *etasclass: removed the options fastML,ellipse.trig,rxy also in all functions

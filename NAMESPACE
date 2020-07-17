@@ -10,7 +10,7 @@ S3method(plot,eqcat)
 export(b.guten,bwd.nrd, eqcat, etasclass, kde2dnew.fortran, 
        kde2d.integral,magn.plot, MLA.freq, simpson.coeff,simpson.kD, 
        time2date,timecharunique2seq,xy.grid,compare.etasclass,etas.starting)
-import("mapdata","maps" )
+import("mapdata","maps","fields" )
 #import("maps","map" )
 importFrom("fields", "image.plot")
   importFrom("grDevices", "dev.new", "dev.off", "gray.colors", "rgb")
