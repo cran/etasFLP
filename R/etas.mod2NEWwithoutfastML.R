@@ -1,15 +1,11 @@
-etas.mod2NEW <-
+etas.mod2NEW_withoutfastML <-
 function(params=c(1,1,1,1,1,1,1),etas.obj,
-                               params.lim	=c(0,0,0,1,0,0,0),
+                                params.lim	=c(0,0,0,0,0,0,0),
 				trace=TRUE,
-				iprint=FALSE
-#				,nthreads=8
-				) 
+				iprint=FALSE) 
 				{
- #   OpenMPController::omp_set_num_threads(nthreads)
-    params.ind   =etas.obj$params.ind
-    params.lim   =etas.obj$params.lim
-    params.fix   =etas.obj$params.fix
+ 		params.ind   =etas.obj$params.ind
+ 		params.fix   =etas.obj$params.fix
                 tmax            =etas.obj$tmax
                 cat         =etas.obj$cat
                 magn.threshold=etas.obj$magn.threshold
@@ -21,7 +17,7 @@ function(params=c(1,1,1,1,1,1,1),etas.obj,
 		nparams       =etas.obj$nparams
                 ntheta          =etas.obj$ntheta		
 			
-				 
+				
 				
 				
                 params.etas    =params[1:nparams.etas]
@@ -56,53 +52,24 @@ times		=cat$time.work
 	etas.comp	=as.double(array(0,n))
 
 	
-##################### begin of the computation Fortran etasfull8 +R  ############################
-	if (etas.obj$fastML){
-	    ris=.Fortran("etasfull8fast" ,NAOK=TRUE,
-	                 tflag=as.integer(onlytime),
-	                 n=as.integer(n),
-	                 mu=as.double(lambda),k=as.double(k0),
-	                 c=as.double(c),p=as.double(p),
-	                 g=as.double(gamma),
-	                 d=as.double(d),q=as.double(q),
-	                 x=as.double(x),y=as.double(y), t=as.double(times),
-	                 m=as.double(magnitudes),
-	                 predictor=as.double(predictor),
-	                 ind      =as.integer(etas.obj$ind),
-	                 nindex    =as.integer(length(etas.obj$index.tot)),
-	                 index    =as.integer(etas.obj$index.tot),
-	                 l=etas.comp)
-	}
-	else if(etas.obj$parallel){
 	
-	    
-	    ris=.Fortran("etasfull8newparallel" ,NAOK=TRUE,
-	                 tflag=as.integer(onlytime),
-	                 n=as.integer(n),
-	                 mu=as.double(lambda),k=as.double(k0),
-	                 c=as.double(c),p=as.double(p),
-	                 g=as.double(gamma),
-	                 d=as.double(d),q=as.double(q),
-	                 x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),
-	                 predictor=as.double(predictor),
-	                 l=etas.comp)
-	}
-	else
-	{
-	    ris=.Fortran("etasfull8newserial" ,NAOK=TRUE,
-	                 tflag=as.integer(onlytime),
-	                 n=as.integer(n),
-	                 mu=as.double(lambda),k=as.double(k0),
-	                 c=as.double(c),p=as.double(p),
-	                 g=as.double(gamma),
-	                 d=as.double(d),q=as.double(q),
-	                 x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),
-	                 predictor=as.double(predictor),
-	                 l=etas.comp)
-	}
+##################### begin of the computation Fortran etasfull8 +R  ############################
+
+ris=.Fortran("etasfull8newserial" ,NAOK=TRUE,
+			tflag=as.integer(onlytime),
+			n=as.integer(n),
+			mu=as.double(lambda),k=as.double(k0),
+			c=as.double(c),p=as.double(p),
+			g=as.double(gamma),
+			d=as.double(d),q=as.double(q),
+			x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),
+			predictor=as.double(predictor),
+			l=etas.comp)
 
 
 
+			
+			
 			
 	timenow		<-	Sys.time()
 	timeelapsed	<-	difftime(timenow,time.init,units="secs")
@@ -118,11 +85,7 @@ times		=cat$time.work
 # starting time integration#
 ##############################################################################
 
-#if(etas.obj$fastML){
- #   integraltot=n
-#}
-#	else
-	{
+
 
 if(p==1){
 			 it=log(c+tmax-times)-log(c)
@@ -188,9 +151,7 @@ timenow		<-	Sys.time()
 	timeelapsed	<-	difftime(timenow,time.init,units="secs")
 
 	integraltot	=integral+lambda*range.t*back.integral
-
-	}
-		logL		= -logL.l+integraltot
+	logL		= -logL.l+integraltot
 
 if(iprint){	cat("whole Integral computation","\n")
 		cat(timeelapsed,"\n")

@@ -1,7 +1,7 @@
 
 b.guten <-
 function(magn,m0=min(magn)){
-            x     =subset(magn,subset=(magn>m0))
+            x     =subset(magn,subset=(magn>=m0))
 	    x     =x-m0
             n	  =length(x)
             beta  =n/sum(x)

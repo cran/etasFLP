@@ -1,11 +1,13 @@
-summary.etasclass<-function(object,...){
+summary.etasclass<-function(object,full=FALSE,...){
 x=object
-cat("Call:","\n","\n")
-print(x$this.call)
-cat("\n","\n")
+if(full){
+    cat("Call:","\n","\n")
+    print(x$this.call)
+    cat("\n","\n")
+}
 cat(x$description,"\n")
 cat("Execution started:                 ",format(x$time.start),"\n")
-cat("Elapsed time of execution (hours)  ",as.numeric(x$time.elapsed,units="hours"),"\n")
+cat("Elapsed time of execution (hours)  ",round(as.numeric(x$time.elapsed,units="hours"),3),"\n")
 cat("Number of observations            ",length(x$cat$time),"\n")
 cat("Magnitude threshold               ",x$magn.threshold,"\n")
 
@@ -20,8 +22,6 @@ cat("flp                                ",x$flp,"\n")
 cat("sequence of AIC values for each iteration","\n")
 cat(x$AIC.iter,"\n","\n")
 }
-cat("final AIC value","\n")
-cat(x$AIC,"\n","\n")
 cat("-------------------------------------------------------","\n","\n")
 
 cat("formula for covariates of the triggered components:","\n")
@@ -31,4 +31,9 @@ ris=cbind(x$params.MLtot,x$sqm)
 colnames(ris)=c("      Estimates","      std.err.")
 print(round(ris,6))
 cat("-------------------------------------------------------","\n")
+if (full) {
+    print(" summary of background seismicity weights ")
+    print(summary(x$rho.weights))
+    
+}
 }

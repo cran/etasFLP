@@ -4,17 +4,18 @@
 \title{Guess starting values of ETAS parameters (beta-version). Only from package version 1.2.0}
 \description{\code{etas.starting} is a simple function to give starting values of the 7 ETAS parameters for the function \code{etasclass}.
 
-It gives only rough approximation, based on some assumptions, intended to give only the order of magnitude of each parameter (but should be better than nothing).
-Returns a list with 8 starting values. In the present version user must give manually the output of this function in the input of \code{etasclass} 
+It gives only rough approximations, based on some assumptions, intended to give only the order of magnitude of each parameter (but should be better than nothing).
+Returns a list with starting values. In the present version user can give manually the output of this function in the input of \code{etasclass}. Otherwise, the function is called by \code{etasclass} at first steps, to supply initial values to start estimation.
 }
 \usage{etas.starting(cat.orig,
-m0=2.5,
+magn.threshold=2.5,
 p.start=1,
 gamma.start=0.5,
 q.start=2,
 betacov.start=.7,
 longlat.to.km=TRUE,
-sectoday=TRUE
+sectoday=FALSE,
+onlytime=FALSE
 )
 }
 %- maybe also 'usage' for other objects documented here.
@@ -22,7 +23,7 @@ sectoday=TRUE
   \item{cat.orig}{
 An  earthquake catalog, possibly an object of class \code{eqcat}, or however a \code{data.frame} with variables of names \code{time},  \code{lat},   \code{long},  \code{z},     \code{magn1}. No missing values are allowed.
 }
-\item{m0}{
+\item{magn.threshold}{
 Threshold magnitude (only events with a magnitude at least \code{magn.threshold} will be used).  Default value = 2.5.
 }
 \item{p.start}{Parameter 4  of the ETAS model; the exponent of the Omori law for temporal decay rate of aftershocks; see details. Default value = 1.0.
@@ -43,9 +44,8 @@ mainshock; see details. Default value = 2.
 }
   \item{longlat.to.km}{ if \code{TRUE}, then \code{long} and \code{lat} variables of \code{cat.orig} are treated as geographical coordinates and converted to kilometers.  Default value = \code{TRUE}.
 }
-
-
-
+\item{onlytime}{if \code{TRUE}  then a time process is fitted to data , regardless to space location (in this case \code{is.backconstant} is set to \code{TRUE} and \code{declustering}, \code{flp} are set to \code{FALSE}). Default value = \code{FALSE}.
+}
 }
 \details{It is a beta-version of a very crude method to give 
  starting values for the seven parameters of an ETAS  (Epidemic type aftershock sequences) model

@@ -1,5 +1,96 @@
+
+ 
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!        bivariate isotropic density estimation routines
+!
+!        xkern,ykern, vectors of lenght nkern (centers for  kernels)
+!         x,y vectors of lenght  m (where we want to compute the density)
+!         dens vector of lenght  m with the densities in x,y
+!         h vector of 2 bandwidths
+!         w        vector of weights
+      subroutine density2parallel(x,y,m,xkern,ykern,nkern,h,w,hvarx,hvary,dens)
+        INTEGER(KIND=4) nkern,m,i,j
+!        input variables declaration:
+      double precision xkern(nkern),ykern(nkern),x(m),y(m),w(nkern),ww,h(2)
+      double precision hvarx(nkern),hvary(nkern)
+!        output variables declaration:     
+      double precision dens(m)
+!        work variables declaration:
+      double precision stdx,stdy,fac,hx(nkern),hy(nkern),parz,wi
+      DATA               fac/0.3989422804014327D0/ !        fac is 1/sqrt(2*PI)
+        ww=sum(w)
+        hx=h(1)*hvarx
+        hy=h(2)*hvary
+      do j=1,m
+        parz=0
+!$ call omp_set_num_threads(8)
+
+!$OMP PARALLEL DO REDUCTION(+:parz) PRIVATE(stdx,stdy,wi,i) SHARED(nkern,j,m,x,xkern,y,ykern,hx,hy,w)
+      do i=1,nkern
+        wi          =w(i)
+        stdx        =((x(j)-xkern(i)))/hx(i)        
+        stdy        =((y(j)-ykern(i)))/hy(i)        
+        parz=parz+wi*exp(-(stdx*stdx+stdy*stdy)/2)
+      end do
+!$OMP  END PARALLEL DO
+        dens(j)=parz*fac*fac/(ww*h(1)*h(2))
+        end do
+        end
    
+!
+!       called by etas.mod2new.R
+!       parallel version to be checked 28-2-2019
+     
+      subroutine etasfull8newparallel(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l)
+        INTEGER(KIND=4) n,tflag,i,j
+      double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
+      double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
+      dum=mu
+
+      if (tflag>0) then
+      do i=2,n
+        inc        =0
+        ti        =t(i)
+        xi        =x(i)
+        yi        =y(i)
+      do j=1,i-1
+      dt        =ti-t(j)
+        etas        =0
+        dx        =xi-x(j)
+        dy        =yi-y(j)
+        ds        =dx*dx+dy*dy
+        etas        =((dt+c)**(-p))*exp(predictor(j))
+        inc        =inc+etas
+        end do
+
+        l(i)        =inc*k
+        end do 
+
+      else  
+      do i=2,n
+        inc        =0
+        ti        =t(i)
+        xi        =x(i)
+        yi        =y(i)
+!$ call omp_set_num_threads(8)
+!$OMP PARALLEL DO REDUCTION(+:inc) PRIVATE(etas,dt,dx,dy,ds,j) SHARED(x,xi,t,ti,y,yi,c,p,predictor,g,m,d,q,i,l,k)
+      do j=1,i-1
+      dt        =ti-t(j)
+        etas        =0
+        dx        =xi-x(j)
+        dy        =yi-y(j)
+        ds        =dx*dx+dy*dy
+        etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
+        inc        =inc+etas
+        end do
+!$OMP END PARALLEL DO
+
+        l(i)        =inc*k
+        end do 
+        end if
+        end
         
+                
        
              subroutine density2serial(x,y,m,xkern,ykern,nkern,h,w,hvarx,hvary,dens)
         INTEGER(KIND=4) nkern,m
@@ -9,17 +100,17 @@
 !        output variables declaration:     
       double precision dens(m)
 !        work variables declaration:
-      double precision stdx(nkern),stdy(nkern),fac,hx,hy
+      double precision stdx(nkern),stdy(nkern),fac,hx(nkern),hy(nkern)
       DATA               fac/0.3989422804014327D0/ !        fac is 1/sqrt(2*PI)
         ww=sum(w)
-        hx=h(1)
-        hy=h(2)
+        hx=h(1)*hvarx
+        hy=h(2)*hvary
         dens=0
          do j=1,m
                 stdx        =((x(j)-xkern))/hx        
                 stdy        =((y(j)-ykern))/hy        
                 dens(j)=sum(w*exp(-(stdx*stdx+stdy*stdy)/2))
-            dens(j)=dens(j)*fac*fac/(ww*hx*hy)
+            dens(j)=dens(j)*fac*fac/(ww*h(1)*h(2))
         end do
        end
 
@@ -33,6 +124,46 @@
 !
 !       called by etas.mod2NEW.R
 !
+        subroutine etasfull8fast(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,ind,nindex,index,l)
+        INTEGER(KIND=4) n,tflag,ind(n),index(nindex),nindex
+        INTEGER(KIND=4) j1,j2,jj
+      double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
+      double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
+      dum=mu
+      
+      do  i=2,n
+        inc        =0
+        ti        =t(i)
+        xi        =x(i)
+        yi        =y(i)
+        j1  =ind(i-1)+1
+        j2  =ind(i)
+      do  jj=j1,j2
+      j = index(jj)
+      dt        =ti-t(j)
+        etas        =0
+        if (dt > 0)  then
+        dx        =xi-x(j)
+        dy        =yi-y(j)
+        ds        =dx*dx+dy*dy
+        if (tflag>0) then
+        etas        =((dt+c)**(-p))*exp(predictor(j))
+        else
+        etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
+        end if 
+        end if
+        inc        =inc+etas
+        end do
+        l(i)        =inc*k
+        end do 
+        end
+       
+
+
+     
+     
+     
+     
      
       subroutine etasfull8newserial(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l)
         INTEGER(KIND=4) n,tflag
@@ -146,13 +277,14 @@
         etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
         end if
         inc        =inc+etas
-!        if (dt < 2) write(*,*) i,j,xi,x(j),yi,y(j)
 
         end do
         l(i)=inc*k
         end do
        end
 
+           
+  
            
        
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -229,20 +361,19 @@
 !
       subroutine deltafl1kspacevar(x,t,w,n,k,m1,m2,nh,rangex,h,hdef,dens,integr,delta,expweight,indweight,allocationerr)
 ! input output  variables declaration:
-        INTEGER(KIND=4) n,m1,m2,indweight,indanis,k,nh,allocationerr
+        INTEGER(KIND=4) n,m1,m2,indweight,k,nh,allocationerr
       double precision dens(n),delta(n),integr(n),hdef(nh)
       double precision t(n),x(n,k),w(n ),rangex(k,2),h(nh),expweight
 ! work variables declaration:  
       INTEGER(KIND=4) one,two,four,m,i,err1
-      double precision deltat, wmat(n,4),xx1(1),yy1(1),alpha(2)
-      double precision lambda(1),mean(k),sd(k), kintegral
+      double precision lambda(1),mean(k),sd(k), kintegral,deltat
 ! allocatable arrays       
       double precision :: x9,w9,x1,xmat9,xmat10,xkern,ykern
       ALLOCATABLE :: x9(:,:), w9(:), x1(:,:),xmat9(:,:),xmat10(:,:), xkern(:),ykern(:)
         one=1
         two=2
         four=4
- !        write(*,*) "indanis = ",indanis
+ !        write(*,*) "indanis = ",indanis. 
         delta(1:n)=0
         do m=m1,m2
 !        write(*,*)"start deltafl1kspacevar step m,m1,m2",m,m1,m2

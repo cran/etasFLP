@@ -7,11 +7,12 @@ Transformed plot of the magnitudes distribution of an earthquakes catalog}
 Plots the logarithm of the cumulative frequency of eccedence vs. magnitude in an earthquake catalog.
 }
 \usage{
-magn.plot(catalog,...)
+magn.plot(catalog, main = "Transformed plot of magnitude frequencies", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{catalog}{should be a \code{eqcat} object, or at least must contain a column with name \code{magn1}.}
+  \item{main}{Title to give to the plot}
   \item{...}{other arguments to be passed to \code{plot()}}
 }
 \details{

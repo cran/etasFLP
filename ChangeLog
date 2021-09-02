@@ -1,3 +1,30 @@
+2021-9-1 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: Changed printing during output 
+2021-8-24 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass: variable magn1.work has been renamed as magnitude
+*b.guten: a bug has been corrected (thanks to Jiancang Zhuang)
+original first line "x = subset(magn, subset = (magn > m0))"
+corrected to "x = subset(magn, subset = (magn >= m0))"
+2021-8-1 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etas.starting.R: a bug has been corrected (thanks to Gordon Ross), for the case when longlat.to.km is FALSE
+2021-8-1 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*etasclass.R: a bug has been corrected (thanks to Gordon Ross), and inferior limit for p is now 1.
+
+2021-6-19 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*timeupdate.etasclass.R: A function to update etasclass objects for new observations has been added. Options can be given and they will override previous values
+*update.etasclass.R: An update method for etasclass objects  has been added. A new iteration will run starting from the full output of the previous object. Options can be given and they will override previous values
+*etasclass The algorythm has been partially rewritten and the sequence of optimization, density estimation  and weighting has a different order
+*etasclass: a new argument n.iterweight has been added: the weighting and the density computations will be alternated  n.iterweight times after each maximum likelihood step: in many situations this improves the general convergence procedure
+*etasclass: In the output all values of input arguments are given either user values or default values: this is useful for the new update method
+2021-1-13 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*print.etasclass: some fields added in the printing of etasclass objects
+*daily.etasclass: a new function added to compute daily maps of predictions
+*etasclass: many internal changes in computing and managing of starting points. Optional argument cat.back avoided from this version; default value for sectoday changed in FALSE; call to etas.starting to obtain starting values for mu and k0; catalog fields changed and extended in final output; rho.weights updated only after the ML step; default bandwidth computed;
+n.iterweight is a new optional argument, which fix the number of iterations made in recomputing weights
+*etas.starting default value for sectoday changed in FALSE; argument m0 renamed with magn.threshold for coherence with etasclass; argument onlytime introduced for compatibility with etasclass
+2020-7-17 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*data: earthquakes catalogs has been changed in compressed format
+*citation: a new reference of year 2020 added for the ETAS model with covariates
 2020-7-15 Marcello Chiodi  <marcello.chiodi@unipa.it>
 *etasFLP-package: a new reference of year 2020 added for the ETAS model with covariates
 *plot.etasclass: two bugs fixed

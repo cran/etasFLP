@@ -1,4 +1,4 @@
-plot.profile.etasclass=function(x,prob=c(0.90,0.95,0.99),...){
+plot.profile.etasclass=function(x,prob=c(0.90,0.95,0.99),use.main=TRUE,...){
 ## plot profile likelihood of an etas model
 # 
 if(sum(is.element(class(x),"profile.etasclass"))==0) stop("object is not of the required class profile.etasclass")
@@ -13,7 +13,8 @@ namepar=namespar[x$iprofile]
 perc=qchisq(prob,df=1)
 
 sn=spline(xx,zz,n=200,method="natural")
-plot(sn,type="l",xlab=namepar,main=paste("Profile -2[log(LR)] for parameter ",namepar),
+if(use.main) main=paste("Profile -2[log(LR)] for parameter ",namepar) else main=""
+plot(sn,type="l",xlab=namepar,main=main,
 	  ylab="-2[log(LR)]")
 abline(h=perc,col="red")
 grid(col="darkgrey")

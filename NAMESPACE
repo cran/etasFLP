@@ -1,6 +1,7 @@
 useDynLib(etasFLP, .registration = TRUE, .fixes = C_)
   
 S3method(summary,etasclass)
+S3method(update,etasclass)
 S3method(plot,etasclass)
 S3method(print,etasclass)
 S3method(profile,etasclass)
@@ -10,6 +11,8 @@ S3method(plot,eqcat)
 export(b.guten,bwd.nrd, eqcat, etasclass, kde2dnew.fortran, 
        kde2d.integral,magn.plot, MLA.freq, simpson.coeff,simpson.kD, 
        time2date,timecharunique2seq,xy.grid,compare.etasclass,etas.starting)
+export(daily.etasclass)
+export(timeupdate.etasclass)
 import("mapdata","maps","fields" )
 #import("maps","map" )
 importFrom("fields", "image.plot")

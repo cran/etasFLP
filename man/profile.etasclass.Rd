@@ -57,7 +57,7 @@ data("italycatalog")
    magn.threshold = 3.0,  magn.threshold.back = 3.5,
    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
    params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
-   formula1 = "time ~  magn1.work- 1", declustering = TRUE, 
+   formula1 = "time ~  magnitude- 1", declustering = TRUE, 
    thinning = FALSE, flp = TRUE, ndeclust = 15,
    onlytime = FALSE, is.backconstant = FALSE,
    description = "etas flp",sectoday = TRUE,

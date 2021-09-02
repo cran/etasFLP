@@ -5,22 +5,22 @@
 \title{Mixed FLP and ML Estimation of ETAS Space-Time Point Processes
 }
 \description{
-\emph{New  version 2.0.0}. Covariates have been introduced to explain the effects of external factors on the induced seismicity. Since the parametrization is changed, the etasclass object created with the previous versions are not compatible with the one obtained with the current version. Estimation of the components of an ETAS (Epidemic Type Aftershock Sequence) model for earthquake description. Non-parametric background seismicity can be estimated through FLP (Forward Likelihood Predictive), while parametric components are estimated through maximum likelihood. The two estimation steps are alternated until convergence is obtained. For each event the probability of being a background event is estimated and used as a weight for declustering steps. Many options to control the estimation process are present, together with some diagnostic tools.
-Parallel computation  could speed up computations with suitable processors, but we decide to exclude the experimental parallelized version to increase portabilty.  
-Some descriptive functions for earthquakes catalogs are  included; also \code{plot}, \code{print}, \code{summary}, \code{profile} methods are defined for main output (objects of class \code{etasclass})}
+\emph{New  version 2.2.0}. Covariates have been introduced to explain the effects of external factors on the induced seismicity. Since the parametrization is changed, the etasclass object created with the previous versions are not compatible with the one obtained with the current version. Estimation of the components of an ETAS (Epidemic Type Aftershock Sequence) model for earthquake description. Non-parametric background seismicity can be estimated through FLP (Forward Likelihood Predictive), while parametric components are estimated through maximum likelihood. The two estimation steps are alternated until convergence is obtained. For each event the probability of being a background event is estimated and used as a weight for declustering steps. Many options to control the estimation process are present, together with some diagnostic tools.
+Some descriptive functions for earthquakes catalogs are  included; also \code{plot}, \code{print}, \code{summary}, \code{profile} methods are defined for main output (objects of class \code{etasclass}); update methods are now present.}
 
 \details{
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 2.1.0\cr  
-Date: \tab 2020-04-30\cr
+Version: \tab 2.2.0\cr  
+Date: \tab 2021-09-01\cr
 License: \tab GPL (>=2) \cr
 Imports: fields,maps
 Depends: \tab R (>= 3.5.0), mapdata \cr
 Suggests: \tab MASS \cr
 }
 \code{etasclass} is the main function of the package \code{etasFLP}: strongly renewed in version 2.0.
+\code{update.etasclass} and \code{timeupdate.etasclass} two new different kind of updating existing \code{etasclass} objects. Very useful for large catalogues 
 }
 \author{
 Marcello Chiodi and Giada Adelfio
@@ -30,9 +30,6 @@ Maintainer: Marcello Chiodi<marcello.chiodi@unipa.it>
 
 \note{The package is intended for the estimation of the ETAS model for seismicity description (introduced by Ogata (1988), see reference),
 but theoretically it can be used for other fields of application.
-
-Future versions could contain anisotropic smoothing,
-ellipsoidal spatial function in triggered intensity, together with parallel computation  and other tricks to speed up computations and to obtain first approximation estimates.
 }
 
 \references{

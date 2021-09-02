@@ -19,6 +19,6 @@ data(catalog.withcov)
 str(catalog.withcov)
 }
 \source{INGV (Istituto Nazionale di Geofisica e Vulcanologia) ISIDE Data Base.}
-\references{INGV  home page: \url{http://www.ingv.it}.}
+\references{INGV  home page: \url{https://www.ingv.it/}.}
 \keyword{datasets}
 \keyword{earthquake}

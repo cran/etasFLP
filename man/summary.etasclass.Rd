@@ -9,11 +9,12 @@ It gives some information on the execution and gives estimates of the ETAS param
 More detailed output is avaliable by inspecting \code{str(etasclass.object)}, and printing single objects.
 }
 \usage{
-\method{summary}{etasclass}(object,...)
+\method{summary}{etasclass}(object,full=FALSE,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{an \code{etaclass} object to pass to \code{summary}.}
+  \item{full}{ logical. New in version 2.2. If \code{TRUE} the full original call will be displayed together with some more output.}
   \item{...}{other arguments.}
 }
 \details{
@@ -49,7 +50,7 @@ Call:
 etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
     mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
     q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
-        TRUE), formula1 = "time ~  magn1.work- 1", declustering = TRUE, 
+        TRUE), formula1 = "time ~  magnitude- 1", declustering = TRUE, 
     thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE, 
     is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE, 
     compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)
@@ -74,7 +75,7 @@ final AIC value
 ------------------------------------------------------- 
  
 formula for covariates of the triggered components: 
-time ~ magn1.work - 1
+time ~ magnitude - 1
 <environment: 0x55968d6fd660>
 ETAS Parameters: 
                  Estimates       std.err.
@@ -85,7 +86,7 @@ p                 1.110059       0.015709
 gamma             0.000000       0.000000
 d                 1.905461       0.260360
 q                 1.947223       0.077627
-magn1.work        0.740109       0.092558
+magnitude        0.740109       0.092558
 ------------------------------------------------------- 
 
 #### using covariates
@@ -95,7 +96,7 @@ Call:
 etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
     mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
     q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
-        TRUE), formula1 = "time ~ z + magn1.work +nstaloc_rev +min_distance_rev+distmin- 1", 
+        TRUE), formula1 = "time ~ z + magnitude +nstaloc_rev +min_distance_rev+distmin- 1", 
     declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15, 
     onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
     usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
@@ -121,7 +122,7 @@ final AIC value
 ------------------------------------------------------- 
  
 formula for covariates of the triggered components: 
-time ~ z + magn1.work + nstaloc_rev + min_distance_rev + distmin - 
+time ~ z + magnitude + nstaloc_rev + min_distance_rev + distmin - 
     1
 <environment: 0x55968d5ed118>
 ETAS Parameters: 
@@ -134,7 +135,7 @@ gamma                   0.000000       0.000000
 d                       1.942929       0.272434
 q                       2.004915       0.084784
 z                      -0.041256       0.005779
-magn1.work              1.157698       0.085360
+magnitude              1.157698       0.085360
 nstaloc_rev            -0.009010       0.001817
 min_distance_rev       -0.011020       0.002804
 distmin                -1.826717       0.298649

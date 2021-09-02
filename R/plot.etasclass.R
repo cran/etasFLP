@@ -36,7 +36,7 @@ pdf(file=file,onefile=TRUE)}
 ## back.grid computed on km coordinates
 
 # chamge the is.backconstant switch
-magnitude=x$cat$magn1.work
+magnitude=x$cat$magnitude
 
 #if(!x$is.backconstant){
 {
@@ -169,7 +169,7 @@ xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green"
 )
 contour(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid)),col="red",add=TRUE)
 
-points(x$cat$long[ind1],x$cat$lat[ind1],cex=sqrt(exp(x$cat$magn1.work[ind1]))/8,col=4,pch=19)
+points(x$cat$long[ind1],x$cat$lat[ind1],cex=sqrt(exp(x$cat$magnitude[ind1]))/8,col=4,pch=19)
 
 
 ### end triggered intensity plotting for a tfixed ########################################
@@ -246,7 +246,7 @@ xlab="x-longitude",ylab="y-latitude",main="Total Intensity with observed points 
 grid(col="grey")
 map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
 xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
-points(x$cat$long,x$cat$lat,cex=sqrt(exp(x$cat$magn1.work))/8,col=rgb(ts,0,1-ts),pch=19)
+points(x$cat$long,x$cat$lat,cex=sqrt(exp(x$cat$magnitude))/8,col=rgb(ts,0,1-ts),pch=19)
 contour(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),col="yellow",add=TRUE)
 
 box()

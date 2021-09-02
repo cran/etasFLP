@@ -21,3 +21,26 @@ bibentry(bibtype = "Article",
         "doi:10.18637/jss.v076.i03")
 )
 
+bibentry(bibtype = "Article",
+  title        = "Including covariates in a space-time point process with application to seismicity",
+  author       = c(person(given = "Giada",
+                          family = "Adelfio",
+                          email = "giada.adelfio@unipa.it"),
+                          person(given = "Marcello",
+                          family = "Chiodi",
+                          email = "marcello.chiodi@unipa.it")),
+  journal      = "Statistical Methods and Applications",
+  year         = "2020",
+  volume       = "",
+  number       = "",
+  pages        = "",
+  doi          = "10.1007/s10260-020-00543-5",
+
+  header       = "",
+  textVersion  =
+  paste(" Giada Adelfio, Marcello Chiodi, (2020).",
+        "Including covariates in a space-time point process with application to seismicity.",
+        "Statistical Methods and Applications.",
+        "doi:10.1007/s10260-020-00543-5")
+)
+

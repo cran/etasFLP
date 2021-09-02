@@ -40,7 +40,7 @@ theta.init=h.init*0
 
     theta.init[1:npar]=log(h.init[1:npar])
 
-    cat("theta.init",theta.init,"\n")
+    cat("Start FLP step: ")
 
 
 #ris	=nlm(flpkspace,theta.init,x=x,t=t, w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params,etas.integral=etas.integral,hessian=TRUE,kern.var=kern.var)
@@ -51,7 +51,7 @@ ris	=nlm(flpkspace,theta.init,x=x,t=t, w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,e
 fl =flpkspace(ris$estimate,x=x,t=t,w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params)
 
 hdef=attr(fl, "hdef")
-cat("exit from flp step...","\n")
+cat("exit from FLP step...","\n")
 return(list(hdef=hdef,fl=fl))
  }
 

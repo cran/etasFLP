@@ -5,7 +5,10 @@
 #include "etasFLP.h"
 
 static const R_FortranMethodDef FortEntries[] = {
+    {"density2parallel", (DL_FUNC) &F77_SUB(density2parallel), 11},
+    {"etasfull8newparallel", (DL_FUNC) &F77_SUB(etasfull8newparallel), 15},
     {"density2serial", (DL_FUNC) &F77_SUB(density2serial), 11},
+    {"etasfull8fast", (DL_FUNC) &F77_SUB(etasfull8fast), 18},
     {"etasfull8newserial", (DL_FUNC) &F77_SUB(etasfull8newserial), 15},
     {"etasfull8tintegratednew", (DL_FUNC) &F77_SUB(etasfull8tintegratednew), 18},
     {"etasfull8tfixednew", (DL_FUNC) &F77_SUB(etasfull8tfixednew), 18},
