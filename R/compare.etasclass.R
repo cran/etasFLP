@@ -3,8 +3,8 @@ compare.etasclass <-
 function(etas1,etas2){
 # compare two etasclass objects
 #check for classes
-	  if(class(etas1)!="etasclass")stop("first argument must be an etasclass object")
-	  if(class(etas2)!="etasclass")stop("second argument must be an etasclass object")
+	  if (!inherits(etas1,"etasclass"))stop("first argument must be an etasclass object")
+    if (!inherits(etas2,"etasclass"))stop("second argument must be an etasclass object")
 	  ### check for comparability of the two input objects
 	  ## same threshold
 	  ## same catalog

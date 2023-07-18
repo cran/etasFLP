@@ -431,7 +431,7 @@
 ! 
       subroutine probnorm(Y,P)
       double precision   P,Y
-      double precision   DERFC,sqrthalf
+      double precision   ERFC,sqrthalf
       DATA               sqrthalf/.7071067811865475D0/
       P = -Y * sqrthalf
       IF (DABS(P) .LE. 13.2) GO TO 1
@@ -439,7 +439,7 @@
       IF (Y .LT. 0.0) RETURN
       P = 1.0
       RETURN
-    1 P = 0.5 * DERFC(P)
+    1 P = 0.5 * ERFC(P)
       RETURN
       END
 !

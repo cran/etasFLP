@@ -12,8 +12,8 @@ Some descriptive functions for earthquakes catalogs are  included; also \code{pl
 \tabular{ll}{
 Package: \tab etasFLP\cr
 Type: \tab Package\cr
-Version: \tab 2.2.0\cr  
-Date: \tab 2021-09-01\cr
+Version: \tab 2.2.1\cr  
+Date: \tab 2023-07-17\cr
 License: \tab GPL (>=2) \cr
 Imports: fields,maps
 Depends: \tab R (>= 3.5.0), mapdata \cr

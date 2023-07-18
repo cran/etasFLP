@@ -12,7 +12,7 @@ profile.etasclass<-function(fitted,iprofile		=1,
 				 profile.approx	=FALSE,...){
 maxprofile=7 # in this version profile only for etas parameters, not for covariates parameters 27-7-2017				 
 				 
-if(class(fitted)!="etasclass") stop("object is not of the required class etasclass")
+if (!inherits(fitted,"etasclass")) stop("object is not of the required class etasclass")
 iprofile=trunc(iprofile)
 if(iprofile>maxprofile | iprofile <1 ) stop("'iprofile' must be an integer between 1 and maxprofile")
 

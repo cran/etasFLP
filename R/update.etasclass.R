@@ -13,7 +13,7 @@
 #' @examples
 update.etasclass <-
 function(object, ...)   {
-    if(class(object)!="etasclass")stop("argument must be an etasclass object")
+  if (!inherits(object,"etasclass"))stop("argument must be an etasclass object")
     class(object$cat.orig)<-"data.frame"
     arg.list<-"cat.orig=object$cat.orig,magn.threshold=object$magn.threshold,magn.threshold.back=object$magn.threshold.back,tmax=object$tmax,long.range=object$long.range,lat.range=object$lat.range,offset=object$offset,hvarx=object$hvarx,hvary=object$hvary,declustering=object$declustering,thinning=object$thinning,flp=object$flp,ndeclust=object$ndeclust,n.iterweight=object$n.iterweight,onlytime=object$onlytime,is.backconstant=object$is.backconstant,sectoday=object$sectoday,longlat.to.km=object$longlat.to.km,usenlm=object$usenlm,compsqm=object$compsqm,epsmax=object$epsmax,iterlim=object$iterlim,ntheta=object$ntheta,method=object$method,mu=object$params[1],k0=object$params[2],c=object$params[3],p=object$params[4],gamma=object$params[5],d=object$params[6],q=object$params[7],hdef=object$hdef[1:2],betacov=object$betacov,params.ind=object$params.ind,w=object$rho.weights,formula1=object$formula1"
     updated.object  <-NULL

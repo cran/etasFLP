@@ -14,7 +14,7 @@
 #' 
 daily.etasclass <-
 function(x, ngrid=201,nclass=20,tfixed=0,flag.log=FALSE,...){
-	if(class(x)!="etasclass")stop("argument must be an etasclass object")
+  if (!inherits(x,"etasclass"))stop("argument must be an etasclass object")
 	nsimps=1+(ngrid-1)/nclass
         simpson=(nsimps==trunc(nsimps))
 	if(!simpson)stop("argument nclass must divide exactly ngrid-1 in order to use Simpson's rule to compute theoretical frequencies")

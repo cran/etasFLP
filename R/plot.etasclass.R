@@ -1,7 +1,7 @@
 plot.etasclass <-
 function(x,pdf=FALSE,file ="etasplot",  ngrid=201,nclass=10,tfixed=0,flag.log=FALSE,...){
 #  function(x,pdf=FALSE,file ="etasplot",  ngrid=201,flag.3D=FALSE,flag.log=FALSE,ellipse=FALSE,...){
-	if(class(x)!="etasclass")stop("argument must be an etasclass object")
+  if (!inherits(x,"etasclass"))stop("argument must be an etasclass object")
 	nsimps=1+(ngrid-1)/nclass
         simpson=(nsimps==trunc(nsimps))
 	if(!simpson)stop("argument nclass must divide exactly ngrid-1 in order to use Simpson's rule to compute theoretical frequencies")

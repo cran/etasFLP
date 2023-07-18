@@ -1,5 +1,5 @@
-745089286fde7a1a9bf9f8f13c1ee1b9 *ChangeLog
-3bceb7d7cac9d41074422732a6e81f06 *DESCRIPTION
+2909af7ad7aa28a6cfd33ae35ff25a29 *ChangeLog
+e9bdefbd63f718976c0690a4c718c76c *DESCRIPTION
 53d3f8337e23ad80d4f6730deddff3b0 *NAMESPACE
 f43bbc4fc62075d40db4811dd33f061b *R/MLA.freq.R
 793c9d4ef337dbbcb920d41da483c0ca *R/angle.positive.R
@@ -7,8 +7,8 @@ f71dcdcfd5068db100be0d1d43d897a0 *R/b.guten.R
 cedd7272541a0e4b9b7d17f54b7f4bd6 *R/bwd.nrd.R
 2a6d1fc15213076252af148989a91e43 *R/cartesian2polar2D.R
 c6bd01392b10aa55fd4bf2cc14e5118c *R/cat.select.R
-b9b0a41317a6a996a8c29f154cd2a048 *R/compare.etasclass.R
-bdaab6df9f8ee6a5ea3142b9c86f1fdf *R/daily.etasclass.R
+282f69c639f9609b9971a73bc6303d0f *R/compare.etasclass.R
+72ede05460f673d09f6ea43c1931e28b *R/daily.etasclass.R
 94a78588abdaa38d4b6bd9797c55052b *R/embedding.rect.cat.epsNEW.R
 ce9b4c16c682302d0ce98364787c8afd *R/embedding.rect.eps.R
 d4f9e72d25de62dde9255912bb1b24c4 *R/eqcat.R
@@ -25,10 +25,10 @@ e50e4d3b61d97d1287d7716a19e832b3 *R/flpkspace.R
 c79438597f7eedb2955d8192c997007f *R/longlat.to.km.R
 d89d955d7cdb58d95959715f984c12f6 *R/magn.plot.R
 605aa2f8775b24156226bdba2f2fe807 *R/plot.eqcat.R
-3a6a573099a8708d72a899d9f7a37cf0 *R/plot.etasclass.R
+a12c1f7e668471a176e069b815e6756c *R/plot.etasclass.R
 ec89dd22b22a956771cf78ae0b8aafc9 *R/plot.profile.etasclass.R
-1730dece1217d5613e5570c077b4bebc *R/print.etasclass.R
-709a6237e1cc47daabbabd11d5f40a96 *R/profile.etasclass.R
+1dde70bed217bb24b6522a3223dd94bf *R/print.etasclass.R
+9c4d0c0290ea15d5bf2963deccee4f4e *R/profile.etasclass.R
 9e7ac9e57bb0c455cffdbfac4316beba *R/region.P.R
 27de4b996e047d2366a098840cad15aa *R/simpson.coeff.R
 32e181dabd407a61298a4b781589da14 *R/simpson.kD.R
@@ -37,12 +37,12 @@ a2847397f933e5ad854f61bc469e4e80 *R/summary.etasclass.R
 bb5fc6c875810265563259675eed1f86 *R/time2date.R
 8636a7fb5aa7cb70a3435685840b538f *R/timechar.to.seq.R
 87e5149eb480167e7eb88a8d80ad9298 *R/timecharunique2seq.R
-1ec1ca42453113abc4f8f242de537047 *R/timeupdate.etasclass.R
+fb44ead76478c9e2a6fbf17207ed8a2c *R/timeupdate.etasclass.R
 8d95ba451e3bb20dc486b1d11b6115a7 *R/triangle.abc.gamma.R
 ca92403dd79aab1c0e67af88da2d9251 *R/triangle.abgamma.alpha.R
 de3084911a5c0b09e9e381c974ba4f21 *R/triangle.abgamma.c.R
 1ee05ecf9ac45ded067e6dbd4acd6471 *R/triangle.alphabetac.b.R
-2733f1c81915a8e64b6557423f5adc49 *R/update.etasclass.R
+7d7dae0498f10440980dd676506304ab *R/update.etasclass.R
 cbe6edc8bb9695a4564d2282f97dba5c *R/xy.grid.R
 8726ac4578db20cb3b4a2e25b5bc82fd *data/californiacatalog.rda
 624cb9e2eca231f672bd4d522416fca1 *data/catalog.withcov.rda
@@ -58,7 +58,7 @@ f99c8cc03a0beec5f25bed955548dfe0 *man/catalog.withcov.Rd
 d744b9929a1c2eaa4a56d6247018d1c3 *man/eqcat.Rd
 0cf21b39d8d424d189077a4f76fc0902 *man/etas.starting.Rd
 63ab7a07dd0d2c2edaad27c43683b27e *man/etasFLP-internal.Rd
-b2373e8c49b587a643b806f2b8fe2e93 *man/etasFLP-package.Rd
+1492fc25dc428c2aa35d68bb0e5105f7 *man/etasFLP-package.Rd
 d5950f1f35a8cae07b1f5716682c744b *man/etasclass.Rd
 5eeb086c3d1e3cb534de74842fa4f64c *man/italycatalog.Rd
 e57231d83d92d5251cbe4f111d8babed *man/kde2dnew.fortran.Rd
@@ -75,5 +75,5 @@ fbca498f172d76620c752c23a7591b88 *man/profile.etasclass.Rd
 93b9fa7ff789ec437929218240825b60 *man/xy.grid.Rd
 ec14c15de7368da9ee22b6509f754581 *src/Makevars
 13a121eb55b9ec708242e7ea4999f102 *src/etasFLP.h
-64d6eb252a2a5040535857b286c09f72 *src/fortran_etas_code.f90
+3ca057f2c85a56a6262b11b82680eab0 *src/fortran_etas_code.f90
 fa44eab3aa91dc0710c7ac593e41f2ed *src/init.c
