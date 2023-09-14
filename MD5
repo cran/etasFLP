@@ -1,5 +1,5 @@
-2909af7ad7aa28a6cfd33ae35ff25a29 *ChangeLog
-e9bdefbd63f718976c0690a4c718c76c *DESCRIPTION
+85704c2058d02b1130739b20b0a56ac9 *ChangeLog
+76a2586f7f77bf2b41b5134d201181b9 *DESCRIPTION
 53d3f8337e23ad80d4f6730deddff3b0 *NAMESPACE
 f43bbc4fc62075d40db4811dd33f061b *R/MLA.freq.R
 793c9d4ef337dbbcb920d41da483c0ca *R/angle.positive.R
@@ -58,7 +58,7 @@ f99c8cc03a0beec5f25bed955548dfe0 *man/catalog.withcov.Rd
 d744b9929a1c2eaa4a56d6247018d1c3 *man/eqcat.Rd
 0cf21b39d8d424d189077a4f76fc0902 *man/etas.starting.Rd
 63ab7a07dd0d2c2edaad27c43683b27e *man/etasFLP-internal.Rd
-1492fc25dc428c2aa35d68bb0e5105f7 *man/etasFLP-package.Rd
+266c24f651754582ae8b96955c5e9ad0 *man/etasFLP-package.Rd
 d5950f1f35a8cae07b1f5716682c744b *man/etasclass.Rd
 5eeb086c3d1e3cb534de74842fa4f64c *man/italycatalog.Rd
 e57231d83d92d5251cbe4f111d8babed *man/kde2dnew.fortran.Rd
@@ -75,5 +75,5 @@ fbca498f172d76620c752c23a7591b88 *man/profile.etasclass.Rd
 93b9fa7ff789ec437929218240825b60 *man/xy.grid.Rd
 ec14c15de7368da9ee22b6509f754581 *src/Makevars
 13a121eb55b9ec708242e7ea4999f102 *src/etasFLP.h
-3ca057f2c85a56a6262b11b82680eab0 *src/fortran_etas_code.f90
+84c95fbf14eef2b84ef3aea88510a9d0 *src/fortran_etas_code.f90
 fa44eab3aa91dc0710c7ac593e41f2ed *src/init.c

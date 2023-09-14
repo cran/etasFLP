@@ -1,9 +1,13 @@
+2023-9-14 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*fortran_etas_code.f90: all INTEGER(KIND=4) changed to INTEGER
+2023-7-18 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*update.etasclass.R: 'if (class(object) != "etasclass")' changed to 'if (!inherits(object,"etasclass"))' changed also in other R files whenever 'if (class(object) != "etasclass")' was present
 2023-7-17 Marcello Chiodi  <marcello.chiodi@unipa.it>
 *fortran_etas_code.f90: arcaic form derfc changed to erfc 
 2021-9-1 Marcello Chiodi  <marcello.chiodi@unipa.it>
-*etasclass: Changed printing during output 
+*etasclass.R: Changed printing during output 
 2021-8-24 Marcello Chiodi  <marcello.chiodi@unipa.it>
-*etasclass: variable magn1.work has been renamed as magnitude
+*etasclass.R: variable magn1.work has been renamed as magnitude
 *b.guten: a bug has been corrected (thanks to Jiancang Zhuang)
 original first line "x = subset(magn, subset = (magn > m0))"
 corrected to "x = subset(magn, subset = (magn >= m0))"

@@ -9,7 +9,7 @@
 !         h vector of 2 bandwidths
 !         w        vector of weights
       subroutine density2parallel(x,y,m,xkern,ykern,nkern,h,w,hvarx,hvary,dens)
-        INTEGER(KIND=4) nkern,m,i,j
+        INTEGER nkern,m,i,j
 !        input variables declaration:
       double precision xkern(nkern),ykern(nkern),x(m),y(m),w(nkern),ww,h(2)
       double precision hvarx(nkern),hvary(nkern)
@@ -42,7 +42,7 @@
 !       parallel version to be checked 28-2-2019
      
       subroutine etasfull8newparallel(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l)
-        INTEGER(KIND=4) n,tflag,i,j
+        INTEGER n,tflag,i,j
       double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
       double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
       dum=mu
@@ -93,7 +93,7 @@
                 
        
              subroutine density2serial(x,y,m,xkern,ykern,nkern,h,w,hvarx,hvary,dens)
-        INTEGER(KIND=4) nkern,m
+        INTEGER nkern,m
 !        input variables declaration:
       double precision xkern(nkern),ykern(nkern),x(m),y(m),w(nkern),ww,h(2)
       double precision hvarx(nkern),hvary(nkern)
@@ -125,8 +125,8 @@
 !       called by etas.mod2NEW.R
 !
         subroutine etasfull8fast(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,ind,nindex,index,l)
-        INTEGER(KIND=4) n,tflag,ind(n),index(nindex),nindex
-        INTEGER(KIND=4) j1,j2,jj
+        INTEGER n,tflag,ind(n),index(nindex),nindex
+        INTEGER j1,j2,jj
       double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
       double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
       dum=mu
@@ -166,7 +166,7 @@
      
      
       subroutine etasfull8newserial(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l)
-        INTEGER(KIND=4) n,tflag
+        INTEGER n,tflag
       double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
       double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
       dum=mu
@@ -212,7 +212,7 @@
 !     called by plot.etasclass.R
 !
       subroutine etasfull8tintegratednew(n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l,ngridtot, xgrid, ygrid,tmax)
-      INTEGER(KIND=4) n,ngridtot
+      INTEGER n,ngridtot
       double precision mu,k,c,p,g,d,q,x(n),y(n),xgrid(ngridtot),ygrid(ngridtot),t(n),m(n),predictor(n),l(ngridtot)
       double precision dx,dy,ds,dt,xi,yi,etas,inc,tmax,integrt,eps,dum
       eps=1D-10
@@ -258,7 +258,7 @@
 !
 !
       subroutine etasfull8tfixednew(n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l,ngridtot, xgrid, ygrid,tfixed)
-      INTEGER(KIND=4) n,ngridtot
+      INTEGER n,ngridtot
       double precision mu,k,c,p,g,d,q,x(n),y(n),xgrid(ngridtot),ygrid(ngridtot),t(n),m(n),predictor(n),l(ngridtot)
       double precision dx,dy,ds,dt,xi,yi,etas,inc,tfixed,eps,dum
       dum=mu
@@ -292,7 +292,7 @@
 !       internal called by deltafl1kspacevar       
 !
         subroutine integrkdweighted(rangex,xkern,w,nkern,k,h,kintegral)
-        INTEGER(KIND=4) nkern,k
+        INTEGER nkern,k
 !         input variables declaration:
       double precision xkern(nkern,k),w(nkern),rangex(k,2),h(k)
 !         output variables declaration:
@@ -323,7 +323,7 @@
         double precision xj(k),wtot
         double precision stdj(k),fac,factot
         DATA               fac/0.3989422804014327D0/
-        INTEGER(KIND=4) nkern,m,k
+        INTEGER nkern,m,k
 !         call density3(x,y,z,n,xkern,ykern,zkern,n,hdef,dens)
         factot=(fac**k)/(PRODUCT(h))
         wtot=sum(w)
@@ -361,11 +361,11 @@
 !
       subroutine deltafl1kspacevar(x,t,w,n,k,m1,m2,nh,rangex,h,hdef,dens,integr,delta,expweight,indweight,allocationerr)
 ! input output  variables declaration:
-        INTEGER(KIND=4) n,m1,m2,indweight,k,nh,allocationerr
+        INTEGER n,m1,m2,indweight,k,nh,allocationerr
       double precision dens(n),delta(n),integr(n),hdef(nh)
       double precision t(n),x(n,k),w(n ),rangex(k,2),h(nh),expweight
 ! work variables declaration:  
-      INTEGER(KIND=4) one,two,four,m,i,err1
+      INTEGER one,two,four,m,i,err1
       double precision lambda(1),mean(k),sd(k), kintegral,deltat
 ! allocatable arrays       
       double precision :: x9,w9,x1,xmat9,xmat10,xkern,ykern
@@ -414,7 +414,7 @@
 
         subroutine univariatew(x,w,n,mean,sd)
 !         input variables declaration:
-        INTEGER(KIND=4) n
+        INTEGER n
         double precision x(n),w(n)
         double precision mean,sd
         double precision ww
