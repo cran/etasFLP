@@ -17,12 +17,13 @@ etasclass <-
            betacov         =0.7,
            ### indicators: if params.ind[i] i-th parameter will be estimated
            params.ind=replicate(7,TRUE),
-#           params.lim=c(0,0,0,1.0,0,0,0),
+           params.lim=c(0,0,0,1.0,0,0,0),
+           
            ### formula for covariates (magnitude should always be included):
            formula1            ="time~magnitude-1",
            offset              =0,
            hdef=c(1,1),
-           w		=replicate(nrow(cat.orig),1),
+           rho.weights		=replicate(nrow(cat.orig),1),
            hvarx  =replicate(nrow(cat.orig),1),
            hvary  =replicate(nrow(cat.orig),1),
            ### flags for the kind of declustering and smoothing:
@@ -41,22 +42,18 @@ etasclass <-
            back.smooth	=1.0,
            sectoday	=FALSE,
            longlat.to.km   =TRUE,
-#           fastML=FALSE, #### not yet implemented
-#           fast.eps=0.001, #### not yet implemented
            usenlm		=TRUE,
            method		="BFGS",
            compsqm 	=TRUE,
            epsmax		= 0.0001,
            iterlim		=50,      
-           ntheta		=36)   {
-    ## unused optional arguments
-    iprint  	<-FALSE
-    fastML    <-FALSE
+           ntheta		=36,
+           trace=TRUE)   {
+    ## unused optional arguments; parallel and fastML mantained because it appears in the output
     parallel   <-FALSE
-    fast.eps   <-0.001
+    fastML     <-FALSE
     ## first checks, selection of data, and initializatios	
-          params.lim=c(0,0,0,1.0,0,0,0)
-    
+ #         params.lim=c(0,0,0,1.0,0,0,0) params.lim is now an input parameter
     this.call<-match.call()
     flag		<-eqcat(cat.orig)
     if (!flag$ok) stop("WRONG EARTHQUAKE CATALOG DEFINITION")
@@ -82,7 +79,8 @@ etasclass <-
     fl.iter		<-numeric(0)
     
     AIC.decrease	<-TRUE	
-    trace		<-TRUE # controls the level of 	intermediate printing can be deleted in future versions
+    #trace		<-TRUE # controls the level of 	intermediate printing can be deleted in future versions;
+    # introduced as input parameter 19-2-2026
     
     eps	<-2*epsmax
     eps.par	<-2*epsmax
@@ -126,6 +124,7 @@ etasclass <-
     
     etas.current<-list(
       parallel    =parallel,
+      fastML.     =fastML,
       this.call		=match.call(),
       nstep.flp=0, #### added feb 2021
       nstep.kde=0, #### added feb 2021
@@ -157,19 +156,19 @@ hvary=hvary,
     class(etas.current)		<-"etasclass"
     etas.current<-cat.select(etas.current,longlat.to.km,sectoday=sectoday)
     
-    ################ block with hvarx,hvary,w to be checked. cat should be subsetted according to ord and ind?  
+    ################ block with hvarx,hvary,rho.weights to be checked. cat should be subsetted according to ord and ind?  
     
-    #etas.current$cat<-data.frame(etas.current$cat,hvarx,hvary,w) ########   change
+    #etas.current$cat<-data.frame(etas.current$cat,hvarx,hvary,rho.weights) ########   change
     etas.current$cat<-data.frame(etas.current$cat,hvarx,hvary) ########   change
     
     cat         <-etas.current$cat[etas.current$cat$ord,][etas.current$cat$ind[etas.current$cat$ord],]
     etas.current$cat<-cat
     n	<-	nrow(cat)
-    missingw        <-missing(w)
-    if(missingw)  w=replicate(n,1)    
+    missingw        <-missing(rho.weights)
+    if(missingw)  rho.weights=replicate(n,1)    
     if(time.update){
-    n.old<-length(w)
-    w    <-c(w,replicate(n-n.old,0.5))
+    n.old<-length(rho.weights)
+    rho.weights    <-c(rho.weights,replicate(n-n.old,0.5))
     hvarx    <-c(hvarx,replicate(n-n.old,1))
     hvary    <-c(hvary,replicate(n-n.old,1))
     }
@@ -179,8 +178,7 @@ hvary=hvary,
     ## hvarx, hvary added july 2017, variable window terms correction
     hvarx<-cat$hvarx/(prod(cat$hvarx))^(1./n)
     hvary<-cat$hvary/(prod(cat$hvary))^(1./n)
-    etas.current$w<-w
-    ################
+     ################
     }
     ycat.work      <-  cat$ycat.work
     xcat.work      <-  cat$xcat.work
@@ -194,7 +192,7 @@ hvary=hvary,
       xback.work	<-xcat.work
       yback.work	<-ycat.work
     }
-    if(missingw)  w=replicate(length(xback.work),1)
+    if(missingw)  rho.weights=replicate(length(xback.work),1)
     
     starting<-etas.starting(cat,magn.threshold=magn.threshold,longlat.to.km = longlat.to.km,sectoday = sectoday, p.start=p,gamma.start=gamma,q.start=q,betacov.start=betacov[1],onlytime=onlytime)
     
@@ -204,14 +202,19 @@ hvary=hvary,
     if(missing(k0)||is.null(k0))   k0	  <-starting$k0.start
     if(missing(c)||is.null(c))     c	  <-starting$c.start
     if(missing(d)||is.null(d))     d	  <-starting$d.start
-    if(missing(hdef)||is.null(hdef)) hdef  <-c(bwd.nrd(xback.work,w),bwd.nrd(yback.work,w))
-    print("Initial ETAS params estimates after checking: ")
+    if(missing(hdef)||is.null(hdef)) hdef  <-c(bwd.nrd(xback.work,rho.weights),bwd.nrd(yback.work,rho.weights))
+    if(trace) print("Initial ETAS params estimates after checking: ")
     vecpar.init=c(mu,k0,c,p,gamma,d,q)
     names(vecpar.init)=c("mu","k0","c","p","gamma","d","q")
+    params.iter=c(vecpar.init,betacov) ### magnitude missing
+    sqm.iter=vecpar.init*0
+    if(trace) print(round(vecpar.init,4)) 
+    hdef.iter=hdef
+    rho.weights.iter=rho.weights
+    etas.current$rho.weights<-rho.weights
+    etas.current$rho.weights.iter<-rho.weights.iter
     
-    print(round(vecpar.init,4))    
-    
-    etas.current$xback.work=xback.work
+     etas.current$xback.work=xback.work
     etas.current$yback.work=yback.work
     
     etas.current$mu.start = mu
@@ -222,7 +225,9 @@ hvary=hvary,
     etas.current$q.start = q
     etas.current$gamma.start = gamma
     etas.current$betacov.start = betacov
+    etas.current$hdef = hdef
     etas.current$hdef.start = hdef
+    etas.current$hdef.iter = hdef
     etas.current$formula1           =formula1
     
     
@@ -237,7 +242,7 @@ hvary=hvary,
     
     ncov=ncol(cov.matrix)
     if (length(betacov)!=ncov){
-      cat("Wrong number of starting values for parametrs linear predictor of covariates. Correct number of zero starting values inserted","\n")
+      if(trace) cat("Wrong number of starting values for parametrs linear predictor of covariates. Correct number of zero starting values inserted","\n")
       betacov=replicate(ncov,0)
     }
     if(length(params.ind)!=7) stop("Wrong number of elements of params.ind")
@@ -250,7 +255,6 @@ hvary=hvary,
     params.fix	<-c(mu,k0,c,p,gamma,d,q)
     nparams.etas<-sum(params.ind)
     nparams 		<-nparams.etas+ncov
-    
     #       print(params.fix>=params.lim)
     ########################################### computation of the region for the integration used in the likelihood computation
     if(onlytime)
@@ -293,13 +297,16 @@ hvary=hvary,
     {
       #			is.backconstant==FALSE
       #           No matter if flp=TRUE or FALSE
-      #           if missing(w)   xback.work and yback.work have been substituted with xcat.work e ycat.work
-      back.tot	<-kde2dnew.fortran(xback.work,yback.work,xcat.work,ycat.work,h=hdef,factor.xy=back.smooth,eps=1/n,w=w,hvarx=hvarx,hvary=hvary) 
+      #           if missing(rho.weights)   xback.work and yback.work have been substituted with xcat.work e ycat.work
+      back.tot	<-kde2dnew.fortran(xback.work,yback.work,xcat.work,ycat.work,h=hdef,factor.xy=back.smooth,eps=1/n,w=rho.weights,hvarx=hvarx,hvary=hvary) 
       etas.current$nstep.kde=etas.current$nstep.kde+1
       back.dens	<-back.tot$z
       back.integral	<-back.tot$integral
       
     }
+#    print("1-first weights and background density")
+#    print(summary(rho.weights)) ## added december 2025
+#    print(summary(back.dens)) ## added december 2025
     
     etas.current$back.integral <-back.integral
     etas.current$back.dens     <-back.dens
@@ -312,6 +319,7 @@ hvary=hvary,
     #while (AIC.decrease& ????????
     # attempt avoiding decrasing constrain:
     
+    
     while ((iter<ndeclust)&((eps>epsmax)||(eps.par>epsmax))){
       
       
@@ -321,9 +329,13 @@ hvary=hvary,
       #check.if.del       if (iter>0) params.fix=etas.ris$params
       
       params		<-log((params.fix-params.lim)[params.ind==1])
+   #   if(iter==1) params.iter<-c(params,betacov)
       
       
       etas.current$params<-params
+      etas.current$params.iter<-params.iter
+      etas.current$sqm.iter<-sqm.iter
+      
       etas.current$params.lim<-params.lim   ##### added 2021
       etas.current$params.ind	<-as.logical(params.ind)
       etas.current$params.fix	<-params.fix
@@ -332,43 +344,41 @@ hvary=hvary,
       etas.current$nparams.etas<-nparams.etas
       #        etas.current$etas.first=etas.current
       
-      cat("Start ML step number: ",iter+1,"\n")
-      
-      ### sperimental section for fastML added on feb. 3, 2021
-      etas.current$fastML<-fastML
-      etas.current$fast.eps<-fast.eps
-      if(fastML) {
-        
-        fast<-(fastML.init(etas.current))
-        etas.current$ind      <-fast$ind
-        etas.current$index.tot<-fast$index.tot
- 
+      if(trace) {
+        cat("Start ML step number: ",iter+1,"started at","\n")
+        print(Sys.time())
       }
-#      return(etas.current)
+        #      return(etas.current)
+ #     print("2-first weights and background density")
+ #     print(summary(rho.weights)) ## added december 2025
+ #     print(summary(back.dens)) ## added december 2025
+      
       risult.opt <- generaloptimizationNEW(etas.current,
                                            hessian	=TRUE,
                                            iterlim		=iterlim,
-                                           iprint=iprint,
+                                           iprint=FALSE,
                                            trace=trace)
       
       etas.current    <-risult.opt$etas.obj	
       params.optim    <-risult.opt$params.optim[1:nparams.etas]
       betacov         <-risult.opt$params.optim[(nparams.etas+1):nparams]
+      if(trace) cat("\n")
+  #    print("3-first weights and background density")
+  #    print(summary(rho.weights)) ## added december 2025
+  #    print(summary(back.dens)) ## added december 2025
       
-      ## params.optim does not contain betacov
-      cat("\n")
-      
-      for (i in 1:n.iterweight){
+       l.optim<-risult.opt$l.optim
+      risult <-risult.opt$risult
+        for (i in 1:n.iterweight){
         
-        cat("weighting step n. ",i,"\n")
+          if(trace) cat("weighting step n. ",i,"\n")
 
         l.optim<-risult.opt$l.optim
         risult <-risult.opt$risult
-        
-        l<-etas.mod2NEW(params=c(params.optim,betacov),
+         l<-etas.mod2NEW(params=c(params.optim,betacov),
                         etas.obj=etas.current,
                         trace=FALSE)
-        
+ 
         ####################("found optimum ML step") #################################################################
         det.check<-det(risult$hessian)
         check=is.na(det.check)||(abs(det.check)<1e-20)
@@ -378,20 +388,27 @@ hvary=hvary,
         if (compsqm)	sqm	<-sqrt(diag(solve(risult$hessian)))*c(exp(params.optim),replicate(ncov,1))
         sqm.etas<-sqm[1:nparams.etas]
         sqm.cov <-sqm[(nparams.etas+1):nparams]
+         
+ #       print(summary(etas.current$rho.weights)) ## added december 2025
         
         ###### the optimization is made with respect to the log of the parameters ()
         ###### so the for the asymptotic standard error we use the approximation Var(exp(y))=[exp(y)]^2 var(y)
         params			<-params.fix
         params[params.ind==1]	 <- exp(params.optim)+params.lim[params.ind==1]
+        params.fix=params
         sqm.tot			<-array(0,nparams.etas)
         sqm.tot[params.ind==1] <-  sqm.etas
         names(sqm.tot) <- namespar
+         
         
         params.MLtot	<-c(params,betacov)
         sqm.MLtot	    <-c(sqm.tot,sqm.cov)
         #####################################################################################
-        cat("found optimum; end  ML step  ")
-        cat(iter+1,"\n")
+        if(trace){
+          print(params.MLtot)       
+          cat("found optimum; end  ML step  ")
+          cat(iter+1,"\n")
+        }
         
         mu	<- params[1]
         k0  <- params[2]
@@ -402,24 +419,26 @@ hvary=hvary,
         d   <- params[6]
         q   <- params[7]
         #        betacov = params[8:nparams]
-        
         #####################################################################################
         # time.res= residuals obtained with integral tansform of time intensity function
         # to be used only for time processes
         # corrected for predictor in version 2.0.0
         # maybe could be omitted later, since plot.etasclass already computes residuals
         #####################################################################################
-        predictor       <- as.matrix(etas.current$cov.matrix)%*%as.vector(betacov)+as.vector(etas.current$offset)
+         predictor       <- as.matrix(etas.current$cov.matrix)%*%as.vector(betacov)+as.vector(etas.current$offset)
         rho.weights     <- params.MLtot[1]*back.dens/attr(l,"lambda.vec")
-        w               <- rho.weights
+ #       w               <- rho.weights
         xback.work <- xcat.work
         yback.work <- ycat.work
+
         
+        ###### maybe the problem is here: 26-12-2025
         
         if (flp){
           etas.l		<- attr(l,"etas.vec")
           # compute etas intensity and integral for each point and call routine for optimization
           # flp MUST be weighted 
+          # 
           ris.flp<-flp1.etas.nlmNEW(cat,
                                     h.init=hdef,
                                     etas.params=params.MLtot,
@@ -427,9 +446,12 @@ hvary=hvary,
                                     w=rho.weights,
                                     m1=m1,
                                     m2=as.integer(nrow(cat)-1),
-                                    mh=1
+                                    mh=1,
+                                    trace=trace
           )
-          etas.current$nstep.flp=etas.current$nstep.flp+1
+          ###### maybe the problem is here: 26-12-2025
+          
+           etas.current$nstep.flp=etas.current$nstep.flp+1
           
           hdef <- ris.flp$hdef
           fl	 <- ris.flp$fl
@@ -440,11 +462,16 @@ hvary=hvary,
           back.ind	 <- runif(n)<rho.weights
           xback.work <- xcat.work[back.ind]
           yback.work <- ycat.work[back.ind]
-          w	<-replicate(length(xback.work),1)
+          rho.weights	<-replicate(length(xback.work),1)
         }
         
-        
-       if (flp) back.tot		<- kde2dnew.fortran(xback.work,yback.work,xcat.work,ycat.work,eps=1/n,h=hdef,w=w,hvarx=hvarx,hvary=hvary) else back.tot		<-kde2dnew.fortran(xback.work,yback.work,xcat.work,ycat.work,eps=1/n,w=w,hvarx=hvarx,hvary=hvary)
+ #       print("5-first weights and background density")
+  #      print(summary(rho.weights)) ## added december 2025 here weights are different from beginning
+
+       if (flp) back.tot		<- kde2dnew.fortran(xback.work,yback.work,xcat.work,ycat.work,eps=1/n,h=hdef,w=rho.weights,hvarx=hvarx,hvary=hvary) else 
+       	{back.tot		<-kde2dnew.fortran(xback.work,yback.work,xcat.work,ycat.work,eps=1/n,w=rho.weights,hvarx=hvarx,hvary=hvary)
+       	hdef=back.tot$h ## added 22 decemb. 2025. hdef was updated only for flp=TRUE
+       	}
         etas.current$nstep.kde=etas.current$nstep.kde+1
         
         back.dens	  <- back.tot$z
@@ -456,14 +483,23 @@ hvary=hvary,
         etas.current$rho.weights  <-rho.weights
         etas.current$back.integral  <-back.integral
         etas.current$back.dens      <-back.dens
-   
+        ###### maybe the problem is here: 26-12-2025
+        
         ##### 
         l<-etas.mod2NEW(params=c(params.optim,betacov),
-                        etas.obj=etas.current,
-                        trace=FALSE)
+                       etas.obj=etas.current,         
+                       trace=FALSE)      ## mod 26-12-2025 results are not good. better mantain
+        if(trace){
+          print("l")
+          print(l[[1]])
+        }
         AIC2   		  <- 2*l +2*nparams
+        ###### maybe the problem is here: 26-12-2025
+        ###### 
+  #      print("6-first weights and background density")
+  #      print(summary(rho.weights)) ## added december 2025
+  #      print(summary(rho.weights)) ## added december 2025
         
-             
       }
       
       #### time residual for time only models
@@ -525,13 +561,44 @@ hvary=hvary,
         
         fl.iter			<- c(fl.iter,fl)
         
-        cat("\n","---ITERATION n.", iter," ---; AIC = ",round(AIC.iter[iter],3),"; elapsed time: ",time.elapsed," time: ")
-        print(Sys.time())
-        cat("\n")
-        cat("Current estimates of parameters: ","\n")
-        cat(round(params.MLtot,5))
-        cat("\n")
+        if(trace) {
+          cat("\n","---ITERATION n.", iter," ---; AIC = ",round(AIC.iter[iter],3),"; elapsed time: ",time.elapsed," time: ")
+          print(Sys.time())
+          cat("\n")
+          cat("Current estimates of parameters: ","\n")
+          cat(round(params.MLtot,5))
+          cat("\n")
+          #       print(str(params.iter))
+        }
+        
       }
+      else ## added 22 decemb. 2025. hdef was updated only for flp=TRUE
+      {
+#      	iter			<- iter+1
+if(trace) print("manipulation for AIC.decreasing=FALSE")
+#      	AIC.iter[iter+1]		<- AIC.temp
+      	AIC.iter2[iter+1]		<- AIC2
+      	lastrow=nrow(params.iter)
+#      	print(lastrow)
+#      	print(str(params.iter))
+      	
+      	params.MLtot<- params.iter[lastrow,]
+      	sqm.tot<-sqm.iter[lastrow,]
+      	
+      	lastrow=nrow(rho.weights.iter)
+    #  	print(lastrow)
+      	
+      	rho.weights		<- rho.weights.iter[lastrow,]
+      	lastrow=nrow(hdef.iter)
+    #  	print(lastrow)
+      	hdef        	<- hdef.iter[lastrow,]
+      	lastrow=length(fl.iter)
+    #  	print(lastrow)
+      	fl	        	<- fl.iter[lastrow]
+      #	print("exit manipulation for AIC.decreasing=FALSE")
+      	
+      }
+      	
       if (iter>1){
         eps			<- max(abs(back.dens-etas.ris$back.dens))
         eps.par	<- max(abs(params.iter[iter]-params.iter[iter-1]))
@@ -579,7 +646,7 @@ hvary=hvary,
       
       etas.ris                    <-etas.current
       if(!AIC.decrease){
-        print("INCREASING AIC")
+        if(trace) print("INCREASING AIC")
         return(etas.ris)
       }
     }
@@ -590,12 +657,16 @@ hvary=hvary,
     #		convergence obtained. Computation of final output 
     #
     #############################################################################################
-    if(!time.update) {
+    
+    
+    if(trace){
+      if(!time.update) {
       cat("\n")
       cat("\n")
       cat("--------- FINAL SUMMARY ---------","\n")
       
       summary(etas.ris)}
+    }
     return(etas.ris)
   }
 #####   check of january 14, 2021

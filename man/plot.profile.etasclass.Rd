@@ -2,7 +2,7 @@
 \alias{plot.profile.etasclass}
 %\alias{plot.etasclass}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{plot method for profile.etasclass objects (profile likelihood of ETAS model)}
+\title{Plot method for profile.etasclass objects}
 \description{\code{plot} method for \code{profile.etasclass} objects (profile likelihood of ETAS model). Plots a smooth interpolation of the profile likelihood of a parameter of an ETAS model, as output from \code{profile.etasclass}.
 }
 \usage{

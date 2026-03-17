@@ -41,8 +41,10 @@ For space dimension, four plot are drawn with triggered, observed, total intensi
 Starting with the package version 1.2.0 different kind of residual analysis are computed and visualized, separately for the space and time dimensions. (8 plot on three windows for the space and 2 plots on one window for the time)
 
 
+
 Then two plots are printed for space residuals for total and background intensities
 
+starting from version 2.3.0 maps are not drawn if original \code{longlat.to.km} is FALSE, because original coordinates are not in degrees.
 
 Space residuals are computed dividing the observed rectangular space area in
 a equally spaced  grid of \code{nclass} intervals for each dimension, so to

@@ -53,7 +53,7 @@ Marcello Chiodi, Giada Adelfio}
 data("italycatalog")
 # load a sample catalog of italian seismicity  
 
-   etas.flp<-etasclass(italycatalog,  
+  > etas.flp<-etasclass(italycatalog,  
    magn.threshold = 3.0,  magn.threshold.back = 3.5,
    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
    params.ind = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
@@ -67,15 +67,25 @@ data("italycatalog")
     # for the background intensity function
     # (magn.threshold.back=3.5)
     
+print(etas.flp)
+### output
+etas flp 
+Execution started:  2026-02-07 09:24:52Elapsed time of execution (hours)   0.065 
+Number of observations:  2158;  Magnitude threshold  3; 
+AIC 48569.62 48539.97 48539.86 48539.82 ; hdef 41.75648 19.66537
+ETAS Parameters: 
+       mu        k0         c         p     gamma         d         q magnitude 
+ 0.372918  0.008025  0.030299  1.310475  1.001160  1.623435  1.873945  0.560083 
+ 
 ## compute profile likelihood for the first parameter (mu)
- system.time( prof.flp <- profile(etas.flp, nprofile = 7, iprofile = 1))
- plot(prof.flp)
+ > prof.flp <- profile(etas.flp, nprofile = 7, iprofile = 1)
+ > plot(prof.flp)
 #### output:
 Asymptotic  confidence  intervals: 
   Coverage Lower Upper
-1     0.90 0.335 0.376
-2     0.95 0.334 0.378
-3     0.99 0.329 0.385
+1     0.90 0.353 0.394
+2     0.95 0.351 0.396
+3     0.99 0.346 0.402
 
 }}
 \keyword{ETAS}

@@ -7,6 +7,7 @@ function(theta,x,t,w,
 			etas.l,
 			mh=1,
 			iprint=FALSE,
+		    trace=TRUE,
 			indweight=TRUE)     {
 		
 # function called (for optimization) by flp.etas.nlm
@@ -16,7 +17,7 @@ function(theta,x,t,w,
 iprint=FALSE
 if (iprint) cat("flpkspace theta", theta,"\n")
 
-cat("-")	
+if (trace) cat("-")	
 		n	=as.integer(nrow(x))
 		dens	=array(0,n)
 		 s	=matrix(c(1,0,0,1),2,2)

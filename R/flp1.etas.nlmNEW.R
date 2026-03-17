@@ -6,7 +6,8 @@ function(cat,
 			etas.l,
 			m1=as.integer(nrow(cat)/2),
 			m2=as.integer(nrow(cat)-1),
-			mh=1
+			mh=1,
+		    trace=TRUE
 			)
 				    {
 ### compute the optimal bandwidth for an etas model according to the flp approach
@@ -40,18 +41,18 @@ theta.init=h.init*0
 
     theta.init[1:npar]=log(h.init[1:npar])
 
-    cat("Start FLP step: ")
+    if(trace) cat("Start FLP step: ")
 
 
 #ris	=nlm(flpkspace,theta.init,x=x,t=t, w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params,etas.integral=etas.integral,hessian=TRUE,kern.var=kern.var)
-ris	=nlm(flpkspace,theta.init,x=x,t=t, w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params,hessian=TRUE)
+ris	=nlm(flpkspace,theta.init,x=x,t=t, w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params,trace=trace, hessian=TRUE)
 
 #fl =flpkspace( ris$estimate,x=x,t=t,w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params, etas.integral=etas.integral,kern.var=kern.var )
 
-fl =flpkspace(ris$estimate,x=x,t=t,w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params)
+fl =flpkspace(ris$estimate,x=x,t=t,w=w,m1=m1,m2=m2,mh=mh,k=k,etas.l=etas.l,etas.params=etas.params,trace=trace)
 
 hdef=attr(fl, "hdef")
-cat("exit from FLP step...","\n")
+if(trace) cat("exit from FLP step...","\n")
 return(list(hdef=hdef,fl=fl))
  }
 

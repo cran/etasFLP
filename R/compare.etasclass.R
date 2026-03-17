@@ -1,4 +1,5 @@
 ## check (22-4-2020) with the new etasclass output
+## modified febraury 2026
 compare.etasclass <-
 function(etas1,etas2){
 # compare two etasclass objects
@@ -10,13 +11,18 @@ function(etas1,etas2){
 	  ## same catalog
 	  ## same domain (space time)
 	  ##
-	  params	=0
-	  npar.est	=etas1$params.ind+etas2$params.ind
-	  npar.est  =c(npar.est,array(2,length(etas1$betacov)))
-	  sqm		=sqrt((etas1$sqm^2+etas2$sqm^2)/npar.est)
-	  params=array(0,length(etas1$params.MLtot))
-	  params[sqm>0]=(etas1$params.MLtot-etas2$params.MLtot)/sqm
-	  AIC=min(etas1$AIC)-min(etas2$AIC)
+	params	=0
+	npar.est	=etas1$params.ind+etas2$params.ind
+	npar.est  =c(npar.est,array(2,length(etas1$betacov)))
+	sqm		=sqrt((etas1$sqm^2+etas2$sqm^2)/npar.est)
+	ktot=length(sqm)
+	params=array(0,length(etas1$params.MLtot))
+	ind0=is.na(etas1$sqm+etas2$sqm)
+	sqm1=replicate(ktot,1)
+	ind1=(sqm>0)&(!(is.na(sqm)))
+	sqm1[ind1]=sqm[ind1]
+	params=(etas1$params.MLtot-etas2$params.MLtot)/sqm1
+	AIC=min(etas1$AIC)-min(etas2$AIC)
 	  if(etas1$onlytime&etas2$onlytime){
 	  weights	=0
 	  weights.std	=0
@@ -29,6 +35,10 @@ function(etas1,etas2){
 	  }
 	  cor.trig	=cor(etas1$l-etas1$params[1]*etas1$back.dens,etas2$l-etas2$params[1]*etas2$back.dens)
 	  cor.back	=cor(etas1$back.dens,etas2$back.dens)
+	  if(!sum(ind0)) print("Warning: some estimated standard errors are missing")
 return(list(diffstd.params=params,AIC=AIC,weights=weights,weights.std=weights.std,cor.weights=cor.weights,cor.trig=cor.trig,cor.back=cor.back))
   
-	  }
+}
+
+
+

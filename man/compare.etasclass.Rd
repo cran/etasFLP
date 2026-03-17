@@ -14,7 +14,7 @@ compare.etasclass(etas1,etas2)
   \item{etas2}{an \code{etasclass} object.}
 }
 \details{
-Compare the results of two \code{etasclass} executions through the comparison of some elements of two \code{etasclass} objects estimated on the same catalog
+Compare the results of two \code{etasclass} executions through the comparison of some elements of two \code{etasclass} objects estimated on the same catalog. If some standard erros are missing (or zero for constant parameters) they are not used in the standardized comparison of parameters (output object \code{diffstd.params}).
 }
 \value{
 \item{diffstd.params}{Standardized comparison of the estimated parameters, included covariates.}

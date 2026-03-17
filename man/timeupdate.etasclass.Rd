@@ -2,7 +2,7 @@
 % Please edit documentation in R/timeupdate.etasclass.R
 \name{timeupdate.etasclass}
 \alias{timeupdate.etasclass}
-\title{timeupdate.etasclass}
+\title{A time updating of an etasclass objects}
 \usage{
 timeupdate.etasclass(object, params.estimation = FALSE, ...)
 }

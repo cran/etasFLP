@@ -1,7 +1,7 @@
 \name{etas.starting}
 \alias{etas.starting}
 
-\title{Guess starting values of ETAS parameters (beta-version). Only from package version 1.2.0}
+\title{Compute rough starting values of ETAS parameters (beta-version).}
 \description{\code{etas.starting} is a simple function to give starting values of the 7 ETAS parameters for the function \code{etasclass}.
 
 It gives only rough approximations, based on some assumptions, intended to give only the order of magnitude of each parameter (but should be better than nothing).

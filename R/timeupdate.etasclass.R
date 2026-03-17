@@ -1,6 +1,5 @@
-#' @title timeupdate.etasclass
-#' @alias timeupdate.etasclass
-#' Title time update for etasclass objects
+#' @aliases timeupdate.etasclass
+#' @title A time updating of an etasclass objects
 #' @description New in version 2.2. A time updating of an etasclass objects: a very experimental version that can be used only on etasclass objects obtained from etasflp versions 2.2 or newer. 
 #' @details It is a beta version. 
 #' A new ETAS model is fitted to a previous object of class etasclass with a new catalog which must be a catalog which extends the previous one on a wider time window, that is a catalog with new observations.  
@@ -13,7 +12,6 @@
 #' @return a new \code{etasclass} object
 #' @export
 #' @seealso \code{\link{update.etasclass}}
-#' @examples
 timeupdate.etasclass <-
     function(object,params.estimation=FALSE, ...)   {
       if (!inherits(object,"etasclass"))stop("argument must be an etasclass object")

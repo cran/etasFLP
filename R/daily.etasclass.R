@@ -1,5 +1,6 @@
-#' Title daily.etasclass
-#' @description A daily  estimation on a space grid is made 
+#' @aliases daily.etasclass
+#' @title Daily estimation on a space grid
+#' @description A daily estimation on a space grid is made 
 #' @param x an etasclass object
 #' @param ngrid  subdivisions of x and y axis for grid computation of intensities
 #' @param nclass number of class for horizontal and vertical axes of the output grid

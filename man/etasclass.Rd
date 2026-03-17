@@ -15,12 +15,13 @@ Performs the estimation of the components of the ETAS (Epidemic Type Aftershock 
 \strong{New in version 2.2.0:}
 \emph{New algoruthm for starting values. A new argument (n.iterweight) and an update method and a \code{timeupdate} option}
 
-An ETAS with up to 7+\code{ncov} parameters can be estimated, with several options and different methods.
+\strong{New in version 2.3.0:}
+\emph{New input argument \code{params.lim}}
+
+An ETAS with up to 7+\code{ncov} parameters can be estimated, with several options and different methods (\code{ncov} is the number of covariates in the triggered seismicity).
 
 Returns an \code{etasclass} object, for which \code{plot}, \code{summary}, \code{print} and \code{profile} methods are defined. 
 }
-
-
 
 \usage{etasclass(cat.orig,
            time.update=FALSE,
@@ -40,12 +41,13 @@ Returns an \code{etasclass} object, for which \code{plot}, \code{summary}, \code
            betacov         =0.7,
            ### indicators: if params.ind[i] i-th parameter will be estimated
            params.ind=replicate(7,TRUE),
-#           params.lim=c(0,0,0,1.0,0,0,0),
+           params.lim=c(0,0,0,1.0,0,0,0),
+           
            ### formula for covariates (magnitude should always be included):
            formula1            ="time~magnitude-1",
            offset              =0,
            hdef=c(1,1),
-           w		=replicate(nrow(cat.orig),1),
+           rho.weights		=replicate(nrow(cat.orig),1),
            hvarx  =replicate(nrow(cat.orig),1),
            hvary  =replicate(nrow(cat.orig),1),
            ### flags for the kind of declustering and smoothing:
@@ -64,15 +66,14 @@ Returns an \code{etasclass} object, for which \code{plot}, \code{summary}, \code
            back.smooth	=1.0,
            sectoday	=FALSE,
            longlat.to.km   =TRUE,
-#           fastML=FALSE, #### not yet implemented
-#           fast.eps=0.001, #### not yet implemented
            usenlm		=TRUE,
            method		="BFGS",
            compsqm 	=TRUE,
            epsmax		= 0.0001,
            iterlim		=50,      
-           ntheta		=36)  
- 				}
+           ntheta		=36,
+           trace=TRUE) 
+           }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{cat.orig}{
@@ -133,17 +134,17 @@ mainshock; see details. Default value = 1.5.
   \item{params.ind}{vector of 7 logical values: \code{params.ind[i] = TRUE} means that the i-th parameter must be estimated.  \code{params.ind[i] = FALSE}  means that the i-th parameter is fixed to its input value  (the order of parametrs is: \code{mu}, \code{k0}, \code{c}, \code{p}, \code{gamma}, \code{d}, \code{q}).
   Default value = \code{replicate(7,TRUE)}, that is, \code{etasclass} estimates all parameters.
 }
-  \item{params.lim}{vector of 7 numerical values: \code{params.lim[i] = theta0} means that the i-th parameter must be greater than \code{theta0}  (the default limits of parametrs are: 0 for \code{mu}, \code{k0}, \code{c}, 1 for \code{p}, 0 for \code{gamma}, \code{d}, \code{q}).
-  Default value = \code{replicate(7,TRUE)}, that is, \code{etasclass} estimates all parameters.
+ \item{params.lim}{ (new in version 2.3.0) vector of 7 numerical  values: \code{params.lim[i]} is lower bound for the i-th parameter.  No upper bound is provided. It is  strongly recomended to use however default values.
+  Default value = \code{c(0,0,0,1.0,0,0,0)}.
 }
-\item{formula1}{a character variable: Formula which defines the covariates acting on the induced seismicity. In classical etas model   the covariate is the magnitude. The left side (dummy) element must be the time, which is a variable certainly present in the data set. The right part of the formula determines \code{ncov} the number of covariates. Default value=\code{"time~magnitude-1"}; input \emph{must} be a character value: it is converted in a formula inside the program}
+ \item{formula1}{a character variable: Formula which defines the covariates acting on the induced seismicity. In classical etas model   the covariate is the magnitude. The left side (dummy) element must be the time, which is a variable certainly present in the data set. The right part of the formula determines \code{ncov} the number of covariates. Default value=\code{"time~magnitude-1"}; input \emph{must} be a character value: it is converted in a formula inside the program}
 \item{offset}{An offset, for which no parameter will be estimated. Default value=0}
 
 \emph{Flags for the kind of declustering and smoothing}:
 %  \item{kern.var}{if \code{TRUE} the background seismicity is estimated through a variable metric anisotropic kernel. yet not used in version 1.1.0. Default value = \code{FALSE}.}
   \item{hdef}{Starting values for the \code{x,y} bandwidths used in the kernel estimator of background seismicity. Default value = \code{1,1}.
 }
-  \item{w}{Starting values for the weigths used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}). 
+  \item{rho.weights}{Starting values for the weigths used in the kernel estimator of background seismicity. The length must be equal to the number of events of the catalog after event selection (can be less than \code{nrow(cat.orig)}). 
   
 Default value = \code{replicate(nrow(cat.orig),1).}
 }
@@ -190,6 +191,8 @@ Controls the level of smoothing for the background seismicity (meaningful only i
   \item{iterlim}{maximum number of iterations in the maximum likelihood steps (used in \code{nlm} or \code{optim}). Default value = 100.
   }
    \item{ntheta}{number of subdivisions of the round angle, used in the approximation of the integral involved in the likelihood computation of the ETAS model. Default value = 100.
+   }
+   \item{trace}{Logical. If \code{TRUE} trace of the optimization steps is printed. Default value = \code{TRUE}
    }
 
 
@@ -304,6 +307,7 @@ returns an object of class \code{etasclass}.
 The main items of the output are:
   \item{this.call}{reports the exact call of the function}
   \item{params.ind}{indicates which parameters have been estimated (see details)}
+  \item{params.lim}{indicates lower bounds for parameters}
   \item{params}{ML estimates of the ETAS parameters.}
   \item{sqm}{Estimates of standard errors of the ML estimates of the ETAS parameters (\code{sqm[i]}=0 if \code{params.ind[i]}=\code{FALSE} or where the hessian is not computed or near to singularity). }
   \item{AIC.iter}{AIC values at each iteration.}
@@ -319,8 +323,7 @@ The main items of the output are:
 \code{print} and
 \code{plot} methods are defined for an object of class \code{etasclass} to obtain main output. 
 
-A \code{profile} method (\code{\link{profile.etasclass}}
-) is also defined  to make approximate inference on a single parameter   
+A \code{profile} method (\code{\link{profile.etasclass}}) is also defined to make approximate inference on a single parameter.
 }
 \note{In this version the x-y space region, where the point process is defined, is  a rectangle embedding the catalog values.
 
@@ -335,10 +338,10 @@ Also a first execution with \code{is.backconstant = TRUE}, to fit a first approx
 Some other useful information can be obtained estimating a pure time process, that can give a good guess at least for some  parameters, like  \eqn{\mu, \kappa_0, \alpha,c,p}{mu, k0, a, c, p}.
 
 
-Input times are expected in days, and so final intensities are expected number of events per day. If input values are in seconds, then set \code{sectoday=TRUE}
+Input times are expected in days, and so final intensities are expected number of events per day. If input values are in seconds, then set \code{sectoday=TRUE}.
 }
 
-\seealso{ \code{\link{eqcat}}, \code{\link{plot.etasclass}},\code{\link{print.etasclass}}, \code{\link{summary.etasclass}}, \code{\link{profile.etasclass}}, \code{\link{etas.starting}}}
+\seealso{ \code{\link{eqcat}}, \code{ \link{plot.etasclass}},\code{ \link{print.etasclass}}, \code{ \link{summary.etasclass}}, \code{ \link{profile.etasclass}}, \code{ \link{etas.starting}}}
 
 \references{
 
@@ -363,7 +366,7 @@ Chiodi, M. and Adelfio, G., (2017) Mixed Non-Parametric and Parametric Estimatio
 Zhuang, J., Ogata, Y.  and Vere-Jones, D.
 Stochastic declustering of space-time earthquake occurrences.
 \emph{Journal of the American Statistical Association},
-\bold{97},  369--379 (2002). DOI:10.1198/016214502760046925.
+\bold{97},  369--379 (2002). DOI:10.1198/ 016214502760046925.
 }
 
 \author{
@@ -374,15 +377,19 @@ Marcello Chiodi, Giada Adelfio}
 
 \examples{
 \dontrun{
-data("italycatalog")
-# load a sample catalog of the italian seismicity
-esecov1<-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
-mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
-q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
-TRUE), formula1 = "time ~  magnitude- 1", declustering = TRUE, 
-thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE, 
-is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE, 
-compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)
+data("catalog.withcov")
+str(catalog.withcov)
+
+# load a sample catalog of the italian seismicity with some covariate
+esecov1<-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, 
+magn.threshold.back = 3.9,
+				   mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1, 
+				   q = 1.5,
+				   params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE),
+				   formula1 = "time ~  magnitude- 1", declustering = TRUE, 
+				   thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE, 
+				   is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE, 
+				   compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 48)
 
 # execution of etasclass for events with minimum magnitude of 3.0. 
 # The events with magnitude at least 3.5 are used to build a first approximation
@@ -395,68 +402,92 @@ compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)
 
 print(esecov1)
 
-> print(esecov1)
-Call: 
- 
-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
-    mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
-    q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
-        TRUE), formula1 = "time ~  magnitude- 1", declustering = TRUE, 
-    thinning = FALSE, flp = TRUE, ndeclust = 15, onlytime = FALSE, 
-    is.backconstant = FALSE, sectoday = FALSE, usenlm = TRUE, 
-    compsqm = TRUE, epsmax = 1e-04, iterlim = 100, ntheta = 36)
-
- 
- 
- 
-Number of observations             2226 
+Execution started:  2026-02-03 15:56:54
+Elapsed time of execution (hours)   0.071 
+Number of observations:  2226;  Magnitude threshold  2.5
+AIC 43587.95 43252.54 43249.81 43249.27 43249.2 43249.19 43249.19
+hdef 28.20105 21.29012 
 ETAS Parameters: 
-        mu         k0          c          p      gamma          d          q 
-  0.667509   0.022393   0.014769   1.110059   0.000000   1.905461   1.947223 
-magnitude 
-  0.740109 
-# summary method for more informative output etasclass object
+       mu        k0         c         p     gamma         d         q magnitude 
+ 0.667562  0.022396  0.014774  1.110087  0.000000  1.905522  1.947269  0.740080 
+ # summary method for more informative output etasclass object
 
 summary(esecov1)
+
+> summary(esecov1)
+ 
+Execution started:                  2026-02-03 15:56:54 
+Elapsed time of execution (hours)   0.071 
+Number of observations             2226 
+Magnitude threshold                2.5 
+declustering                        TRUE 
+Number of declustering iterations   7 
+Kind of declustering                weighting 
+flp                                 TRUE 
+sequence of AIC values for each iteration 
+43587.95 43252.54 43249.81 43249.27 43249.2 43249.19 43249.19 
+ 
+------------------------------------------------------- 
+ 
+formula for covariates of the triggered components: 
+[1] "time ~  magnitude- 1"
+ETAS Parameters: 
+                Estimates       std.err.
+mu               0.667562       0.022621
+k0               0.022396       0.005782
+c                0.014774       0.002708
+p                1.110087       0.015702
+gamma            0.000000       0.000000
+d                1.905522       0.260380
+q                1.947269       0.077635
+magnitude        0.740080       0.092559
+------------------------------------------------------- 
+
 # plot results with maps of intensities and diagnostic tools 
 
 plot(esecov1)
 
 ## an application with 5 covariates
-esecov5<-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
-mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
-q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE), 
-formula1 = "time ~ z + magnitude +nstaloc_rev +min_distance_rev+distmin- 1", 
-declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15, 
-onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
-usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
-ntheta = 36)
+esecov5<-etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9,
+				   mu = 0.3, k0 = 0.02, c = 0.015, p = 1.01, gamma = 0, d = 1, 
+				   q = 1.5,
+				   params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE), 
+				   formula1=
+				   "time~z+magnitude+nstaloc_rev+min_distance_rev+distmin-1", 
+				   declustering = TRUE, thinning = FALSE,
+				   flp = TRUE, ndeclust = 15, 
+				   onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
+				   usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
+				   ntheta = 48)
 
-## print results, more out put with summary
+## print results, more output with summary
+
  print(esecov5)
 Call: 
  
 etasclass(cat.orig = catalog.withcov, magn.threshold = 2.5, magn.threshold.back = 3.9, 
-    mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
-    q = 1.5, params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, 
-        TRUE), formula1 = "time ~ z + magnitude +nstaloc_rev +min_distance_rev+distmin- 1", 
-    declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15, 
-    onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
-    usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
-    ntheta = 36)
+  mu = 0.3, k0 = 0.02, c = 0.015, p = 0.99, gamma = 0, d = 1, 
+  q = 1.5,
+  params.ind = c(TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE),
+  formula1 = 
+  "time ~ z + magnitude +nstaloc_rev 
+  +min_distance_rev+distmin- 1", 
+  declustering = TRUE, thinning = FALSE, flp = TRUE, ndeclust = 15, 
+  onlytime = FALSE, is.backconstant = FALSE, sectoday = FALSE, 
+  usenlm = TRUE, compsqm = TRUE, epsmax = 1e-04, iterlim = 100, 
+  ntheta = 36)
 
  
  
- 
-Number of observations             2226 
+ Execution started:  2026-02-03 16:09:29
+ Elapsed time of execution (hours)   0.106 
+Number of observations:  2226;  Magnitude threshold  2.5
+AIC 43117.52 42748.26 ; hdef 26.9334 20.89011 
 ETAS Parameters: 
-              mu               k0                c                p 
-        0.705351         0.073070         0.019396         1.154186 
-           gamma                d                q                z 
-        0.000000         1.942929         2.004915        -0.041256 
-      magnitude      nstaloc_rev min_distance_rev          distmin 
-        1.157698        -0.009010        -0.011020        -1.826717 
-
+         mu          k0           c           p       gamma           d           q 
+        0.698665    0.068132    0.018731    1.147265    0.000000    1.900510    1.978678 
+     z        magnitude      nstaloc_rev min_distance_rev     distmin 
+     -0.039953    1.150552        -0.008982        -0.011203        -1.831964 
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

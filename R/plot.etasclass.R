@@ -154,7 +154,7 @@ if(tfixed>0){
 if(!pdf) dev.new()
 ind1=x$cat$time.work>=tfixed & x$cat$time.work<(tfixed+1)
 
-mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
+if(!x$longlat.to.km) mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
 
 image.plot(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid))
 ,col=gray.colors(128, start = 0., end = 1., gamma =2 )
@@ -164,7 +164,7 @@ image.plot(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid))
 
 grid(col="grey")
 
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
 xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green"
 )
 contour(x.grid,y.grid,(matrix(totfixed.grid,ngrid,ngrid)),col="red",add=TRUE)
@@ -180,7 +180,7 @@ if(!pdf) dev.new()
 
 ### start triggered intensity plotting
 
-mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
+if(!x$longlat.to.km) mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
 
 image.plot(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid))
 ,col=gray.colors(128, start = 0., end = 1., gamma =2 )
@@ -190,7 +190,7 @@ image.plot(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid))
 
 grid(col="grey")
 
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
 xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green"
 )
 contour(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid)),col="red",add=TRUE)
@@ -210,7 +210,7 @@ main="Background Intensity"
 )
       
 grid(col="grey")
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
 xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
 
 contour(x.grid,y.grid,(matrix(back.grid,ngrid,ngrid)),col="red",add=TRUE)
@@ -227,7 +227,7 @@ xlab="x-longitude",ylab="y-latitude",main="Total Intensity"
 )
       
 grid(col="grey")
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
 xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
 contour(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),col="red",add=TRUE)
 
@@ -244,7 +244,7 @@ xlab="x-longitude",ylab="y-latitude",main="Total Intensity with observed points 
 )
       
 grid(col="grey")
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",
 xlim=range(x$cat$long),ylim=range(x$cat$lat),col="green")
 points(x$cat$long,x$cat$lat,cex=sqrt(exp(x$cat$magnitude))/8,col=rgb(ts,0,1-ts),pch=19)
 contour(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),col="yellow",add=TRUE)
@@ -398,7 +398,7 @@ main="Standardized differences between \n observed and theoretical frequency (wh
 
 #image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,xaxp=c(xx[1],xx[2],nclass),yaxp=c(yy[1],yy[2],nclass))
 grid(nclass)
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",col="black")
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",col="black")
 
 ############### for background
 
@@ -416,7 +416,7 @@ main="Standardized differences between  \n observed and theoretical frequency (b
 
 #image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,xaxp=c(xx[1],xx[2],nclass),yaxp=c(yy[1],yy[2],nclass))
 grid(nclass)
-map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",col="black")
+if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitude",col="black")
 
 ############################
 

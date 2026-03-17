@@ -29,7 +29,8 @@ if (etas.obj$usenlm){risult =nlm(etas.mod2NEW,params,
 		hessian=hessian,
 		iterlim		=iterlim,
 		params.lim=etas.obj$params.lim, # added 2021
-		etas.obj=etas.obj
+		etas.obj=etas.obj,
+		trace=trace
 		)
 		params.optim=risult$estimate
 		l.optim	 =risult$minimum}
@@ -41,7 +42,8 @@ risult =optim(params,etas.mod2NEW,
 		params.lim=etas.obj$params.lim, # added 2021
 		
 		hessian	=hessian,		control=list(trace=2,maxit=iterlim,fnscale=n/diff(range(etas.obj$cat$time.work)),parscale=sqrt(exp(params))),
- 		etas.obj=etas.obj
+ 		etas.obj=etas.obj,
+		trace=trace
 )
 		
    params.optim=risult$par

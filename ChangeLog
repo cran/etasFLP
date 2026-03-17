@@ -1,13 +1,19 @@
-2023-9-14 Marcello Chiodi  <marcello.chiodi@unipa.it>
-*fortran_etas_code.f90: all INTEGER(KIND=4) changed to INTEGER
-2023-7-18 Marcello Chiodi  <marcello.chiodi@unipa.it>
-*update.etasclass.R: 'if (class(object) != "etasclass")' changed to 'if (!inherits(object,"etasclass"))' changed also in other R files whenever 'if (class(object) != "etasclass")' was present
+2026-1-16 Marcello Chiodi  <marcello.chiodi@unipa.it>
+*plot.etasclass: maps are not drawn if original longlat.to.km is FALSE
+*profile.etasclass.Rd: example has been rerun and corrected
+*etasclass.Rd and other manual topics: upgraded all the examples in manual pages
+*etasclass: introduced as optional parameter the vector of lower bounds "params.lim"", which was previously fixed inside the code 
+*etasclass: introduced as optional parameter "trace"", a logical variable to trace the optimization steps.
+*etasclass: corrected one bug that avoided correct use of the update method; now updating is (or supposed to be) correct
+*etasclass: improved updating and saving of variables
+*etasclass: avoid some intermediate printing; avoide in the code all references to not implemented arguments
+*compare.etasclass: modified to allow for missing or zero standard error estimates in one of the object
 2023-7-17 Marcello Chiodi  <marcello.chiodi@unipa.it>
 *fortran_etas_code.f90: arcaic form derfc changed to erfc 
 2021-9-1 Marcello Chiodi  <marcello.chiodi@unipa.it>
-*etasclass.R: Changed printing during output 
+*etasclass: Changed printing during output 
 2021-8-24 Marcello Chiodi  <marcello.chiodi@unipa.it>
-*etasclass.R: variable magn1.work has been renamed as magnitude
+*etasclass: variable magn1.work has been renamed as magnitude
 *b.guten: a bug has been corrected (thanks to Jiancang Zhuang)
 original first line "x = subset(magn, subset = (magn > m0))"
 corrected to "x = subset(magn, subset = (magn >= m0))"

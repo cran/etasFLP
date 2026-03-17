@@ -2,7 +2,7 @@
 % Please edit documentation in R/daily.etasclass.R
 \name{daily.etasclass}
 \alias{daily.etasclass}
-\title{Title daily.etasclass}
+\title{Daily estimation on a space grid}
 \usage{
 daily.etasclass(x, ngrid = 201, nclass = 20, tfixed = 0, flag.log = FALSE, ...)
 }
@@ -23,5 +23,5 @@ daily.etasclass(x, ngrid = 201, nclass = 20, tfixed = 0, flag.log = FALSE, ...)
 a grid with daily theoretical intensities
 }
 \description{
-A daily  estimation on a space grid is made
+A daily estimation on a space grid is made
 }

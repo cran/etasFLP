@@ -25,7 +25,7 @@ timecharunique2seq(timestring)
 
 
 \details{\code{time2date} converts sequential time in seconds into character string;
-\code{timecharunique2seq}  converts character times of catalogs into sequential time (seconds elapsed from the base date): the input is a single string.}
+\code{timecharunique2seq}  converts character times, possibly from earthquakes catalogs, into sequential time (seconds elapsed from the base date): the input is a single string.}
 
 \value{\code{time2date} returns a character string; \code{timecharunique2seq} returns a list:
 \item{char}{the input string.}
