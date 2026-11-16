@@ -7,7 +7,7 @@
 daily.etasclass(x, ngrid = 201, nclass = 20, tfixed = 0, flag.log = FALSE, ...)
 }
 \arguments{
-\item{x}{an etasclass object}
+\item{x}{an \code{etasclass} object}
 
 \item{ngrid}{subdivisions of x and y axis for grid computation of intensities}
 
@@ -20,8 +20,25 @@ daily.etasclass(x, ngrid = 201, nclass = 20, tfixed = 0, flag.log = FALSE, ...)
 \item{...}{other optional parameters}
 }
 \value{
-a grid with daily theoretical intensities
+A list with components \code{tfixed} (the day of computation), \code{totfixed.grid} (total intensities on the \code{ngrid} x \code{ngrid} grid at day \code{tfixed}) and \code{teo1} (matrix of \code{nclass} x \code{nclass} cells with the theoretical frequencies).
 }
 \description{
-A daily estimation on a space grid is made
+Computes, on a space grid, the total intensity of the ETAS model (background plus triggered) at a fixed day, together with the theoretical frequencies in a coarser grid of cells.
+}
+\details{
+The computation is the same used by \code{\link{plot.etasclass}} when a positive \code{tfixed} is given, but without any graphical output. \code{nclass} must divide exactly \code{ngrid-1}, in order to use the Simpson's rule to obtain the theoretical frequencies.
+}
+
+\examples{
+data("italycatalog")
+## a small sample of the catalog keeps the execution time short:
+## please, use larger values of n to obtain reasonable datasets and estimates
+sub <- italycatalog[1:150, ]
+fit <- etasclass(sub, magn.threshold = 3.0, magn.threshold.back = 3.5,
+    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
+    ndeclust = 1, sectoday = TRUE, epsmax = 0.001, trace = FALSE)
+
+## theoretical intensities on a space grid at day 1 (coarse grid)
+d1 <- daily.etasclass(fit, ngrid = 41, nclass = 10, tfixed = 1)
+str(d1)
 }

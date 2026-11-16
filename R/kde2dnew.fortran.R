@@ -1,6 +1,5 @@
 kde2dnew.fortran <-
 function(
-#        parallel=FALSE,
          xkern,ykern,gx,gy,h,
          factor.xy=1,eps=0,w=replicate(length(xkern),1),
 hvarx=replicate(length(xkern),1),hvary=replicate(length(xkern),1)

@@ -19,8 +19,8 @@ Compare the results of two \code{etasclass} executions through the comparison of
 \value{
 \item{diffstd.params}{Standardized comparison of the estimated parameters, included covariates.}
 \item{AIC}{Difference of AIC values.}
-\item{weigths}{Comparison of the weights \code{rho.weights} of the two input objects.}
-\item{rho.weigths}{Standardized comparison of the weights \code{rho.weights} of the two input objects.}
+\item{weights}{Comparison of the weights \code{rho.weights} of the two input objects.}
+\item{weights.std}{Standardized comparison of the weights \code{rho.weights} of the two input objects.}
 \item{cor.weights}{Correlation between the weights \code{rho.weights} of the two input objects}
 \item{cor.trig}{Correlation between the triggered intensities of the two input objects}
 \item{cor.back}{Correlation between the background intensities  of the two input objects}
@@ -30,6 +30,20 @@ Compare the results of two \code{etasclass} executions through the comparison of
 Marcello Chiodi}
 
 %\seealso{}
+\examples{
+data("italycatalog")
+## a small sample of the catalog keeps the execution time short:
+## please, use larger values of n to obtain reasonable datasets and estimates
+sub <- italycatalog[1:150, ]
+fit <- etasclass(sub, magn.threshold = 3.0, magn.threshold.back = 3.5,
+    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
+    ndeclust = 1, sectoday = TRUE, epsmax = 0.001, trace = FALSE)
+
+## a second object, obtained with a different number of iterations
+fit2 <- update(fit, iterlim = 3)
+compare.etasclass(fit, fit2)
+}
+
 \keyword{ catalog }
 \keyword{ etasclass }
 \keyword{ earthquake }

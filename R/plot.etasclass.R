@@ -25,7 +25,9 @@ typegraph=1
 
 file=paste(file,".pdf",sep="")
 if (pdf){
-pdf(file=file,onefile=TRUE)}
+pdf(file=file,onefile=TRUE)
+on.exit(dev.off())}
+newdev <- function() if(!pdf && dev.interactive()) dev.new()
 #else
 #{
 #dev.new()
@@ -151,7 +153,7 @@ ngridtot	=length(space.grid[,1])
 
 if(tfixed>0){
 ### start triggered intensity plotting for a tfixed ########################################
-if(!pdf) dev.new()
+newdev()
 ind1=x$cat$time.work>=tfixed & x$cat$time.work<(tfixed+1)
 
 if(!x$longlat.to.km) mapxy=map("worldHires",xlim=range(x$cat$long),ylim=range(x$cat$lat),plot=FALSE)
@@ -175,7 +177,7 @@ points(x$cat$long[ind1],x$cat$lat[ind1],cex=sqrt(exp(x$cat$magnitude[ind1]))/8,c
 ### end triggered intensity plotting for a tfixed ########################################
 }
 
-if(!pdf) dev.new()
+newdev()
 
 
 ### start triggered intensity plotting
@@ -201,7 +203,7 @@ contour(x.grid,y.grid,(matrix(trig.grid,ngrid,ngrid)),col="red",add=TRUE)
 
 box()
 
-if(!pdf) dev.new()
+newdev()
 
 image.plot(x.grid,y.grid,(matrix(back.grid,ngrid,ngrid))
 ,col=gray.colors(128, start = 0., end = 1., gamma =2 ),
@@ -219,7 +221,7 @@ box()
 
 ### start total intensity plotting
 
-if(!pdf) dev.new()
+newdev()
 
 image.plot(x.grid,y.grid,(matrix(tot.grid,ngrid,ngrid)),
 col=gray.colors(128, start = 0., end = 1., gamma =2 ),
@@ -235,7 +237,7 @@ box()
 ### start total intensity plotting with observed points
 ts=(x$cat$time-min(x$cat$time))/diff(range(x$cat$time))
 
-if(!pdf) dev.new()
+newdev()
 
 image.plot(x.grid,y.grid,
 (matrix(tot.grid,ngrid,ngrid)),
@@ -257,7 +259,7 @@ box()
 if((as.numeric(kern.var)*as.numeric(ellipse))==1){
 wmat1		=matrix(0,n,4)
   
-if(!pdf) dev.new()
+newdev()
 
 
 wx=wmat1[,2]^2
@@ -391,7 +393,7 @@ std[std4]=-smax
 std4=std>(smax)
 std[std4]=smax
 
-if(!pdf) dev.new()
+newdev()
 
 image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,
 main="Standardized differences between \n observed and theoretical frequency (whole model)")
@@ -409,7 +411,7 @@ std[std4]=-smax
 std4=std>(smax)
 std[std4]=smax
 
-if(!pdf) dev.new()
+newdev()
 
 image.plot(x.grid,y.grid,std,zlim=c(-smax,smax),col=bluered,
 main="Standardized differences between  \n observed and theoretical frequency (background only)")
@@ -422,14 +424,14 @@ if(!x$longlat.to.km) map("worldHires",add=TRUE,xlab="x-longitude",ylab="y-latitu
 
 ######### four graph on a page 
 
-if(!pdf) dev.new()
-par(mfcol=c(3,2))
+newdev()
+oldpar1 <- par(mfcol=c(3,2))
 
 ## plotting observed vs. observed theoretical
 np=200
 
 # page7: graph2
-par(cex.main=0.8,mar=c(6, 4, 5, 2) + 0.2)
+oldpar2 <- par(cex.main=0.8,mar=c(6, 4, 5, 2) + 0.2)
 plot(teo1,emp1,xlab="theor. freq",ylab="empir. freq",main="Total space intens.")
 abline(a=0,b=1)
 tvec=seq(0,max(teo1),length.out=np)
@@ -575,10 +577,12 @@ t.intens[i]   	=integraltot.intens
 ##############################################################################
 }
 
-if(!pdf) dev.new()
+par(oldpar2)
+par(oldpar1)
+newdev()
 
 #close.screen()
-par(mfcol=c(2,1))
+oldpar3 <- par(mfcol=c(2,1))
 
 #split.screen(rbind(c(0,1,0.4,1),c(0,1,0,0.4)))
 #screen(1)
@@ -588,6 +592,7 @@ abline(a=0,b=1,col=2)
 #screen(2)
 plot(t.intens,type="h",xlab=expression(t[i]),ylab=expression(lambda(t[i])))
 close.screen()
+par(oldpar3)
 
 
 
@@ -595,9 +600,8 @@ close.screen()
 
 
 ########## end of graphic output ################
-if(pdf) dev.off()
 
-return(list(
+invisible(list(
 x.grid=x.grid,
 y.grid=y.grid,
 space.grid=space.grid,

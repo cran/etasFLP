@@ -8,90 +8,6 @@
 !         dens vector of lenght  m with the densities in x,y
 !         h vector of 2 bandwidths
 !         w        vector of weights
-      subroutine density2parallel(x,y,m,xkern,ykern,nkern,h,w,hvarx,hvary,dens)
-        INTEGER nkern,m,i,j
-!        input variables declaration:
-      double precision xkern(nkern),ykern(nkern),x(m),y(m),w(nkern),ww,h(2)
-      double precision hvarx(nkern),hvary(nkern)
-!        output variables declaration:     
-      double precision dens(m)
-!        work variables declaration:
-      double precision stdx,stdy,fac,hx(nkern),hy(nkern),parz,wi
-      DATA               fac/0.3989422804014327D0/ !        fac is 1/sqrt(2*PI)
-        ww=sum(w)
-        hx=h(1)*hvarx
-        hy=h(2)*hvary
-      do j=1,m
-        parz=0
-!$ call omp_set_num_threads(8)
-
-!$OMP PARALLEL DO REDUCTION(+:parz) PRIVATE(stdx,stdy,wi,i) SHARED(nkern,j,m,x,xkern,y,ykern,hx,hy,w)
-      do i=1,nkern
-        wi          =w(i)
-        stdx        =((x(j)-xkern(i)))/hx(i)        
-        stdy        =((y(j)-ykern(i)))/hy(i)        
-        parz=parz+wi*exp(-(stdx*stdx+stdy*stdy)/2)
-      end do
-!$OMP  END PARALLEL DO
-        dens(j)=parz*fac*fac/(ww*h(1)*h(2))
-        end do
-        end
-   
-!
-!       called by etas.mod2new.R
-!       parallel version to be checked 28-2-2019
-     
-      subroutine etasfull8newparallel(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l)
-        INTEGER n,tflag,i,j
-      double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
-      double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
-      dum=mu
-
-      if (tflag>0) then
-      do i=2,n
-        inc        =0
-        ti        =t(i)
-        xi        =x(i)
-        yi        =y(i)
-      do j=1,i-1
-      dt        =ti-t(j)
-        etas        =0
-        dx        =xi-x(j)
-        dy        =yi-y(j)
-        ds        =dx*dx+dy*dy
-        etas        =((dt+c)**(-p))*exp(predictor(j))
-        inc        =inc+etas
-        end do
-
-        l(i)        =inc*k
-        end do 
-
-      else  
-      do i=2,n
-        inc        =0
-        ti        =t(i)
-        xi        =x(i)
-        yi        =y(i)
-!$ call omp_set_num_threads(8)
-!$OMP PARALLEL DO REDUCTION(+:inc) PRIVATE(etas,dt,dx,dy,ds,j) SHARED(x,xi,t,ti,y,yi,c,p,predictor,g,m,d,q,i,l,k)
-      do j=1,i-1
-      dt        =ti-t(j)
-        etas        =0
-        dx        =xi-x(j)
-        dy        =yi-y(j)
-        ds        =dx*dx+dy*dy
-        etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
-        inc        =inc+etas
-        end do
-!$OMP END PARALLEL DO
-
-        l(i)        =inc*k
-        end do 
-        end if
-        end
-        
-                
-       
              subroutine density2serial(x,y,m,xkern,ykern,nkern,h,w,hvarx,hvary,dens)
         INTEGER nkern,m
 !        input variables declaration:
@@ -118,58 +34,23 @@
      
        
        
-!        etasfull8fast and etasfull8new computes only the triggered intensity of the ETAS model
+!        etasfull8newserial computes only the triggered intensity of the ETAS model
 !       with 7+ncov parametrs.
 !       input magnitude vector must be  m(j)-m0
 !
 !       called by etas.mod2NEW.R
 !
-        subroutine etasfull8fast(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,ind,nindex,index,l)
-        INTEGER n,tflag,ind(n),index(nindex),nindex
-        INTEGER j1,j2,jj
-      double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
-      double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
-      dum=mu
-      
-      do  i=2,n
-        inc        =0
-        ti        =t(i)
-        xi        =x(i)
-        yi        =y(i)
-        j1  =ind(i-1)+1
-        j2  =ind(i)
-      do  jj=j1,j2
-      j = index(jj)
-      dt        =ti-t(j)
-        etas        =0
-        if (dt > 0)  then
-        dx        =xi-x(j)
-        dy        =yi-y(j)
-        ds        =dx*dx+dy*dy
-        if (tflag>0) then
-        etas        =((dt+c)**(-p))*exp(predictor(j))
-        else
-        etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
-        end if 
-        end if
-        inc        =inc+etas
-        end do
-        l(i)        =inc*k
-        end do 
-        end
-       
-
-
-     
-     
-     
-     
-     
       subroutine etasfull8newserial(tflag,n,mu,k,c,p,g,d,q,x,y,t,m,predictor,l)
         INTEGER n,tflag
       double precision mu,k,c,p,g,d,q,x(n),y(n),t(n),m(n),predictor(n),l(n)
       double precision dx,dy,ds,dt,xi,yi,ti,etas,inc,dum
+      double precision, allocatable :: ep(:), eg(:)
+      allocate(ep(n),eg(n))
       dum=mu
+      do j=1,n
+        ep(j)        =exp(predictor(j))
+        eg(j)        =exp(g*m(j))
+      end do
       do i=2,n
         inc        =0
         ti        =t(i)
@@ -183,22 +64,17 @@
         dy        =yi-y(j)
         ds        =dx*dx+dy*dy
         if (tflag>0) then
-        etas        =((dt+c)**(-p))*exp(predictor(j))
+        etas        =exp(-p*log(dt+c))*ep(j)
         else
-        etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
+        etas        =exp(-p*log(dt+c)-q*log(ds/eg(j)+d))*ep(j)
         end if 
         end if
         inc        =inc+etas
         end do
         l(i)        =inc*k
         end do 
-
-        end
-        
-
-        
-          
-        
+      deallocate(ep,eg)
+      end
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!       
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
@@ -215,8 +91,24 @@
       INTEGER n,ngridtot
       double precision mu,k,c,p,g,d,q,x(n),y(n),xgrid(ngridtot),ygrid(ngridtot),t(n),m(n),predictor(n),l(ngridtot)
       double precision dx,dy,ds,dt,xi,yi,etas,inc,tmax,integrt,eps,dum
+      double precision, allocatable :: wt(:), eg(:)
       eps=1D-10
       dum=mu
+      allocate(wt(n),eg(n))
+      do j=1,n
+        dt        =tmax-t(j)
+        wt(j)     =0
+        if (dt > 0)  then
+!                check for p=1
+          if (abs(p-1)<eps) then
+                integrt =log(c+dt)-log(c)
+          else
+                integrt =((c+dt)**(1-p)- c**(1-p))/(1-p)
+          end if
+          wt(j)   =integrt*exp(predictor(j))
+        end if
+        eg(j)     =exp(g*m(j))
+      end do
 
       do i=1,ngridtot
         inc        =0
@@ -229,23 +121,14 @@
         dx        =xi-x(j)
         dy        =yi-y(j)
         ds        =dx*dx+dy*dy
-! t- integration 
-!                check for p=1
-        if (abs(p-1)<eps) then
-                integrt =log(c+dt)-log(c)
-                 else
-                integrt =((c+dt)**(1-p)- c**(1-p))/(1-p)
-        end if
-        etas        =integrt*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
+        etas        =wt(j)*exp(-q*log(ds/eg(j)+d))
         end if
         inc        =inc+etas
         end do
         l(i)        =inc*k
         end do
+      deallocate(wt,eg)
        end
-              
-       
-   
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !     etasfull8tfixednew computes only the triggered intensity of the ETAS model
@@ -261,8 +144,16 @@
       INTEGER n,ngridtot
       double precision mu,k,c,p,g,d,q,x(n),y(n),xgrid(ngridtot),ygrid(ngridtot),t(n),m(n),predictor(n),l(ngridtot)
       double precision dx,dy,ds,dt,xi,yi,etas,inc,tfixed,eps,dum
+      double precision, allocatable :: wt(:), eg(:)
       dum=mu
       eps=1D-10
+      allocate(wt(n),eg(n))
+      do j=1,n
+        dt        =tfixed-t(j)
+        wt(j)     =0
+        if (dt > 0)  wt(j)=((dt+c)**(-p))*exp(predictor(j))
+        eg(j)     =exp(g*m(j))
+      end do
       do i=1,ngridtot
         inc        =0
         xi        =xgrid(i)
@@ -274,19 +165,15 @@
         dx        =xi-x(j)
         dy        =yi-y(j)
         ds        =dx*dx+dy*dy
-        etas        =((dt+c)**(-p))*exp(predictor(j))*(ds/exp(g*m(j))+d )**(-q)
+        etas        =wt(j)*exp(-q*log(ds/eg(j)+d))
         end if
         inc        =inc+etas
 
         end do
         l(i)=inc*k
         end do
+      deallocate(wt,eg)
        end
-
-           
-  
-           
-       
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !        integrkdweighted
 !       internal called by deltafl1kspacevar       

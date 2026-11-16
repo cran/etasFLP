@@ -45,13 +45,12 @@ From version 2.0 you could use \code{z} as a covariate for the triggered compone
 
 %\seealso{}
 \examples{
-\dontrun{
 data(italycatalog)
-f=eqcat(italycatalog)
+f <- eqcat(italycatalog)
 print(f$ok)
 summary(f$cat)
 plot(f$cat)
-}}
+}
 \keyword{ catalog }
 \keyword{ earthquake }
 

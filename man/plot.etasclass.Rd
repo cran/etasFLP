@@ -13,7 +13,7 @@ are also plotted for a grid of values.
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{an \code{etaclass} object.}
+  \item{x}{an \code{etasclass} object.}
 %  \item{which}{an array with the desired graphs. Default is 1:4}
   \item{pdf}{If \code{TRUE}, then 2D plots are sent to a pdf file}
   \item{file}{name of the pdf file}
@@ -33,7 +33,7 @@ Background, triggered and total space intensities
 are also computed and plotted for a grid of values.
 
 If a positive value is given for \code{tfixed}, then the triggered intensity at time \code{tfixed} is estimated and visualized.
-A tipical use can be with \code{tfixed} a day after a big earthquake.
+A typical use can be with \code{tfixed} a day after a big earthquake.
 
 
 For space dimension, four plot are drawn with triggered, observed, total intensity, and total intensity with points.
@@ -111,34 +111,38 @@ integral transformation:
 Then, a plot of \eqn{\tau_i} versus
 \eqn{i} can give information about the departures of the models in the
 time dimension. In particular, this plot, together with a plot of
-the estimated time intensities, drawn on the same graphic winodw, can inform  on the time at which
+the estimated time intensities, drawn on the same graphic window, can inform  on the time at which
 departures are more evident
 
 
 
-If \code{pdf=TRUE} all graphs are printed on a pdf file, as spcified by \code{file}; otherwise 
+If \code{pdf=TRUE} all graphs are printed on a pdf file, as specified by \code{file}; otherwise 
 default screen device is used. 
 }
 
-\value{This 
-\code{plot} method computes, among others, \code{back.grid}, \code{trig.grid}, 
-with coordinates \code{x.grid} and \code{y.grid}  used to obtain image plots of background, triggered and total spatial estimated intensities
+\value{This
+\code{plot} method returns (invisibly) a list with the quantities computed to draw the graphs, among others the grids \code{back.grid}, \code{trig.grid}, \code{tot.grid}
+with coordinates \code{x.grid} and \code{y.grid}, used to obtain the image plots of background, triggered and total spatial estimated intensities
 (see \code{\link{etasclass}} to see the details of the mixed estimation method used).
 
-   \item{x.grid}{x grid values.}
+  \item{x.grid}{x grid values.}
   \item{y.grid}{y grid values.}
- \item{back.grid}{background intensity estimated on a \code{ngrid} x \code{ngrid} grid.}
+  \item{space.grid}{the \code{ngrid*ngrid} points of the grid, one point for each row.}
+  \item{back.grid}{background intensity estimated on a \code{ngrid} x \code{ngrid} grid.}
   \item{trig.grid}{triggered intensities estimated on a grid of \code{ngrid} x \code{ngrid} points.}
   \item{tot.grid}{total intensities estimated on a grid of \code{ngrid} x \code{ngrid} points.}
   \item{tfixed}{the fixed time for which intensity is estimated and visualized.}
   \item{totfixed.grid}{total intensities estimated on a grid of \code{ngrid} x \code{ngrid} points at time \code{tfixed}.}
- \item{back.grid}{background space intensity estimated for observed points.}
-  \item{trig.grid}{triggered space intensities estimated for observed points.}
-  \item{tot.grid}{total space intensities estimated for observed points.}
+  \item{back.obs}{background space intensity estimated for observed points.}
+  \item{trig.obs}{triggered space intensities estimated for observed points.}
+  \item{tot.obs}{total space intensities estimated for observed points.}
   \item{teo1}{matrix of \code{nclass*nclass} cells with theoretical total space intensities.}
   \item{teo2}{matrix of \code{nclass*nclass} cells with theoretical background space intensities.}
   \item{emp1}{matrix of \code{nclass*nclass} cells with empirical total space intensities.}
   \item{emp2}{matrix of \code{nclass*nclass} cells with empirical background space intensities.}
+  \item{dx, dy}{width of the cells of the \code{nclass*nclass} grid in the two directions.}
+  \item{ranget}{length of the observed time interval.}
+  \item{magnitude}{magnitudes of the observed events (minus the threshold).}
   \item{t.trasf}{vector  of transformed times.}
 
 }
@@ -146,7 +150,7 @@ with coordinates \code{x.grid} and \code{y.grid}  used to obtain image plots of 
 \note{In this first version the x-y space region, where the point process is defined, by default is  a rectangle embedding the catalog values.
 }
 
-\seealso{\code{\link{etasclass}},  \code{\link{eqcat}}, \code{\link{profile.etasclass}}}
+\seealso{\code{\link{etasclass}},  \code{\link{eqcat}}, \code{\link{profile.etasclass}}, \code{\link{daily.etasclass}}}
 
 \references{
 
@@ -172,18 +176,19 @@ Marcello Chiodi, Giada Adelfio}
 
 
 \examples{
-\dontrun{
 data("italycatalog")
-# load a sample catalog of the italian seismicity
+## a small sample of the catalog keeps the execution time short:
+## please, use larger values of n to obtain reasonable datasets and estimates
+sub <- italycatalog[1:150, ]
+fit <- etasclass(sub, magn.threshold = 3.0, magn.threshold.back = 3.5,
+    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
+    ndeclust = 1, sectoday = TRUE, epsmax = 0.001, trace = FALSE)
 
-class(italycatalog)<-"eqcat"
-
-
-# plot method
-
-plot(\code{an etasclass object})
-
-}
+## the plots are written on a pdf file (coarse grid, for speed)
+plot(fit, pdf = TRUE, file = file.path(tempdir(), "etasplot"),
+    ngrid = 41, nclass = 10)
+## on screen (several windows are opened):
+## plot(fit)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

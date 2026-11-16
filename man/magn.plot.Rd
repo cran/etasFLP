@@ -4,7 +4,7 @@
 \title{
 Transformed plot of the magnitudes distribution of an earthquakes catalog}
 \description{
-Plots the logarithm of the cumulative frequency of eccedence vs. magnitude in an earthquake catalog.
+Plots the logarithm of the cumulative frequency of exceedance vs. magnitude in an earthquake catalog.
 }
 \usage{
 magn.plot(catalog, main = "Transformed plot of magnitude frequencies", ...)
@@ -28,10 +28,8 @@ than a given \eqn{m_0}{m0}, then  \eqn{m_0}{m0} is probably the magnitude thresh
 \author{Marcello Chiodi.}
 
 \examples{
-\dontrun{
 data(italycatalog)
-magn.plot(italycatalog) 
-}
+magn.plot(italycatalog)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

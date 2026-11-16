@@ -43,11 +43,10 @@ timecharunique2seq(timestring)
   
 
 \examples{
-\dontrun{
-tchar="1960-11-06 11:09:35.000"
-tsec =timecharunique2seq(tchar)[["sec"]]
+tchar <- "1960-11-06 11:09:35.000"
+tsec <- timecharunique2seq(tchar)[["sec"]]
 time2date(tsec)
-}}
+}
 \keyword{date}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

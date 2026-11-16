@@ -3,10 +3,8 @@ function(params=c(1,1,1,1,1,1,1),etas.obj,
                                params.lim	=c(0,0,0,1,0,0,0),
 				trace=TRUE,
 				iprint=FALSE
-#				,nthreads=8
 				) 
 				{
- #   OpenMPController::omp_set_num_threads(nthreads)
     params.ind   =etas.obj$params.ind
     params.lim   =etas.obj$params.lim
     params.fix   =etas.obj$params.fix
@@ -57,26 +55,7 @@ times		=cat$time.work
 
 	
 ##################### begin of the computation Fortran etasfull8 +R  ############################
-	if (etas.obj$fastML){
-	    ris=.Fortran("etasfull8fast" ,NAOK=TRUE,
-	                 tflag=as.integer(onlytime),
-	                 n=as.integer(n),
-	                 mu=as.double(lambda),k=as.double(k0),
-	                 c=as.double(c),p=as.double(p),
-	                 g=as.double(gamma),
-	                 d=as.double(d),q=as.double(q),
-	                 x=as.double(x),y=as.double(y), t=as.double(times),
-	                 m=as.double(magnitudes),
-	                 predictor=as.double(predictor),
-	                 ind      =as.integer(etas.obj$ind),
-	                 nindex    =as.integer(length(etas.obj$index.tot)),
-	                 index    =as.integer(etas.obj$index.tot),
-	                 l=etas.comp)
-	}
-	else if(etas.obj$parallel){
-	
-	    
-	    ris=.Fortran("etasfull8newparallel" ,NAOK=TRUE,
+	ris=.Fortran("etasfull8newserial" ,NAOK=TRUE,
 	                 tflag=as.integer(onlytime),
 	                 n=as.integer(n),
 	                 mu=as.double(lambda),k=as.double(k0),
@@ -86,20 +65,6 @@ times		=cat$time.work
 	                 x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),
 	                 predictor=as.double(predictor),
 	                 l=etas.comp)
-	}
-	else
-	{
-	    ris=.Fortran("etasfull8newserial" ,NAOK=TRUE,
-	                 tflag=as.integer(onlytime),
-	                 n=as.integer(n),
-	                 mu=as.double(lambda),k=as.double(k0),
-	                 c=as.double(c),p=as.double(p),
-	                 g=as.double(gamma),
-	                 d=as.double(d),q=as.double(q),
-	                 x=as.double(x),y=as.double(y), t=as.double(times),m=as.double(magnitudes),
-	                 predictor=as.double(predictor),
-	                 l=etas.comp)
-	}
 
 
 
@@ -118,10 +83,6 @@ times		=cat$time.work
 # starting time integration#
 ##############################################################################
 
-#if(etas.obj$fastML){
- #   integraltot=n
-#}
-#	else
 	{
 
 if(p==1){

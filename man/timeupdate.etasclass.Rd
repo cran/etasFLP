@@ -17,14 +17,30 @@ timeupdate.etasclass(object, params.estimation = FALSE, ...)
 a new \code{etasclass} object
 }
 \description{
-New in version 2.2. A time updating of an etasclass objects: a very experimental version that can be used only on etasclass objects obtained from etasflp versions 2.2 or newer.
+New in version 2.2. A time updating of an etasclass objects: a very experimental version that can be used only on etasclass objects obtained from etasFLP versions 2.2 or newer.
 }
 \details{
 It is a beta version. 
-A new ETAS model is fitted to a previous object of class etasclass with a new catalog which must be a catalog which extends the previous one on a wider time window, that is a catalog with new observations.  
+A new ETAS model is fitted to a previous object of class etasclass with a new catalog which must be a catalog which extends the previous one on a wider time window, that is a catalog with new observations.  The new catalog (and, possibly, a new \code{tmax}) can be given through \code{...} or can be assigned to the component \code{cat.orig} of \code{object}.
 
 As a default a new quick execution is made, with one quick iteration for parameter updating and an iteration for background density estimation.
 }
 \seealso{
 \code{\link{update.etasclass}}
+}
+
+\examples{
+data("italycatalog")
+## a small sample of the catalog keeps the execution time short:
+## please, use larger values of n to obtain reasonable datasets and estimates
+sub <- italycatalog[1:150, ]
+fit <- etasclass(sub, magn.threshold = 3.0, magn.threshold.back = 3.5,
+    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
+    ndeclust = 1, sectoday = TRUE, epsmax = 0.001, trace = FALSE)
+
+## the catalog is extended with some new events (here taken from the
+## same catalog) and the object is updated quickly
+fit$cat.orig <- italycatalog[1:160, ]
+fit.new <- timeupdate.etasclass(fit)
+fit.new$params
 }

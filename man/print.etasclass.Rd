@@ -11,7 +11,7 @@ Gives some information on the execution and gives estimates of the ETAS paramete
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{an \code{etaclass} object.}
+  \item{x}{an \code{etasclass} object.}
   \item{...}{other arguments.}
 }
 \details{

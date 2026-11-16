@@ -7,7 +7,7 @@
 \method{update}{etasclass}(object, ...)
 }
 \arguments{
-\item{object}{an etasclass object  obtained from etasflp versions 2.2 or newer that will be updated.}
+\item{object}{an etasclass object  obtained from etasFLP versions 2.2 or newer that will be updated.}
 
 \item{...}{optional arguments that will override the corresponding arguments in \code{object}}
 }
@@ -15,11 +15,25 @@
 un updated \code{etasclass} object
 }
 \description{
-New in version 2.2. A method update for etasclass objects: a very experimental version that can be used only on etasclass objects obtained from etasflp versions 2.2 or newer. Some bugs avoided in version 2.3.0
+New in version 2.2. A method update for etasclass objects: a very experimental version that can be used only on etasclass objects obtained from etasFLP versions 2.2 or newer. Some bugs avoided in version 2.3.0
 }
 \details{
 It is a beta version. The catalog must be the same, and options in "..." must leave unchanged the number of observations used for estimation. Arguments given in "..." will override arguments already present in \code{object}. Not all arguments are suitable for updating: among them \code{formula}, \code{params.ind} and \code{params.lim} should not be included in "..." list (to update such parameters it is better to assign them to a variable and then pass the variable name) . A new etasclass execution will start, using as arguments  values of input \code{object}, eventually integrated with the list in "...". Tipically a first execution can be given with low values of iterlim, ndeclust, ntheta and high values of epsmax (e.g. iterlim=5, ndeclust=1, ntheta=24, epsmax=0.01), to obtain good starting values for parameters and for weights. Then an update can be run with better values such as iterlim=50, ndeclust=10, ntheta=60, epsmax=0.0001.
 }
 \seealso{
 \code{\link{timeupdate.etasclass}}
+}
+
+\examples{
+data("italycatalog")
+## a small sample of the catalog keeps the execution time short:
+## please, use larger values of n to obtain reasonable datasets and estimates
+sub <- italycatalog[1:150, ]
+fit <- etasclass(sub, magn.threshold = 3.0, magn.threshold.back = 3.5,
+    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
+    ndeclust = 1, sectoday = TRUE, epsmax = 0.001, trace = FALSE)
+
+## new execution starting from the previous fit, with a new option
+fit2 <- update(fit, iterlim = 3)
+summary(fit2)
 }

@@ -20,20 +20,16 @@ MLA.freq(x)
 single frequencies, cumulated and back cumulated (absolute and relatives).
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{return a matrix with 7 columns: the modaldistinct values of \code{x}, frequencies, relative frequencies, cumulated frequencies,
+\value{returns a data frame with 7 columns: the distinct values of \code{x}, frequencies, relative frequencies, cumulated frequencies,
 cumulated relative frequencies,  back cumulated frequencies
 and back cumulated relative frequencies.
 }
 \examples{
-%\dontrun{
-
-x=trunc(runif(1000)*10)
+x <- trunc(runif(1000) * 10)
 MLA.freq(x)
 
 data(italycatalog)
 MLA.freq(italycatalog$magn1)
-
-%}
 }
 \author{
 Marcello Chiodi}

@@ -19,7 +19,7 @@ title(main="Circles extension proportional to magnitude \n red: recent, blu:olde
 #plot3d(x$long,x$lat,x$time,add=TRUE, type="p",col=rgb(ts,0,1-ts))
 
 #####################################################
-dev.new()
+if(dev.interactive()) dev.new()
 magn.plot(x)
 
 }

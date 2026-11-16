@@ -29,7 +29,7 @@ Threshold magnitude (only events with a magnitude at least \code{magn.threshold}
 \item{p.start}{Parameter 4  of the ETAS model; the exponent of the Omori law for temporal decay rate of aftershocks; see details. Default value = 1.0.
 %%     ~~Describe \code{p} here~~
 }
-  \item{gamma.start}{Parameter 5 (\eqn{\gamma}) of the ETAS model; together with  \code{a} is related to the efficiency of an event of given magnitude 
+  \item{gamma.start}{Parameter 5 (\eqn{\gamma}) of the ETAS model; is related to the efficiency of an event of given magnitude 
   in generating aftershocks; see details. Default value = 0.5.
 %%     ~~Describe \code{gamma} here~~
 }
@@ -106,6 +106,12 @@ Marcello Chiodi, Giada Adelfio}
 
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
+\examples{
+data(italycatalog)
+## rough starting values of the ETAS parameters
+etas.starting(italycatalog[1:300, ], magn.threshold = 3, sectoday = TRUE)
+}
+
 \keyword{ETAS}
 \keyword{earthquake}
 \keyword{likelihood}

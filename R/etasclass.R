@@ -49,9 +49,6 @@ etasclass <-
            iterlim		=50,      
            ntheta		=36,
            trace=TRUE)   {
-    ## unused optional arguments; parallel and fastML mantained because it appears in the output
-    parallel   <-FALSE
-    fastML     <-FALSE
     ## first checks, selection of data, and initializatios	
  #         params.lim=c(0,0,0,1.0,0,0,0) params.lim is now an input parameter
     this.call<-match.call()
@@ -123,8 +120,6 @@ etasclass <-
     
     
     etas.current<-list(
-      parallel    =parallel,
-      fastML.     =fastML,
       this.call		=match.call(),
       nstep.flp=0, #### added feb 2021
       nstep.kde=0, #### added feb 2021
@@ -159,6 +154,11 @@ hvary=hvary,
     ################ block with hvarx,hvary,rho.weights to be checked. cat should be subsetted according to ord and ind?  
     
     #etas.current$cat<-data.frame(etas.current$cat,hvarx,hvary,rho.weights) ########   change
+    if(time.update){
+    nc    <-nrow(etas.current$cat)
+    hvarx <-c(hvarx,replicate(nc-length(hvarx),1))
+    hvary <-c(hvary,replicate(nc-length(hvary),1))
+    }
     etas.current$cat<-data.frame(etas.current$cat,hvarx,hvary) ########   change
     
     cat         <-etas.current$cat[etas.current$cat$ord,][etas.current$cat$ind[etas.current$cat$ord],]
@@ -169,8 +169,6 @@ hvary=hvary,
     if(time.update){
     n.old<-length(rho.weights)
     rho.weights    <-c(rho.weights,replicate(n-n.old,0.5))
-    hvarx    <-c(hvarx,replicate(n-n.old,1))
-    hvary    <-c(hvary,replicate(n-n.old,1))
     }
     else
     {
@@ -210,7 +208,7 @@ hvary=hvary,
     sqm.iter=vecpar.init*0
     if(trace) print(round(vecpar.init,4)) 
     hdef.iter=hdef
-    rho.weights.iter=rho.weights
+    rho.weights.iter=rep(rho.weights,length.out=n)
     etas.current$rho.weights<-rho.weights
     etas.current$rho.weights.iter<-rho.weights.iter
     

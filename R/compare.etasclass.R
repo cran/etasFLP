@@ -22,12 +22,13 @@ function(etas1,etas2){
 	ind1=(sqm>0)&(!(is.na(sqm)))
 	sqm1[ind1]=sqm[ind1]
 	params=(etas1$params.MLtot-etas2$params.MLtot)/sqm1
-	AIC=min(etas1$AIC)-min(etas2$AIC)
+	AIC=min(etas1$AIC.iter)-min(etas2$AIC.iter)
 	  if(etas1$onlytime&etas2$onlytime){
 	  weights	=0
 	  weights.std	=0
 	  cor.weights	=0
 	  }
+	  else
 	  {
 	  weights	=etas1$rho.weights-etas2$rho.weights
 	  weights.std	=(etas1$rho.weights-etas2$rho.weights)/sqrt((etas1$rho.weights*(1-etas1$rho.weights)+etas2$rho.weights*(1-etas2$rho.weights)))
@@ -35,7 +36,7 @@ function(etas1,etas2){
 	  }
 	  cor.trig	=cor(etas1$l-etas1$params[1]*etas1$back.dens,etas2$l-etas2$params[1]*etas2$back.dens)
 	  cor.back	=cor(etas1$back.dens,etas2$back.dens)
-	  if(!sum(ind0)) print("Warning: some estimated standard errors are missing")
+	  if(sum(ind0)>0) print("Warning: some estimated standard errors are missing")
 return(list(diffstd.params=params,AIC=AIC,weights=weights,weights.std=weights.std,cor.weights=cor.weights,cor.trig=cor.trig,cor.back=cor.back))
   
 }

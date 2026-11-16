@@ -5,8 +5,8 @@
 \description{
 A small sample catalog of  italian earthquakes of magnitude at least 2.5 from May 2012 to May 2016 with extra information.}
 \usage{catalog.withcov}
-\format{a data matrix with 2,226 observations and 11 variables:
-\code{Date}, \code{id_ev},  \code{time}, \code{lat}, \code{long}, \code{z}, \code{magn1}, \code{err_h_rev}, \code{min_distance_rev}, \code{rms_rev}, \code{nstaloc_rev}           .
+\format{a data frame with 2,226 observations and 12 variables:
+\code{Date}, \code{id_ev},  \code{time}, \code{lat}, \code{long}, \code{z}, \code{magn1}, \code{err_h_rev}, \code{min_distance_rev}, \code{rms_rev}, \code{nstaloc_rev}, \code{distmin}.
 }
 \details{
 A small sample catalog of  italian earthquakes of magnitude at least 2.5 from May 2012 to May 2016 with extra information.

@@ -18,7 +18,7 @@
 }
 \details{Plots a spline interpolation of the profile likelihood for a parameter of the ETAS model for earthquake seismicity, computed with \code{profile.etasclass}; 
 
-the order of parametrs is: (\code{mu}, \code{k0}, \code{c}, \code{p}, \code{a}, \code{gamma}, \code{d}, \code{q}).
+the order of parametrs is: (\code{mu}, \code{k0}, \code{c}, \code{p}, \code{gamma}, \code{d}, \code{q}).
 
 A \code{plot} method is defined for \code{profile.etasclass} objects. A number of grid points \code{nprofile}  of 7 (the default) usually is enough to have a good interpolation of the profile likelihood.
 }
@@ -38,9 +38,21 @@ Marcello Chiodi, Giada Adelfio}
 
 
 \examples{
-\dontrun{
-## see example in profile.etasclass
-}}
+\donttest{
+data("italycatalog")
+## a small sample of the catalog keeps the execution time short:
+## please, use larger values of n to obtain reasonable datasets and estimates
+sub <- italycatalog[1:100, ]
+fit <- etasclass(sub, magn.threshold = 3.0, magn.threshold.back = 3.5,
+    k0 = 0.005, c = 0.005, p = 1.01, gamma = 0.6, q = 1.52, d = 1.1,
+    ndeclust = 1, sectoday = TRUE, epsmax = 0.001, trace = FALSE)
+
+## profile likelihood for the first parameter (mu)
+prof.flp <- profile(fit, nprofile = 3, iprofile = 1)
+prof.flp
+plot(prof.flp)
+}
+}
 \keyword{ETAS}
 \keyword{earthquake}
 \keyword{profile}
